@@ -26,3 +26,9 @@ Users can join and leave groups that are tied to a specific game. You should the
 ## Usage
 Users can invite others by simply mentioning the group... 
 Alternatively, a looking-to-play-right-now which creates a rich text embed?
+
+## Built using
+See pom.xml for complete list
+* JDA
+* JDA Utilities
+* Lombok
