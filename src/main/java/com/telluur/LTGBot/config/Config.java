@@ -9,14 +9,18 @@ import lombok.Getter;
  */
 
 public class Config {
-
     /**
      * The discord login token
      */
     @Getter private String token;
 
     /**
-     * The owner user id.
+     * The guild ID the bot should be locked to
+     */
+    @Getter private String guild;
+
+    /**
+     * The bot's owner user id.
      */
     @Getter private String owner;
 

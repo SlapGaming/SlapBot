@@ -1,9 +1,9 @@
 package com.telluur.LTGBot.commands;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.LTGBot.LTGBot;
 import com.telluur.LTGBot.util.AccessUtil;
+import net.dv8tion.jda.core.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,21 +14,27 @@ import org.slf4j.LoggerFactory;
  * @author Rick Fontein
  */
 
-public abstract class ModeratorCommand extends Command {
-
+public abstract class ModeratorCommand extends AbstractCommand {
     protected static final Logger logger = LoggerFactory.getLogger("MODERATOR");
 
     public ModeratorCommand(LTGBot ltgBot) {
-        this.category = new Category("admin", commandEvent -> AccessUtil.isModerator(ltgBot, commandEvent.getMember()));
+        super(ltgBot);
+        this.category = new Category("Moderator");
     }
 
     @Override
     protected void execute(CommandEvent event) {
-        String author = event.getAuthor().getName();
-        String cmd = event.getMessage().getContentDisplay();
-        logger.info(String.format("%s: %s", author, cmd));
+        if (super.inValidGuildOrPrivate(event)) {
+            User user = event.getAuthor();
+            String cmd = event.getMessage().getContentDisplay();
 
-        handle(event);
+            if (AccessUtil.isModerator(ltgBot, user)) {
+                logger.info(String.format("<OK> %s: %s", user.getName(), cmd));
+                handle(event);
+            } else {
+                logger.info(String.format("<DENIED> %s: %s", user.getName(), cmd));
+            }
+        }
     }
 
     public abstract void handle(CommandEvent event);

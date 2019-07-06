@@ -1,6 +1,7 @@
 package com.telluur.LTGBot.commands.user;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.telluur.LTGBot.LTGBot;
 import com.telluur.LTGBot.commands.UserCommand;
 
 /**
@@ -10,10 +11,10 @@ import com.telluur.LTGBot.commands.UserCommand;
  */
 
 public class PingCmd extends UserCommand {
-
-    public PingCmd() {
+    public PingCmd(LTGBot ltgBot) {
+        super(ltgBot);
         this.name = "ping";
-        this.help = "Ping pong me all day long, baby!";
+        this.help = "Ping pong me all day long!";
         this.guildOnly = false;
     }
 

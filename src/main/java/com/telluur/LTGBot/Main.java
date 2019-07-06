@@ -3,7 +3,13 @@ package com.telluur.LTGBot;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.telluur.LTGBot.commands.admin.GetConfigCommand;
+import com.telluur.LTGBot.commands.admin.KillCommand;
+import com.telluur.LTGBot.commands.moderator.AddGameCommand;
+import com.telluur.LTGBot.commands.moderator.RemoveGameCommand;
 import com.telluur.LTGBot.commands.user.PingCmd;
+import com.telluur.LTGBot.commands.user.SubscribeCommand;
+import com.telluur.LTGBot.commands.user.UnsubscribeCommand;
 import com.telluur.LTGBot.config.Config;
 import com.telluur.LTGBot.config.ConfigLoader;
 import com.vdurmont.emoji.EmojiParser;
@@ -21,7 +27,7 @@ import javax.security.auth.login.LoginException;
  * @author Rick Fontein
  */
 public class Main {
-    static final Logger logger = LoggerFactory.getLogger("SYSTEM");
+    private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
 
     public static void main(String[] args) {
         logger.info("Starting up");
@@ -38,7 +44,25 @@ public class Main {
         cmdBuilder.setAlternativePrefix(config.getAltprefix());
         cmdBuilder.setGame(Game.playing(EmojiParser.parseToUnicode("with traffic :car:")));
         cmdBuilder.addCommands(
-                new PingCmd()
+                /*
+                Listen in alphabetical order
+                Admin
+                 */
+                new GetConfigCommand(ltgBot),
+                new KillCommand(ltgBot),
+
+                /*
+                Moderator
+                 */
+                new AddGameCommand(ltgBot),
+                new RemoveGameCommand(ltgBot),
+
+                /*
+                User
+                 */
+                new PingCmd(ltgBot),
+                new SubscribeCommand(ltgBot),
+                new UnsubscribeCommand(ltgBot)
         );
         CommandClient cmdClient = cmdBuilder.build();
 
@@ -51,6 +75,7 @@ public class Main {
                     .setAudioEnabled(false)
                     .setGame(Game.playing(EmojiParser.parseToUnicode("with myself")))
                     .build();
+            jda.awaitReady();
             ltgBot.finishBot(jda);
         } catch (LoginException e) {
             logger.error("Failed to login", e.getCause());
@@ -58,12 +83,10 @@ public class Main {
         } catch (IllegalArgumentException e) {
             logger.error("Malformed config file", e.getCause());
             shutdown("caught exception");
+        } catch (InterruptedException e) {
+            logger.error("Could not complete JDA", e.getCause());
+            shutdown("caught exception");
         }
-    }
-
-    public static void shutdown() {
-        logger.info("Shutting down");
-        System.exit(1);
     }
 
     public static void shutdown(String reason) {

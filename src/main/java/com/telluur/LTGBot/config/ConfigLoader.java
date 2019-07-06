@@ -24,6 +24,7 @@ public class ConfigLoader {
             Config config = mapper.readValue(new File("yaml/config.yaml"), Config.class);
             logger.info("================= CONFIG =================");
             logger.debug("Discord token:     " + config.getToken());
+            logger.info("Guild:             " + config.getGuild());
             logger.info("Owner User:        " + config.getOwner());
             logger.info("Admin Role:        " + config.getAdmin());
             logger.info("Moderator Role:    " + config.getModerator());
