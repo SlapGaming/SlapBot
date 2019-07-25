@@ -3,10 +3,13 @@ package com.telluur.LTGBot.commands.admin;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.LTGBot.LTGBot;
 import com.telluur.LTGBot.commands.AdminCommand;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
+
+import java.awt.*;
 
 
 /**
@@ -19,33 +22,34 @@ public class GetConfigCommand extends AdminCommand {
     public GetConfigCommand(LTGBot ltgBot) {
         super(ltgBot);
         this.name = "config";
-        this.help = "displays the loaded configuration file (excluding token)";
+        this.help = "Displays the loaded configuration file (excluding token).";
         this.guildOnly = false;
     }
 
     @Override
     public void handle(CommandEvent event) {
-        StringBuilder sb = new StringBuilder("**-={Config file}=-**\r\n");
-
         Guild guild = ltgBot.getGuild();
-        sb.append(String.format("**Guild:** %s <%s>\r\n", guild.getName(), guild.getId()));
+        TextChannel tc = ltgBot.getTextChannel();
 
         User owner = ltgBot.getOwner();
-        sb.append(String.format("**Owner:** %s <%s>\r\n", owner.getName(), owner.getId()));
-
         Role admin = ltgBot.getAdminRole();
-        sb.append(String.format("**Admin:** %s <%s>\r\n", admin.getName(), admin.getId()));
-
         Role mod = ltgBot.getModeratorRole();
-        sb.append(String.format("**Moderator:** %s <%s>\r\n", mod.getName(), mod.getId()));
-
-        TextChannel tc = ltgBot.getTextChannel();
-        sb.append(String.format("**Text Channel:** %s <%s>\r\n", tc.getName(), tc.getId()));
 
         String prefix = ltgBot.getPrefix();
         String altPrefix = ltgBot.getAltPrefix();
-        sb.append(String.format("**Prefix:** `%s` or `%s`\r\n", prefix, altPrefix));
 
-        event.reply(sb.toString());
+
+        EmbedBuilder eb = new EmbedBuilder()
+                .setTitle("Bot Configuration")
+                .setColor(Color.RED)
+                .setDescription("The bot's settings as defined in config.yaml (Excluding tokens).")
+                .addField("Guild", guild.getName(), true)
+                .addField("Text Channel", tc.getAsMention(), true)
+                .addBlankField(true)
+                .addField("Bot Owner", owner.getName(), true)
+                .addField("Admins", admin.getName(), true)
+                .addField("Moderators", mod.getName(), true)
+                .addField("Command Prefix", String.format("`%s` or `%s`", prefix, altPrefix), true);
+        event.reply(eb.build());
     }
 }

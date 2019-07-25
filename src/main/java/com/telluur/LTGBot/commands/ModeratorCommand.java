@@ -33,6 +33,11 @@ public abstract class ModeratorCommand extends AbstractCommand {
                 handle(event);
             } else {
                 logger.info(String.format("<DENIED> %s: %s", user.getName(), cmd));
+                event.replyError(String.format(
+                        "This command can only be used by `%s` or `%s`.",
+                        ltgBot.getAdminRole().getName(),
+                        ltgBot.getModeratorRole().getName()
+                ));
             }
         }
     }

@@ -31,6 +31,10 @@ public abstract class AdminCommand extends AbstractCommand {
                 handle(event);
             } else {
                 logger.info(String.format("<DENIED> %s: %s", user.getName(), cmd));
+                event.replyError(String.format(
+                        "This command can only be used by `%s`.",
+                        ltgBot.getAdminRole().getName()
+                ));
             }
         }
     }

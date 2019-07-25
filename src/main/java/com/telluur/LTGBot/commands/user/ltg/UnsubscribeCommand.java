@@ -1,35 +1,39 @@
-package com.telluur.LTGBot.commands.moderator;
+package com.telluur.LTGBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.ModeratorCommand;
+import com.telluur.LTGBot.commands.UserCommand;
 import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.User;
 
 import java.util.List;
 
 import static com.jagrosh.jdautilities.commons.utils.FinderUtil.findRoles;
 
 /**
- * Delete a LTG role from discord and internally from storage.
+ * Command that lets members leave a game role
  *
  * @author Rick Fontein
  */
 
-public class RemoveGameCommand extends ModeratorCommand {
-    public RemoveGameCommand(LTGBot ltgBot) {
+public class UnsubscribeCommand extends UserCommand {
+    public UnsubscribeCommand(LTGBot ltgBot) {
         super(ltgBot);
-        this.name = "removegame";
-        this.aliases = new String[]{"remove", "delete", "del"};
+        this.name = "unsubscribe";
+        this.aliases = new String[]{"unsub", "leave"};
         this.arguments = "<@role>";
-        this.help = "Delete a LTG role.";
+        this.help = "Unsubscribe from a game group.";
         this.guildOnly = false;
     }
 
     @SuppressWarnings("Duplicates")
     @Override
     public void handle(CommandEvent event) {
+        //Delete the message as it includes a role mention
+        event.getMessage().delete().queue();
+
         if (event.getArgs().isEmpty()) {
-            event.replyError("Please include a single valid `<@role>` as argument.");
+            event.replyError("Please include a `<@role>` as argument.");
             return;
         }
 
@@ -41,9 +45,9 @@ public class RemoveGameCommand extends ModeratorCommand {
         }
 
         Role LTGRole = mentionedRoles.get(0);
-
-        ltgBot.getLtgHandler().deleteGameRole(LTGRole,
-                success -> event.replySuccess(String.format("Deleted LTG role `%s`.", LTGRole.getName())),
+        User subscriber = event.getAuthor();
+        ltgBot.getLtgHandler().leaveGameRole(LTGRole, subscriber,
+                success -> event.replySuccess(String.format("%s unsubscribed from `%s`.", subscriber.getAsMention(), LTGRole.getName())),
                 failure -> event.replyError(failure.getMessage()));
     }
 }

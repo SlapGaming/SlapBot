@@ -5,7 +5,7 @@ import com.telluur.LTGBot.LTGBot;
 import com.telluur.LTGBot.commands.ModeratorCommand;
 
 /**
- * TODO add class description
+ * Add an LTG game command
  *
  * @author Rick Fontein
  */
@@ -13,15 +13,22 @@ import com.telluur.LTGBot.commands.ModeratorCommand;
 public class AddGameCommand extends ModeratorCommand {
     public AddGameCommand(LTGBot ltgBot) {
         super(ltgBot);
-        this.name = "add";
-        this.aliases = new String[]{"new", "create"};
-        this.arguments = "<identifier>";
-        this.help = "Adds a new game role";
+        this.name = "addgame";
+        this.aliases = new String[]{"add", "create"};
+        this.arguments = "<name>";
+        this.help = "Adds a new LTG role.";
         this.guildOnly = false;
     }
 
     @Override
     public void handle(CommandEvent event) {
-        //TODO Implement
+        if (event.getArgs().isEmpty()) {
+            event.replyError("Please include a `name` as argument.");
+            return;
+        }
+
+        ltgBot.getLtgHandler().createGameRole(event.getArgs(),
+                role -> event.replySuccess(String.format("Created LTG role %s.", role.getAsMention())),
+                failure -> event.replyError(failure.getMessage()));
     }
 }

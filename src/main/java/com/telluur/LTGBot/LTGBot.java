@@ -1,7 +1,8 @@
 package com.telluur.LTGBot;
 
 import com.telluur.LTGBot.config.Config;
-import com.telluur.LTGBot.ltg.LTPHandler;
+import com.telluur.LTGBot.ltg.LTGHandler;
+import com.telluur.LTGBot.ltg.storage.StorageHandler;
 import lombok.Getter;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -23,7 +24,7 @@ public class LTGBot {
     /*
     Handlers
      */
-    @Getter LTPHandler ltpHandler;
+    @Getter LTGHandler ltgHandler;
     @Getter private JDA jda;
     /*
     Config stuff
@@ -48,6 +49,6 @@ public class LTGBot {
         this.moderatorRole = jda.getRoleById(config.getModerator());
         this.textChannel = jda.getTextChannelById(config.getChannel());
 
-        this.ltpHandler = new LTPHandler(this);
+        this.ltgHandler = new LTGHandler(this);
     }
 }

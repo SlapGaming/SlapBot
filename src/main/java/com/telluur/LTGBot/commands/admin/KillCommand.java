@@ -17,7 +17,7 @@ public class KillCommand extends AdminCommand {
         super(ltgBot);
         this.name = "kill";
         this.aliases = new String[]{"fuckoff", "die"};
-        this.help = "Kills the bot";
+        this.help = "Kills the bot.";
         this.guildOnly = false;
     }
 

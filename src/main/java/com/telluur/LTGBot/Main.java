@@ -5,11 +5,15 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.telluur.LTGBot.commands.admin.GetConfigCommand;
 import com.telluur.LTGBot.commands.admin.KillCommand;
+import com.telluur.LTGBot.commands.admin.ltg.ForceReloadCommand;
+import com.telluur.LTGBot.commands.admin.ltg.ForceSaveCommand;
 import com.telluur.LTGBot.commands.moderator.AddGameCommand;
 import com.telluur.LTGBot.commands.moderator.RemoveGameCommand;
 import com.telluur.LTGBot.commands.user.PingCmd;
-import com.telluur.LTGBot.commands.user.SubscribeCommand;
-import com.telluur.LTGBot.commands.user.UnsubscribeCommand;
+import com.telluur.LTGBot.commands.user.ltg.GamesCommand;
+import com.telluur.LTGBot.commands.user.ltg.SubscribeCommand;
+import com.telluur.LTGBot.commands.user.ltg.SubscriptionsCommand;
+import com.telluur.LTGBot.commands.user.ltg.UnsubscribeCommand;
 import com.telluur.LTGBot.config.Config;
 import com.telluur.LTGBot.config.ConfigLoader;
 import com.vdurmont.emoji.EmojiParser;
@@ -42,12 +46,14 @@ public class Main {
         cmdBuilder.setOwnerId(config.getOwner());
         cmdBuilder.setPrefix(config.getPrefix());
         cmdBuilder.setAlternativePrefix(config.getAltprefix());
-        cmdBuilder.setGame(Game.playing(EmojiParser.parseToUnicode("with traffic :car:")));
+        cmdBuilder.setGame(config.getGameStatus());
         cmdBuilder.addCommands(
                 /*
                 Listen in alphabetical order
                 Admin
                  */
+                new ForceSaveCommand(ltgBot),
+                new ForceReloadCommand(ltgBot),
                 new GetConfigCommand(ltgBot),
                 new KillCommand(ltgBot),
 
@@ -61,6 +67,8 @@ public class Main {
                 User
                  */
                 new PingCmd(ltgBot),
+                new GamesCommand(ltgBot),
+                new SubscriptionsCommand(ltgBot),
                 new SubscribeCommand(ltgBot),
                 new UnsubscribeCommand(ltgBot)
         );
@@ -73,7 +81,7 @@ public class Main {
                     .setToken(token)
                     .addEventListener(cmdClient)
                     .setAudioEnabled(false)
-                    .setGame(Game.playing(EmojiParser.parseToUnicode("with myself")))
+                    .setGame(Game.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
             ltgBot.finishBot(jda);

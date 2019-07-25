@@ -1,8 +1,10 @@
-token:     ".............................token........................." # Your bot token goes here
-guild:     "123456789012345678"                                          # Discord guild snowflake ID
-owner:     "123456789012345678"                                          # Discord user snowflake ID
-admin:     "123456789012345678"                                          # Discord guild role snowflake ID
-moderator: "123456789012345678"                                          # Discord guild role snowflake ID
-channel:   "123456789012345678"                                          # Discord text channel snowflake ID
-prefix:    "."                                                           # Prefix for the commands
-altprefix: ",,"                                                          # Alternative prefix for the commands
+token:      ".............................token........................." # Your bot token goes here
+guild:      "123456789012345678"                                          # Discord guild snowflake ID
+owner:      "123456789012345678"                                          # Discord user snowflake ID
+admin:      "123456789012345678"                                          # Discord guild role snowflake ID
+moderator:  "123456789012345678"                                          # Discord guild role snowflake ID
+channel:    "123456789012345678"                                          # Discord text channel snowflake ID
+statustype: "listening"                                                   # Status type: (playing, watching, listening)
+status:     "for commands: .help"                                         # Status of the bot.
+prefix:     "."                                                           # Prefix for the commands
+altprefix:  ",,"                                                          # Alternative prefix for the commands

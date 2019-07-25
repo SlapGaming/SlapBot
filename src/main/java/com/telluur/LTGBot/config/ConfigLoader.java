@@ -22,6 +22,16 @@ public class ConfigLoader {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             Config config = mapper.readValue(new File("yaml/config.yaml"), Config.class);
+            switch (config.getStatustype()) {
+                case "watching":
+                    break;
+                case "listening":
+                    break;
+                case "playing":
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid status type");
+            }
             logger.info("================= CONFIG =================");
             logger.debug("Discord token:     " + config.getToken());
             logger.info("Guild:             " + config.getGuild());
@@ -30,6 +40,8 @@ public class ConfigLoader {
             logger.info("Moderator Role:    " + config.getModerator());
             logger.info("Command prefix:    " + config.getPrefix());
             logger.info("Command altprefix: " + config.getAltprefix());
+            logger.info("Status Type:       " + config.getStatustype());
+            logger.info("Status:            " + config.getStatus());
             logger.info("Text channel:      " + config.getChannel());
             logger.info("==========================================");
             return config;

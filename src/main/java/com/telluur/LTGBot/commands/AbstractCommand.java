@@ -31,8 +31,10 @@ public abstract class AbstractCommand extends Command {
 
         if (eventGuild != null && !eventGuild.equals(configGuild)) {
             logger.info(String.format("<DENIED> %s: %s", user.getName(), cmd));
-            event.replyError(String.format("This bot is locked to `%s`, and can only be used there or in private chat.",
-                    configGuild.getName()));
+            event.replyError(String.format(
+                    "This bot is locked to `%s`, and can only be used there or in private chat.",
+                    configGuild.getName()
+            ));
             return false;
         } else {
             return true;
