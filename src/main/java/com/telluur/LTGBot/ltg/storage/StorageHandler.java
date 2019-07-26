@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,11 +25,10 @@ import java.util.List;
  */
 
 public class StorageHandler {
+    private static final Logger logger = LoggerFactory.getLogger("LTG");
     private File storage;
     private ObjectMapper mapper;
     private ObjectNode root;
-
-    private static final Logger logger = LoggerFactory.getLogger("LTG");
 
     /**
      * Initializes the handler by:

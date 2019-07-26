@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
  */
 
 public class SubscriptionsCommand extends UserCommand {
-    private final Paginator.Builder builder;
     private static final char SPACE = '\u00A0'; //No break space character, cause discord collapses normal ones.
+    private final Paginator.Builder builder;
 
     public SubscriptionsCommand(LTGBot ltgBot) {
         super(ltgBot);

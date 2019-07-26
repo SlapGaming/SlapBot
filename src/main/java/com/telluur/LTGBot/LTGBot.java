@@ -3,7 +3,6 @@ package com.telluur.LTGBot;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.LTGBot.config.Config;
 import com.telluur.LTGBot.ltg.LTGHandler;
-import com.telluur.LTGBot.ltg.storage.StorageHandler;
 import lombok.Getter;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;

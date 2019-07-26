@@ -38,7 +38,7 @@ public class AddGameCommand extends ModeratorCommand {
             return;
         }
 
-        if(parts[0].length() > 6){
+        if (parts[0].length() > 6) {
             event.replyError("`<abbreviation=6>` has a limit of 6 characters.");
             return;
         }

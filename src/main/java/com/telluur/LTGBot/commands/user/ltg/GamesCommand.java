@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class GamesCommand extends UserCommand {
-    private final Paginator.Builder builder;
     private static final char SPACE = '\u00A0'; //No break space character, cause discord collapses normal ones.
+    private final Paginator.Builder builder;
 
     public GamesCommand(LTGBot ltgBot) {
         super(ltgBot);

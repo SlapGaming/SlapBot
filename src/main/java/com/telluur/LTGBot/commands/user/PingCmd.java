@@ -13,20 +13,6 @@ import java.util.Random;
  */
 
 public class PingCmd extends UserCommand {
-    public PingCmd(LTGBot ltgBot) {
-        super(ltgBot);
-        this.name = "ping";
-        this.help = "pong!";
-        this.guildOnly = false;
-    }
-
-    @Override
-    public void handle(CommandEvent event) {
-        String pong = puns[random.nextInt(puns.length)];
-        event.reply(pong);
-    }
-
-    private Random random = new Random();
     private static final String[] puns = {
             "What do you serve but not eat? \n" +
                     "A ping pong ball. ",
@@ -49,4 +35,18 @@ public class PingCmd extends UserCommand {
             "Are you a ping pong table? Cuz you ping pong my balls. ",
             "Stop staring at my \"Balls of Fury\". "
     };
+    private Random random = new Random();
+
+    public PingCmd(LTGBot ltgBot) {
+        super(ltgBot);
+        this.name = "ping";
+        this.help = "pong!";
+        this.guildOnly = false;
+    }
+
+    @Override
+    public void handle(CommandEvent event) {
+        String pong = puns[random.nextInt(puns.length)];
+        event.reply(pong);
+    }
 }
