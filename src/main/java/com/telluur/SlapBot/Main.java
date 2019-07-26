@@ -1,22 +1,22 @@
-package com.telluur.LTGBot;
+package com.telluur.SlapBot;
 
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.LTGBot.commands.admin.GetConfigCommand;
-import com.telluur.LTGBot.commands.admin.KillCommand;
-import com.telluur.LTGBot.commands.admin.ltg.ForceReloadCommand;
-import com.telluur.LTGBot.commands.admin.ltg.ForceSaveCommand;
-import com.telluur.LTGBot.commands.moderator.AddGameCommand;
-import com.telluur.LTGBot.commands.moderator.RemoveGameCommand;
-import com.telluur.LTGBot.commands.user.PingCmd;
-import com.telluur.LTGBot.commands.user.ltg.GamesCommand;
-import com.telluur.LTGBot.commands.user.ltg.SubscribeCommand;
-import com.telluur.LTGBot.commands.user.ltg.SubscriptionsCommand;
-import com.telluur.LTGBot.commands.user.ltg.UnsubscribeCommand;
-import com.telluur.LTGBot.config.Config;
-import com.telluur.LTGBot.config.ConfigLoader;
+import com.telluur.SlapBot.commands.admin.GetConfigCommand;
+import com.telluur.SlapBot.commands.admin.KillCommand;
+import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
+import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
+import com.telluur.SlapBot.commands.moderator.AddGameCommand;
+import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
+import com.telluur.SlapBot.commands.user.PingCmd;
+import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
+import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
+import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
+import com.telluur.SlapBot.commands.user.ltg.UnsubscribeCommand;
+import com.telluur.SlapBot.config.Config;
+import com.telluur.SlapBot.config.ConfigLoader;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -41,7 +41,7 @@ public class Main {
 
         logger.info("Bot start");
         EventWaiter waiter = new EventWaiter();
-        LTGBot ltgBot = new LTGBot(config, waiter);
+        SlapBot slapBot = new SlapBot(config, waiter);
 
         logger.info("Building commands");
         CommandClientBuilder cmdBuilder = new CommandClientBuilder();
@@ -54,25 +54,25 @@ public class Main {
                 Listen in alphabetical order
                 Admin
                  */
-                new ForceSaveCommand(ltgBot),
-                new ForceReloadCommand(ltgBot),
-                new GetConfigCommand(ltgBot),
-                new KillCommand(ltgBot),
+                new ForceSaveCommand(slapBot),
+                new ForceReloadCommand(slapBot),
+                new GetConfigCommand(slapBot),
+                new KillCommand(slapBot),
 
                 /*
                 Moderator
                  */
-                new AddGameCommand(ltgBot),
-                new RemoveGameCommand(ltgBot),
+                new AddGameCommand(slapBot),
+                new RemoveGameCommand(slapBot),
 
                 /*
                 User
                  */
-                new PingCmd(ltgBot),
-                new GamesCommand(ltgBot),
-                new SubscriptionsCommand(ltgBot),
-                new SubscribeCommand(ltgBot),
-                new UnsubscribeCommand(ltgBot)
+                new PingCmd(slapBot),
+                new GamesCommand(slapBot),
+                new SubscriptionsCommand(slapBot),
+                new SubscribeCommand(slapBot),
+                new UnsubscribeCommand(slapBot)
         );
         CommandClient cmdClient = cmdBuilder.build();
 
@@ -86,7 +86,7 @@ public class Main {
                     .setGame(Game.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
-            ltgBot.finishBot(jda);
+            slapBot.finishBot(jda);
         } catch (LoginException e) {
             logger.error("Failed to login", e.getCause());
             shutdown("caught exception");

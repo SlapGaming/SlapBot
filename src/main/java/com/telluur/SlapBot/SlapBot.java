@@ -1,8 +1,8 @@
-package com.telluur.LTGBot;
+package com.telluur.SlapBot;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.LTGBot.config.Config;
-import com.telluur.LTGBot.ltg.LTGHandler;
+import com.telluur.SlapBot.config.Config;
+import com.telluur.SlapBot.ltg.LTGHandler;
 import lombok.Getter;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * @author Rick Fontein
  */
 
-public class LTGBot {
+public class SlapBot {
     static final Logger logger = LoggerFactory.getLogger("BOT");
     private final Config config;
     /*
@@ -36,7 +36,7 @@ public class LTGBot {
     @Getter private TextChannel textChannel;
     @Getter private String prefix, altPrefix;
 
-    public LTGBot(Config config, EventWaiter eventWaiter) {
+    public SlapBot(Config config, EventWaiter eventWaiter) {
         this.config = config;
         this.prefix = config.getPrefix();
         this.altPrefix = config.getAltprefix();

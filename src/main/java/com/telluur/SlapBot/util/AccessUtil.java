@@ -1,6 +1,6 @@
-package com.telluur.LTGBot.util;
+package com.telluur.SlapBot.util;
 
-import com.telluur.LTGBot.LTGBot;
+import com.telluur.SlapBot.SlapBot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
@@ -17,21 +17,21 @@ import org.slf4j.LoggerFactory;
 public class AccessUtil {
     protected static final Logger logger = LoggerFactory.getLogger("ACCESSUTIL");
 
-    public static boolean isOwner(LTGBot ltgBot, User user) {
-        return user.equals(ltgBot.getOwner());
+    public static boolean isOwner(SlapBot slapBot, User user) {
+        return user.equals(slapBot.getOwner());
     }
 
     /**
      * Checks whether member is an admin
      *
-     * @param ltgBot the bot instance containing the roles
+     * @param slapBot the bot instance containing the roles
      * @param user   the user to be checked for access
      * @return whether access should be granted
      */
-    public static boolean isAdmin(LTGBot ltgBot, User user) {
-        Guild guild = ltgBot.getGuild();
+    public static boolean isAdmin(SlapBot slapBot, User user) {
+        Guild guild = slapBot.getGuild();
         if (guild.isMember(user)) {
-            return isOwner(ltgBot, user) || hasRole(guild.getMember(user), ltgBot.getAdminRole());
+            return isOwner(slapBot, user) || hasRole(guild.getMember(user), slapBot.getAdminRole());
         } else {
             return false;
         }
@@ -40,15 +40,15 @@ public class AccessUtil {
     /**
      * Checks whether member is moderator or higher
      *
-     * @param ltgBot the bot instance containing the roles
+     * @param slapBot the bot instance containing the roles
      * @param user   the user to be checked for access
      * @return whether access should be granted
      */
-    public static boolean isModerator(LTGBot ltgBot, User user) {
-        Guild guild = ltgBot.getGuild();
+    public static boolean isModerator(SlapBot slapBot, User user) {
+        Guild guild = slapBot.getGuild();
         if (guild.isMember(user)) {
             Member member = guild.getMember(user);
-            return isOwner(ltgBot, user) || hasRole(member, ltgBot.getAdminRole()) || hasRole(member, ltgBot.getModeratorRole());
+            return isOwner(slapBot, user) || hasRole(member, slapBot.getAdminRole()) || hasRole(member, slapBot.getModeratorRole());
         } else {
             return false;
         }
