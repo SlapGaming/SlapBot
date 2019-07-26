@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -122,7 +123,6 @@ public class StorageHandler {
         root.fieldNames().forEachRemaining(snowflakes::add);
         return snowflakes;
     }
-
 
     /*
     SAVE FILE

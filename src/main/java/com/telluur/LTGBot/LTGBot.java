@@ -1,5 +1,6 @@
 package com.telluur.LTGBot;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.LTGBot.config.Config;
 import com.telluur.LTGBot.ltg.LTGHandler;
 import com.telluur.LTGBot.ltg.storage.StorageHandler;
@@ -24,8 +25,9 @@ public class LTGBot {
     /*
     Handlers
      */
-    @Getter LTGHandler ltgHandler;
     @Getter private JDA jda;
+    @Getter private LTGHandler ltgHandler;
+    @Getter private EventWaiter eventWaiter;
     /*
     Config stuff
      */
@@ -35,10 +37,11 @@ public class LTGBot {
     @Getter private TextChannel textChannel;
     @Getter private String prefix, altPrefix;
 
-    public LTGBot(Config config) {
+    public LTGBot(Config config, EventWaiter eventWaiter) {
         this.config = config;
         this.prefix = config.getPrefix();
         this.altPrefix = config.getAltprefix();
+        this.eventWaiter = eventWaiter;
     }
 
     public void finishBot(JDA jda) throws IllegalArgumentException {

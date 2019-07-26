@@ -53,13 +53,14 @@ public class LTGHandler {
     /**
      * Creates a new role in the discord guild
      *
-     * @param name    The name for the new role
-     * @param success Consumer that accepts a Role when adding was sucessful
-     * @param failure Consumer that accepts an exception when creation failed
+     * @param abbreviation The game's abbreviation
+     * @param fullname     The full game name
+     * @param success      Consumer that accepts a Role when adding was sucessful
+     * @param failure      Consumer that accepts an exception when creation failed
      */
-    public void createGameRole(String name, Consumer<Role> success, Consumer<Throwable> failure) {
+    public void createGameRole(String abbreviation, String fullname, Consumer<Role> success, Consumer<Throwable> failure) {
         guildController.createRole()
-                .setName(name)
+                .setName(String.format("%s | %s", abbreviation, fullname))
                 .setPermissions(Permission.EMPTY_PERMISSIONS)
                 .setMentionable(true)
                 .setColor(new Color(26, 188, 156))
@@ -67,7 +68,7 @@ public class LTGHandler {
                         role -> {
                             try {
 
-                                StoredGame storedGame = new StoredGame(name);
+                                StoredGame storedGame = new StoredGame(abbreviation, fullname);
                                 storageHandler.setGameBySnowflake(role.getId(), storedGame);
                                 success.accept(role);
                                 logger.info(String.format("Role `%s` with id `%s` created", role.getName(), role.getId()));
@@ -78,7 +79,7 @@ public class LTGHandler {
                             }
                         },
                         fail -> {
-                            logger.error(String.format("Failed to create Discord role `%s`", name));
+                            logger.error(String.format("Failed to create Discord role `%s | %s`", abbreviation, fullname));
                             failure.accept(fail);
                         });
 

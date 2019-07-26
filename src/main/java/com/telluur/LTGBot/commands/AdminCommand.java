@@ -23,6 +23,7 @@ public abstract class AdminCommand extends AbstractCommand {
 
     @Override
     protected void execute(CommandEvent event) {
+        super.execute(event);
         if (super.inValidGuildOrPrivate(event)) {
             User user = event.getAuthor();
             String cmd = event.getMessage().getContentDisplay();

@@ -1,41 +1,16 @@
 package com.telluur.LTGBot.ltg.storage;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * POJO for the games stored in the storage.yaml file
+ * <p>
+ * private NoArgsConstructor for jackson databind
  *
  * @author Rick Fontein
  */
-
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StoredGame {
-    @Getter @Setter private String name;
-
-    /**
-     * Constructor for adding a new game
-     *
-     * @param name the name of the game
-     */
-    public StoredGame(String name) {
-        this.name = name;
-    }
-
-
-    /*
-    INTERNAL
-     */
-
-    /**
-     * Private constructor for Jackson
-     * Uses Getters and Setters
-     */
-    private StoredGame() {
-    }
-
-
-    @Override
-    public String toString() {
-        return "StoredGame{" + "name='" + name + '\'' + '}';
-    }
+    @Getter @Setter private String abbreviation, fullName;
 }

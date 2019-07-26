@@ -3,6 +3,7 @@ package com.telluur.LTGBot;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.LTGBot.commands.admin.GetConfigCommand;
 import com.telluur.LTGBot.commands.admin.KillCommand;
 import com.telluur.LTGBot.commands.admin.ltg.ForceReloadCommand;
@@ -39,7 +40,8 @@ public class Main {
         Config config = ConfigLoader.loadYAML();
 
         logger.info("Bot start");
-        LTGBot ltgBot = new LTGBot(config);
+        EventWaiter waiter = new EventWaiter();
+        LTGBot ltgBot = new LTGBot(config, waiter);
 
         logger.info("Building commands");
         CommandClientBuilder cmdBuilder = new CommandClientBuilder();
@@ -79,7 +81,7 @@ public class Main {
             String token = config.getToken();
             JDA jda = new JDABuilder()
                     .setToken(token)
-                    .addEventListener(cmdClient)
+                    .addEventListener(cmdClient, waiter)
                     .setAudioEnabled(false)
                     .setGame(Game.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
