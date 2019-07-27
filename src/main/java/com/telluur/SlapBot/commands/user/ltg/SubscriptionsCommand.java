@@ -107,9 +107,9 @@ public class SubscriptionsCommand extends UserCommand {
 
 
         if (games.length <= 0) {
-            event.replySuccess(String.format("`%s` does not have any subscriptions.", member.getNickname()));
+            event.replySuccess(String.format("`%s` does not have any subscriptions.", member.getEffectiveName()));
         } else {
-            builder.setText(String.format("Looking-to-game subscriptions of `%s`", member.getNickname()))
+            builder.setText(String.format("Looking-to-game subscriptions of `%s`", member.getEffectiveName()))
                     .setItems(games)
                     .build()
                     .display(event.getChannel());
@@ -117,9 +117,9 @@ public class SubscriptionsCommand extends UserCommand {
     }
 
     private void roleDisplay(CommandEvent event, Role role) {
-        String[] subscribers = ltgBot.getGuild().getMembersWithRoles(role)
+        String[] subscribers = slapBot.getGuild().getMembersWithRoles(role)
                 .stream()
-                .map(member -> String.format("`%-50s`", member.getNickname()))
+                .map(member -> String.format("`%-50s`", member.getEffectiveName()))
                 .sorted()
                 .toArray(String[]::new);
 

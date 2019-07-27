@@ -38,18 +38,24 @@ public abstract class AbstractCommand extends Command {
         event.getMessage().delete().queue();
         String filteredCmd = Arrays.stream(event.getMessage().getContentRaw().split("\\s+"))
                 .map(stringPart -> {
-                    List<Member> possibleMembers = FinderUtil.findMembers(stringPart, ltgBot.getGuild());
-                    List<Role> possibleRoles = FinderUtil.findRoles(stringPart, ltgBot.getGuild());
-                    if (possibleMembers.size() == 1) {
-                        return String.format("`%s`", possibleMembers.get(0).getNickname());
-                    } else if (possibleRoles.size() == 1) {
-                        return String.format("`%s`", possibleRoles.get(0).getName());
-                    } else {
+                    if (stringPart.startsWith("<")) {
+                        List<Member> possibleMembers = FinderUtil.findMembers(stringPart, slapBot.getGuild());
+                        List<Role> possibleRoles = FinderUtil.findRoles(stringPart, slapBot.getGuild());
+                        if (possibleMembers.size() == 1) {
+                            Member m = possibleMembers.get(0);
+                            return String.format("`%s`", m.getEffectiveName());
+                        } else if (possibleRoles.size() == 1) {
+                            System.out.println("roles");
+                            return String.format("`%s`", possibleRoles.get(0).getName());
+                        } else {
+                            return stringPart;
+                        }
+                    } else{
                         return stringPart;
                     }
                 })
                 .collect(Collectors.joining(" "));
-        event.getChannel().sendMessage(String.format("`%s` issued command: %s", event.getMember().getNickname(), filteredCmd)).queue();
+        event.getChannel().sendMessage(String.format("`%s` issued command: %s", event.getMember().getEffectiveName(), filteredCmd)).queue();
 
     }
 
