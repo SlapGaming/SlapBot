@@ -1,11 +1,11 @@
-package com.telluur.LTGBot.commands.user.ltg;
+package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.UserCommand;
-import com.telluur.LTGBot.ltg.storage.StorageHandler;
-import com.telluur.LTGBot.ltg.storage.StoredGame;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.UserCommand;
+import com.telluur.SlapBot.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.ltg.storage.StoredGame;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.PermissionException;
@@ -25,8 +25,8 @@ public class GamesCommand extends UserCommand {
     private static final char SPACE = '\u00A0'; //No break space character, cause discord collapses normal ones.
     private final Paginator.Builder builder;
 
-    public GamesCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public GamesCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "games";
         this.help = "Shows an alphabetical list of all LTG games";
         builder = new Paginator.Builder()
@@ -42,15 +42,15 @@ public class GamesCommand extends UserCommand {
                 .waitOnSinglePage(false)
                 .useNumberedItems(false)
                 .showPageNumbers(true)
-                .setEventWaiter(ltgBot.getEventWaiter())
+                .setEventWaiter(slapBot.getEventWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
 
     }
 
     @Override
     public void handle(CommandEvent event) {
-        Guild g = ltgBot.getGuild();
-        StorageHandler handler = ltgBot.getLtgHandler().getStorageHandler();
+        Guild g = slapBot.getGuild();
+        StorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
 
         /*
         Get gameSnowflakes from storage

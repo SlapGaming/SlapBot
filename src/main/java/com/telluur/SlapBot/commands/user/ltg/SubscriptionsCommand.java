@@ -1,11 +1,11 @@
-package com.telluur.LTGBot.commands.user.ltg;
+package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.Paginator;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.UserCommand;
-import com.telluur.LTGBot.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.UserCommand;
+import com.telluur.SlapBot.ltg.storage.StorageHandler;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.PermissionException;
@@ -27,8 +27,8 @@ public class SubscriptionsCommand extends UserCommand {
     private static final char SPACE = '\u00A0'; //No break space character, cause discord collapses normal ones.
     private final Paginator.Builder builder;
 
-    public SubscriptionsCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public SubscriptionsCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "subscriptions";
         this.aliases = new String[]{"subs", "info"};
         this.arguments = "<?@role|?@user>";
@@ -47,7 +47,7 @@ public class SubscriptionsCommand extends UserCommand {
                 .waitOnSinglePage(false)
                 .useNumberedItems(false)
                 .showPageNumbers(true)
-                .setEventWaiter(ltgBot.getEventWaiter())
+                .setEventWaiter(slapBot.getEventWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
     }
 
@@ -63,7 +63,7 @@ public class SubscriptionsCommand extends UserCommand {
         String[] parts = event.getArgs().split("\\s+");
 
         List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], event.getGuild());
-        StorageHandler handler = ltgBot.getLtgHandler().getStorageHandler();
+        StorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
             if (handler.hasGameBySnowflake(role.getId())) {
@@ -75,7 +75,7 @@ public class SubscriptionsCommand extends UserCommand {
         }
 
         //Handle member mention
-        List<Member> mentionedMembers = FinderUtil.findMembers(parts[0], ltgBot.getGuild());
+        List<Member> mentionedMembers = FinderUtil.findMembers(parts[0], slapBot.getGuild());
         if (mentionedMembers.size() == 1) {
             Member member = mentionedMembers.get(0);
             memberDisplay(event, member);
@@ -88,7 +88,7 @@ public class SubscriptionsCommand extends UserCommand {
 
     private void memberDisplay(CommandEvent event, Member member) {
         List<String> discordRoles = member.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-        StorageHandler handler = ltgBot.getLtgHandler().getStorageHandler();
+        StorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
         String[] games = handler.getGameSnowflakes()
                 .stream()
                 .filter(discordRoles::contains)

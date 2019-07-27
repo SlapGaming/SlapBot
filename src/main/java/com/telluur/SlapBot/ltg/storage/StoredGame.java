@@ -1,4 +1,4 @@
-package com.telluur.LTGBot.ltg.storage;
+package com.telluur.SlapBot.ltg.storage;
 
 import lombok.*;
 

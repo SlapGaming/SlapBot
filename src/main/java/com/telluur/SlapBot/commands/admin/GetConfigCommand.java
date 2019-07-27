@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.commands.admin;
+package com.telluur.SlapBot.commands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.AdminCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.AdminCommand;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -19,8 +19,8 @@ import java.awt.*;
  */
 
 public class GetConfigCommand extends AdminCommand {
-    public GetConfigCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public GetConfigCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "config";
         this.help = "Displays the loaded configuration file (excluding token).";
         this.guildOnly = false;
@@ -28,15 +28,15 @@ public class GetConfigCommand extends AdminCommand {
 
     @Override
     public void handle(CommandEvent event) {
-        Guild guild = ltgBot.getGuild();
-        TextChannel tc = ltgBot.getTextChannel();
+        Guild guild = slapBot.getGuild();
+        TextChannel tc = slapBot.getTextChannel();
 
-        User owner = ltgBot.getOwner();
-        Role admin = ltgBot.getAdminRole();
-        Role mod = ltgBot.getModeratorRole();
+        User owner = slapBot.getOwner();
+        Role admin = slapBot.getAdminRole();
+        Role mod = slapBot.getModeratorRole();
 
-        String prefix = ltgBot.getPrefix();
-        String altPrefix = ltgBot.getAltPrefix();
+        String prefix = slapBot.getPrefix();
+        String altPrefix = slapBot.getAltPrefix();
 
 
         EmbedBuilder eb = new EmbedBuilder()

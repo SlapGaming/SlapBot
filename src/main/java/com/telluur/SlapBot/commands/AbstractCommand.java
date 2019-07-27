@@ -1,9 +1,9 @@
-package com.telluur.LTGBot.commands;
+package com.telluur.SlapBot.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
-import com.telluur.LTGBot.LTGBot;
+import com.telluur.SlapBot.SlapBot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractCommand extends Command {
     private static final Logger logger = LoggerFactory.getLogger("CMD");
-    protected LTGBot ltgBot;
+    protected SlapBot slapBot;
 
-    AbstractCommand(LTGBot ltgBot) {
-        this.ltgBot = ltgBot;
+    AbstractCommand(SlapBot slapBot) {
+        this.slapBot = slapBot;
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class AbstractCommand extends Command {
         User user = event.getAuthor();
         String cmd = event.getMessage().getContentDisplay();
         Guild eventGuild = event.getGuild();
-        Guild configGuild = ltgBot.getGuild();
+        Guild configGuild = slapBot.getGuild();
 
         if (eventGuild != null && !eventGuild.equals(configGuild)) {
             logger.info(String.format("<DENIED> %s: %s", user.getName(), cmd));

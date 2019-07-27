@@ -1,9 +1,9 @@
-package com.telluur.LTGBot.ltg;
+package com.telluur.SlapBot.ltg;
 
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.Main;
-import com.telluur.LTGBot.ltg.storage.StorageHandler;
-import com.telluur.LTGBot.ltg.storage.StoredGame;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.Main;
+import com.telluur.SlapBot.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.ltg.storage.StoredGame;
 import lombok.Getter;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
@@ -27,18 +27,18 @@ import java.util.function.Consumer;
 public class LTGHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
 
-    private LTGBot ltgBot;
+    private SlapBot slapBot;
     private Guild guild;
     private GuildController guildController;
 
     @Getter private StorageHandler storageHandler;
 
 
-    public LTGHandler(LTGBot ltgBot) {
+    public LTGHandler(SlapBot slapBot) {
         try {
-            this.ltgBot = ltgBot;
-            this.guild = ltgBot.getGuild();
-            this.guildController = ltgBot.getGuild().getController();
+            this.slapBot = slapBot;
+            this.guild = slapBot.getGuild();
+            this.guildController = slapBot.getGuild().getController();
             this.storageHandler = new StorageHandler();
         } catch (IOException e) {
             logger.error("Failed to read storage", e.getCause());

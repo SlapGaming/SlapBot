@@ -1,9 +1,9 @@
-package com.telluur.LTGBot.commands.admin;
+package com.telluur.SlapBot.commands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.Main;
-import com.telluur.LTGBot.commands.AdminCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.Main;
+import com.telluur.SlapBot.commands.AdminCommand;
 import com.vdurmont.emoji.EmojiParser;
 
 /**
@@ -13,8 +13,8 @@ import com.vdurmont.emoji.EmojiParser;
  */
 
 public class KillCommand extends AdminCommand {
-    public KillCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public KillCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "kill";
         this.aliases = new String[]{"fuckoff", "die"};
         this.help = "Kills the bot.";

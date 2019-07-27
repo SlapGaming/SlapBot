@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.commands.user.ltg;
+package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.UserCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.UserCommand;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 
@@ -17,8 +17,8 @@ import static com.jagrosh.jdautilities.commons.utils.FinderUtil.findRoles;
  */
 
 public class UnsubscribeCommand extends UserCommand {
-    public UnsubscribeCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public UnsubscribeCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "unsubscribe";
         this.aliases = new String[]{"unsub", "leave"};
         this.arguments = "<@role>";
@@ -46,7 +46,7 @@ public class UnsubscribeCommand extends UserCommand {
 
         Role LTGRole = mentionedRoles.get(0);
         User subscriber = event.getAuthor();
-        ltgBot.getLtgHandler().leaveGameRole(LTGRole, subscriber,
+        slapBot.getLtgHandler().leaveGameRole(LTGRole, subscriber,
                 success -> event.replySuccess(String.format("%s unsubscribed from `%s`.", subscriber.getAsMention(), LTGRole.getName())),
                 failure -> event.replyError(failure.getMessage()));
     }

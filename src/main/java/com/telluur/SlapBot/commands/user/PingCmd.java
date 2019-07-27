@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.commands.user;
+package com.telluur.SlapBot.commands.user;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.UserCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.UserCommand;
 
 import java.util.Random;
 
@@ -37,8 +37,8 @@ public class PingCmd extends UserCommand {
     };
     private Random random = new Random();
 
-    public PingCmd(LTGBot ltgBot) {
-        super(ltgBot);
+    public PingCmd(SlapBot slapBot) {
+        super(slapBot);
         this.name = "ping";
         this.help = "pong!";
         this.guildOnly = false;

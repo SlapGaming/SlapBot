@@ -1,4 +1,4 @@
-package com.telluur.LTGBot.config;
+package com.telluur.SlapBot.config;
 
 import com.vdurmont.emoji.EmojiParser;
 import lombok.Getter;

@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.commands.moderator;
+package com.telluur.SlapBot.commands.moderator;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.ModeratorCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.ModeratorCommand;
 import net.dv8tion.jda.core.entities.Role;
 
 import java.util.List;
@@ -16,8 +16,8 @@ import static com.jagrosh.jdautilities.commons.utils.FinderUtil.findRoles;
  */
 
 public class RemoveGameCommand extends ModeratorCommand {
-    public RemoveGameCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public RemoveGameCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "removegame";
         this.aliases = new String[]{"remove", "delete", "del"};
         this.arguments = "<@role>";
@@ -42,7 +42,7 @@ public class RemoveGameCommand extends ModeratorCommand {
 
         Role LTGRole = mentionedRoles.get(0);
 
-        ltgBot.getLtgHandler().deleteGameRole(LTGRole,
+        slapBot.getLtgHandler().deleteGameRole(LTGRole,
                 success -> event.replySuccess(String.format("Deleted LTG role `%s`.", LTGRole.getName())),
                 failure -> event.replyError(failure.getMessage()));
     }

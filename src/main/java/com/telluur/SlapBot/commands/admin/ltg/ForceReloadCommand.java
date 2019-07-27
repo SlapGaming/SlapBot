@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.commands.admin.ltg;
+package com.telluur.SlapBot.commands.admin.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.AdminCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.AdminCommand;
 
 import java.io.IOException;
 
@@ -13,8 +13,8 @@ import java.io.IOException;
  */
 
 public class ForceReloadCommand extends AdminCommand {
-    public ForceReloadCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public ForceReloadCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "reload";
         this.help = "Forces to load LTG from storage. WARNING: ASYNC, MAY BREAK BOT.";
         this.guildOnly = false;
@@ -23,7 +23,7 @@ public class ForceReloadCommand extends AdminCommand {
     @Override
     public void handle(CommandEvent event) {
         try {
-            ltgBot.getLtgHandler().getStorageHandler().forceReload();
+            slapBot.getLtgHandler().getStorageHandler().forceReload();
             event.replySuccess("Successfully reloaded from storage.");
         } catch (IOException e) {
             event.replyError("An IO Exception occurred. Good job, you broke the bot!");

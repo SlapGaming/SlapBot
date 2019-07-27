@@ -1,7 +1,7 @@
-package com.telluur.LTGBot.commands;
+package com.telluur.SlapBot.commands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
+import com.telluur.SlapBot.SlapBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 public abstract class UserCommand extends AbstractCommand {
     protected static final Logger logger = LoggerFactory.getLogger("USER");
 
-    public UserCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public UserCommand(SlapBot slapBot) {
+        super(slapBot);
         this.category = new Category("User");
     }
 

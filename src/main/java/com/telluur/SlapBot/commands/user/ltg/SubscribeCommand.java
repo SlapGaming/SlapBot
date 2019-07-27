@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.commands.user.ltg;
+package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.LTGBot.LTGBot;
-import com.telluur.LTGBot.commands.UserCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.UserCommand;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 
@@ -17,8 +17,8 @@ import static com.jagrosh.jdautilities.commons.utils.FinderUtil.findRoles;
  */
 
 public class SubscribeCommand extends UserCommand {
-    public SubscribeCommand(LTGBot ltgBot) {
-        super(ltgBot);
+    public SubscribeCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "subscribe";
         this.aliases = new String[]{"sub", "join"};
         this.arguments = "<@role>";
@@ -45,7 +45,7 @@ public class SubscribeCommand extends UserCommand {
 
         Role LTGRole = mentionedRoles.get(0);
         User subscriber = event.getAuthor();
-        ltgBot.getLtgHandler().joinGameRole(LTGRole, subscriber,
+        slapBot.getLtgHandler().joinGameRole(LTGRole, subscriber,
                 success -> event.replySuccess(String.format("%s is now subscribed to `%s`.", subscriber.getAsMention(), LTGRole.getName())),
                 failure -> event.replyError(failure.getMessage()));
     }

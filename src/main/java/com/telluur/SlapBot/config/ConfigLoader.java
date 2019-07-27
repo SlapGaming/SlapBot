@@ -1,8 +1,8 @@
-package com.telluur.LTGBot.config;
+package com.telluur.SlapBot.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.telluur.LTGBot.Main;
+import com.telluur.SlapBot.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
