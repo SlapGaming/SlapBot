@@ -29,8 +29,8 @@ public class SubscriptionsCommand extends UserCommand {
 
     public SubscriptionsCommand(SlapBot slapBot) {
         super(slapBot);
-        this.name = "subscriptions";
-        this.aliases = new String[]{"subs", "info"};
+        this.name = "info";
+        this.aliases = new String[]{"subscriptions", "subs"};
         this.arguments = "<?@role|?@user>";
         this.help = "Displays subscription info of a LTG role or user, defaults to your own subscriptions.";
 

@@ -70,11 +70,11 @@ public class Main {
                 /*
                 User
                  */
-                new PingCmd(slapBot),
                 new GamesCommand(slapBot),
-                new SubscriptionsCommand(slapBot),
-                new SubscribeCommand(slapBot),
-                new UnsubscribeCommand(slapBot)
+                new SubscriptionsCommand(slapBot), //info
+                new SubscribeCommand(slapBot), //join
+                new UnsubscribeCommand(slapBot), //leave
+                new PingCmd(slapBot)
         );
         CommandClient cmdClient = cmdBuilder.build();
 

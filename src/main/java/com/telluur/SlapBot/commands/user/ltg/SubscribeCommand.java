@@ -19,8 +19,8 @@ import static com.jagrosh.jdautilities.commons.utils.FinderUtil.findRoles;
 public class SubscribeCommand extends UserCommand {
     public SubscribeCommand(SlapBot slapBot) {
         super(slapBot);
-        this.name = "subscribe";
-        this.aliases = new String[]{"sub", "join"};
+        this.name = "join";
+        this.aliases = new String[]{"subscribe", "sub"};
         this.arguments = "<@role>";
         this.help = "Subscribes to a game group.";
     }

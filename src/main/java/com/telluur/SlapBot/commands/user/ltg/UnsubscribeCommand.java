@@ -19,8 +19,8 @@ import static com.jagrosh.jdautilities.commons.utils.FinderUtil.findRoles;
 public class UnsubscribeCommand extends UserCommand {
     public UnsubscribeCommand(SlapBot slapBot) {
         super(slapBot);
-        this.name = "unsubscribe";
-        this.aliases = new String[]{"unsub", "leave"};
+        this.name = "leave";
+        this.aliases = new String[]{"unsubscribe", "unsub"};
         this.arguments = "<@role>";
         this.help = "Unsubscribe from a game group.";
         this.guildOnly = false;
