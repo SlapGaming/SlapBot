@@ -4,14 +4,14 @@ package com.telluur.SlapBot;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.SlapBot.commands.admin.GetConfigCommand;
+import com.telluur.SlapBot.commands.AboutCommand;
+import com.telluur.SlapBot.commands.PingCmd;
 import com.telluur.SlapBot.commands.admin.KillCommand;
 import com.telluur.SlapBot.commands.admin.PruneChatCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
-import com.telluur.SlapBot.commands.user.PingCmd;
 import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
@@ -36,7 +36,10 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
 
     public static void main(String[] args) {
-        logger.info("Starting up");
+        final String VERSION = Main.class.getPackage().getImplementationVersion() != null ?
+                Main.class.getPackage().getImplementationVersion() :
+                "DEVELOPMENT NON PACKAGED";
+        logger.info(String.format("Starting bot, version: [%s]", VERSION));
         logger.info("Loading config.yaml");
         Config config = ConfigLoader.loadYAML();
 
@@ -53,11 +56,16 @@ public class Main {
         cmdBuilder.addCommands(
                 /*
                 Listen in alphabetical order
+                About command
+                 */
+                new AboutCommand(slapBot),
+                new PingCmd(),
+
+                /*
                 Admin
                  */
                 new ForceSaveCommand(slapBot),
                 new ForceReloadCommand(slapBot),
-                new GetConfigCommand(slapBot),
                 new KillCommand(slapBot),
                 new PruneChatCommand(slapBot),
 
@@ -73,8 +81,7 @@ public class Main {
                 new GamesCommand(slapBot),
                 new SubscriptionsCommand(slapBot), //info
                 new SubscribeCommand(slapBot), //join
-                new UnsubscribeCommand(slapBot), //leave
-                new PingCmd(slapBot)
+                new UnsubscribeCommand(slapBot) //leave
         );
         CommandClient cmdClient = cmdBuilder.build();
 

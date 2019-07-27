@@ -2,7 +2,7 @@ package com.telluur.SlapBot.commands.admin.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.commands.AdminCommand;
+import com.telluur.SlapBot.commands.abstractions.AdminCommand;
 
 import java.io.IOException;
 

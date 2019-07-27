@@ -3,7 +3,7 @@ package com.telluur.SlapBot.commands.user.ltg;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.commands.UserCommand;
+import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.ltg.storage.StoredGame;
 import net.dv8tion.jda.core.entities.Guild;

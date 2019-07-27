@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.commands.UserCommand;
+import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;

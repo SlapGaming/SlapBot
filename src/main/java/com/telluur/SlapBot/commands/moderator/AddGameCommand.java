@@ -2,7 +2,7 @@ package com.telluur.SlapBot.commands.moderator;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.commands.ModeratorCommand;
+import com.telluur.SlapBot.commands.abstractions.ModeratorCommand;
 
 /**
  * Add an LTG game command

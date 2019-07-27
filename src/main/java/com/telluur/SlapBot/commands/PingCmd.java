@@ -1,8 +1,7 @@
-package com.telluur.SlapBot.commands.user;
+package com.telluur.SlapBot.commands;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.commands.UserCommand;
 
 import java.util.Random;
 
@@ -12,7 +11,7 @@ import java.util.Random;
  * @author Rick Fontein
  */
 
-public class PingCmd extends UserCommand {
+public class PingCmd extends Command {
     private static final String[] puns = {
             "What do you serve but not eat? \n" +
                     "A ping pong ball. ",
@@ -37,15 +36,14 @@ public class PingCmd extends UserCommand {
     };
     private Random random = new Random();
 
-    public PingCmd(SlapBot slapBot) {
-        super(slapBot);
+    public PingCmd() {
         this.name = "ping";
         this.help = "pong!";
         this.guildOnly = false;
     }
 
     @Override
-    public void handle(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         String pong = puns[random.nextInt(puns.length)];
         event.reply(pong);
     }

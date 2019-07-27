@@ -1,7 +1,7 @@
 package com.telluur.SlapBot.ltg;
 
-import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.Main;
+import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.ltg.storage.StoredGame;
 import lombok.Getter;

@@ -1,9 +1,9 @@
 package com.telluur.SlapBot.commands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.Main;
-import com.telluur.SlapBot.commands.AdminCommand;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.abstractions.AdminCommand;
 import com.vdurmont.emoji.EmojiParser;
 
 /**

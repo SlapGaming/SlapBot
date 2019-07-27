@@ -2,7 +2,7 @@ package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.commands.UserCommand;
+import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 

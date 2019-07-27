@@ -25,7 +25,7 @@ public class AccessUtil {
      * Checks whether member is an admin
      *
      * @param slapBot the bot instance containing the roles
-     * @param user   the user to be checked for access
+     * @param user    the user to be checked for access
      * @return whether access should be granted
      */
     public static boolean isAdmin(SlapBot slapBot, User user) {
@@ -41,7 +41,7 @@ public class AccessUtil {
      * Checks whether member is moderator or higher
      *
      * @param slapBot the bot instance containing the roles
-     * @param user   the user to be checked for access
+     * @param user    the user to be checked for access
      * @return whether access should be granted
      */
     public static boolean isModerator(SlapBot slapBot, User user) {
