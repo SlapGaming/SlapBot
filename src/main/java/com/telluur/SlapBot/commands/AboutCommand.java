@@ -9,8 +9,6 @@ import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDAInfo;
 
-import java.awt.*;
-
 
 /**
  * Command that displays the configuration of the bot.
@@ -36,7 +34,7 @@ public class AboutCommand extends Command {
     protected void execute(CommandEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setAuthor("All about " + event.getSelfUser().getName() + "!", null, event.getSelfUser().getAvatarUrl());
-        eb.setColor(Color.RED);
+        eb.setColor(SlapBot.getCOLOR());
 
         /*
         Description Builder

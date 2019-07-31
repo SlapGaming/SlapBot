@@ -4,13 +4,15 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
+import com.telluur.SlapBot.ltg.LTGHandler;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.ltg.storage.StoredGame;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -23,14 +25,18 @@ import java.util.concurrent.TimeUnit;
 
 public class GamesCommand extends UserCommand {
     private static final char SPACE = '\u00A0'; //No break space character, cause discord collapses normal ones.
-    private final Paginator.Builder builder;
+    private static final String REPLY_HEADER = "**Looking-to-game roles**";
+    private final Paginator.Builder textChatBuilder;
+    private final EmbedBuilder privateChatBuilder;
 
     public GamesCommand(SlapBot slapBot) {
         super(slapBot);
         this.name = "games";
         this.help = "Shows an alphabetical list of all LTG games";
-        builder = new Paginator.Builder()
-                .setColor(new Color(26, 188, 156))
+        this.guildOnly = false;
+        textChatBuilder = new Paginator.Builder()
+                .setText(REPLY_HEADER)
+                .setColor(LTGHandler.getCOLOR())
                 .setColumns(1)
                 .setFinalAction(m -> {
                     try {
@@ -44,6 +50,8 @@ public class GamesCommand extends UserCommand {
                 .showPageNumbers(true)
                 .setEventWaiter(slapBot.getEventWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
+        privateChatBuilder = new EmbedBuilder()
+                .setColor(LTGHandler.getCOLOR());
 
     }
 
@@ -60,7 +68,6 @@ public class GamesCommand extends UserCommand {
         Sort alphabetically
         Collect to array for varargs paginator
          */
-        //Get gameSnowflakes from storage convert them to JDA Role objects
         String[] games = handler.getGameSnowflakes()
                 .stream()
                 .map(s -> {
@@ -85,10 +92,23 @@ public class GamesCommand extends UserCommand {
             event.replyError("No LTG roles found.");
             return;
         }
-
-        builder.setText("Looking-to-game roles in this guild")
-                .setItems(games)
-                .build()
-                .display(event.getChannel());
+        switch (event.getChannel().getType()) {
+            case TEXT:
+                textChatBuilder
+                        .setItems(games)
+                        .build()
+                        .display(event.getChannel());
+                break;
+            case PRIVATE:
+                MessageEmbed me = privateChatBuilder
+                        .setDescription(String.join("\r\n", games))
+                        .build();
+                event.reply(REPLY_HEADER);
+                event.reply(me);
+                break;
+            default:
+                event.replyError("Could not display message in this channel.");
+                break;
+        }
     }
 }

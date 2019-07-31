@@ -44,7 +44,7 @@ public class PruneChatCommand extends AdminCommand {
                 return;
             }
 
-            if (limit < 1 || limit > 100) {
+            if (limit < 1 || limit > 200) {
                 event.replyInDm("First argument should be a number. <1-100>");
                 return;
             }

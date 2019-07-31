@@ -29,16 +29,13 @@ public class UnsubscribeCommand extends UserCommand {
     @SuppressWarnings("Duplicates")
     @Override
     public void handle(CommandEvent event) {
-        //Delete the message as it includes a role mention
-        event.getMessage().delete().queue();
-
         if (event.getArgs().isEmpty()) {
             event.replyError("Please include a `<@role>` as argument.");
             return;
         }
 
         String[] parts = event.getArgs().split("\\s+");
-        List<Role> mentionedRoles = findRoles(parts[0], event.getGuild());
+        List<Role> mentionedRoles = findRoles(parts[0], slapBot.getGuild());
         if (mentionedRoles.size() != 1) {
             event.replyError("Please include a single valid `<@role>` as argument.");
             return;

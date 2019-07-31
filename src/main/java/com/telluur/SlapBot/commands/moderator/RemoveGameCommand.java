@@ -34,7 +34,7 @@ public class RemoveGameCommand extends ModeratorCommand {
         }
 
         String[] parts = event.getArgs().split("\\s+");
-        List<Role> mentionedRoles = findRoles(parts[0], event.getGuild());
+        List<Role> mentionedRoles = findRoles(parts[0], slapBot.getGuild());
         if (mentionedRoles.size() != 1) {
             event.replyError("Please include a single valid `<@role>` as argument.");
             return;

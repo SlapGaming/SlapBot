@@ -5,12 +5,14 @@ import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
+import com.telluur.SlapBot.ltg.LTGHandler;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +27,8 @@ import java.util.stream.Collectors;
 
 public class SubscriptionsCommand extends UserCommand {
     private static final char SPACE = '\u00A0'; //No break space character, cause discord collapses normal ones.
-    private final Paginator.Builder builder;
+    private final Paginator.Builder textChatBuilder;
+    private final EmbedBuilder privateChatBuilder;
 
     public SubscriptionsCommand(SlapBot slapBot) {
         super(slapBot);
@@ -33,9 +36,10 @@ public class SubscriptionsCommand extends UserCommand {
         this.aliases = new String[]{"subscriptions", "subs"};
         this.arguments = "<?@role|?@user>";
         this.help = "Displays subscription info of a LTG role or user, defaults to your own subscriptions.";
+        this.guildOnly = false;
 
-        builder = new Paginator.Builder()
-                .setColor(new Color(26, 188, 156))
+        textChatBuilder = new Paginator.Builder()
+                .setColor(LTGHandler.getCOLOR())
                 .setColumns(1)
                 .setFinalAction(m -> {
                     try {
@@ -49,20 +53,30 @@ public class SubscriptionsCommand extends UserCommand {
                 .showPageNumbers(true)
                 .setEventWaiter(slapBot.getEventWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
+        privateChatBuilder = new EmbedBuilder()
+                .setColor(LTGHandler.getCOLOR());
     }
 
     @Override
     public void handle(CommandEvent event) {
+        Member issuer = event.getMember();
+
+        if (issuer == null && slapBot.getGuild().isMember(event.getAuthor())) {
+            issuer = slapBot.getGuild().getMember(event.getAuthor());
+        } else {
+            event.replyError(String.format("You need to be a member of `%s`", slapBot.getGuild().getName()));
+        }
+
         //Handle no argument
         if (event.getArgs().isEmpty()) {
-            memberDisplay(event, event.getMember());
+            memberDisplay(event, issuer);
             return;
         }
 
         //Handle role mention
         String[] parts = event.getArgs().split("\\s+");
 
-        List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], event.getGuild());
+        List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], slapBot.getGuild());
         StorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
@@ -109,10 +123,9 @@ public class SubscriptionsCommand extends UserCommand {
         if (games.length <= 0) {
             event.replySuccess(String.format("`%s` does not have any subscriptions.", member.getEffectiveName()));
         } else {
-            builder.setText(String.format("Looking-to-game subscriptions of `%s`", member.getEffectiveName()))
-                    .setItems(games)
-                    .build()
-                    .display(event.getChannel());
+            String replyHeader = String.format("**Looking-to-game subscriptions of `%s`**", member.getEffectiveName());
+            //noinspection DuplicatedCode
+            createReply(event, games, replyHeader);
         }
     }
 
@@ -126,10 +139,30 @@ public class SubscriptionsCommand extends UserCommand {
         if (subscribers.length <= 0) {
             event.replySuccess(String.format("`%s` does not have any subscribers.", role.getName()));
         } else {
-            builder.setText(String.format("Looking-to-game subscribers of `%s`, total subscriber count: `%d`.", role.getName(), subscribers.length))
-                    .setItems(subscribers)
-                    .build()
-                    .display(event.getChannel());
+            String replyHeader = String.format("**Looking-to-game subscribers of `%s`, total subscriber count: `%d`.**", role.getName(), subscribers.length);
+            createReply(event, subscribers, replyHeader);
+        }
+    }
+
+    private void createReply(CommandEvent event, String[] subscribers, String replyHeader) {
+        switch (event.getChannel().getType()) {
+            case TEXT:
+                textChatBuilder
+                        .setText(replyHeader)
+                        .setItems(subscribers)
+                        .build()
+                        .display(event.getChannel());
+                break;
+            case PRIVATE:
+                MessageEmbed me = privateChatBuilder
+                        .setDescription(String.join("\r\n", subscribers))
+                        .build();
+                event.reply(replyHeader);
+                event.reply(me);
+                break;
+            default:
+                event.replyError("Could not display message in this channel.");
+                break;
         }
     }
 }

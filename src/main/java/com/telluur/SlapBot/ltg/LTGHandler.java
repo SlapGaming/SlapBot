@@ -26,11 +26,10 @@ import java.util.function.Consumer;
 
 public class LTGHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
-
+    @Getter private static final Color COLOR = new Color(26, 188, 156);
     private SlapBot slapBot;
     private Guild guild;
     private GuildController guildController;
-
     @Getter private StorageHandler storageHandler;
 
 
@@ -63,7 +62,7 @@ public class LTGHandler {
                 .setName(String.format("%s | %s", abbreviation, fullname))
                 .setPermissions(Permission.EMPTY_PERMISSIONS)
                 .setMentionable(true)
-                .setColor(new Color(26, 188, 156))
+                .setColor(COLOR)
                 .queue(
                         role -> {
                             try {

@@ -12,6 +12,8 @@ import net.dv8tion.jda.core.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
+
 /**
  * Singleton JDA bot class
  *
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class SlapBot {
     static final Logger logger = LoggerFactory.getLogger("BOT");
+    @Getter private static final Color COLOR = new Color(255, 90, 50);
     private final Config config;
     /*
     Handlers
@@ -43,7 +46,7 @@ public class SlapBot {
         this.eventWaiter = eventWaiter;
     }
 
-    public void finishBot(JDA jda) throws IllegalArgumentException {
+    void finishBot(JDA jda) throws IllegalArgumentException {
         this.jda = jda;
         this.guild = jda.getGuildById(config.getGuild());
         this.owner = jda.getUserById(config.getOwner());

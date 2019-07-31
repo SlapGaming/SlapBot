@@ -4,6 +4,9 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.ModeratorCommand;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Add an LTG game command
  *
@@ -11,6 +14,11 @@ import com.telluur.SlapBot.commands.abstractions.ModeratorCommand;
  */
 
 public class AddGameCommand extends ModeratorCommand {
+    private final List<Character> ILLEGAL_CHARS = "|\"'`(){}[]<>/"
+            .chars()
+            .mapToObj(i -> (char) i)
+            .collect(Collectors.toList());
+
     public AddGameCommand(SlapBot slapBot) {
         super(slapBot);
         this.name = "addgame";
@@ -28,13 +36,10 @@ public class AddGameCommand extends ModeratorCommand {
             return;
         }
 
-        if (parts[0].contains("|")) {
-            event.replyError("`<abbreviation=6>` contained the separation character `|`.");
-            return;
-        }
-
-        if (parts[1].contains("|")) {
-            event.replyError("`<fullname+>` contained the separation character `|`.");
+        if (ILLEGAL_CHARS.stream().anyMatch(c -> event.getArgs().contains(c.toString()))) {
+            event.replyError(String.format(
+                    "Either the abbreviation or the fullname contained one of the following illegal characters: `%s`",
+                    ILLEGAL_CHARS));
             return;
         }
 
