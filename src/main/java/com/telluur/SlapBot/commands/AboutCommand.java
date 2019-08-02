@@ -58,8 +58,8 @@ public class AboutCommand extends Command {
         //features
         sb.append("\r\n\r\nSome of my features include: ```css\r\n" +
                 ":video_game: Looking-to-game\r\n" +
-                ":twisted_rightwards_arrows: Teams generator (soon)\r\n" +
-                ":hammer: Pun-ishment (soon)\r\n" +
+                ":twisted_rightwards_arrows: Teams generator\r\n" +
+                ":hammer: Pun-ishment\r\n" +
                 ":notes: Soundboard (suggested/soon)\r\n" +
                 "```");
         //settings/stats header
@@ -70,12 +70,21 @@ public class AboutCommand extends Command {
         Bot settings
         Make sure multiples of 3
          */
-        eb.addField("Guild", slapBot.getGuild().getName(), true);
-        eb.addField("Text Channel", slapBot.getTextChannel().getAsMention(), true);
         eb.addField("Command Prefix", String.format("`%s` or `%s`", slapBot.getPrefix(), slapBot.getAltPrefix()), true);
+        eb.addField("Guild", slapBot.getGuild().getName(), true);
+        eb.addBlankField(true);
+
         eb.addField("Bot Owner", slapBot.getOwner().getName(), true);
         eb.addField("Bot Admins", slapBot.getAdminRole().getName(), true);
         eb.addField("Bot Moderators", slapBot.getModeratorRole().getName(), true);
+
+        /*
+        // THis does not allign nicely, so uncommented for now...
+        eb.addField("LTG Channel", slapBot.getLtgTxChannel().getAsMention(), true);
+        eb.addField("Pun Role", slapBot.getPunRole().getName(), true);
+        eb.addField("Pun Channel", slapBot.getPunVcChannel().getName(), true);
+        */
+
 
         /*
         Add some stats at the bottom
