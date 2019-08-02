@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.commands.AboutCommand;
 import com.telluur.SlapBot.commands.PingCmd;
+import com.telluur.SlapBot.commands.admin.EvalCommand;
 import com.telluur.SlapBot.commands.admin.KillCommand;
 import com.telluur.SlapBot.commands.admin.PruneChatCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
@@ -64,6 +65,7 @@ public class Main {
                 /*
                 Admin
                  */
+                new EvalCommand(slapBot),
                 new ForceSaveCommand(slapBot),
                 new ForceReloadCommand(slapBot),
                 new KillCommand(slapBot),
