@@ -21,7 +21,7 @@ public class EvalCommand extends AdminCommand {
         super(bot);
         this.bot = bot;
         this.name = "eval";
-        this.help = "evaluates nashorn cod, available binding: bot, event, jda, guild, channel.";
+        this.help = "evaluates nashorn code, available bindings: bot, event, jda, guild, channel.";
         this.guildOnly = false;
     }
 
@@ -35,9 +35,9 @@ public class EvalCommand extends AdminCommand {
         se.put("guild", event.getGuild());
         se.put("channel", event.getChannel());
         try {
-            event.replySuccess(String.format("Evaluated Successfully:\n```\n%s```", se.eval(event.getArgs())));
+            event.replySuccess(String.format("Evaluated Successfully:\r\n```\r\n%s```", se.eval(event.getArgs())));
         } catch (Exception e) {
-            event.replyError(String.format("An exception was thrown:\n```\n%s```", e.getMessage()));
+            event.replyError(String.format("An exception was thrown:\r\n```\r\n%s```", e.getMessage()));
         }
     }
 }
