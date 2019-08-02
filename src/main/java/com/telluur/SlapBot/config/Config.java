@@ -22,9 +22,19 @@ public class Config {
     @Getter private String guild;
 
     /**
-     * The text channel the bot should be locked to.
+     * The LTG text channel.
      */
-    @Getter private String channel;
+    @Getter private String ltgTxChannel;
+
+    /**
+     * The punishment voice channel
+     */
+    @Getter private String punVcChannel;
+
+    /**
+     * The punishment role
+     */
+    @Getter private String punRole;
 
     /**
      * The bot's owner user id.

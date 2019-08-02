@@ -13,6 +13,7 @@ import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
+import com.telluur.SlapBot.commands.user.PunCommand;
 import com.telluur.SlapBot.commands.user.TeamsCommand;
 import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
@@ -81,6 +82,7 @@ public class Main {
                 /*
                 User
                  */
+                new PunCommand(slapBot),
                 new TeamsCommand(slapBot),
                 new GamesCommand(slapBot),
                 new SubscriptionsCommand(slapBot), //info

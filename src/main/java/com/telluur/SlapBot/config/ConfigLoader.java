@@ -42,7 +42,9 @@ public class ConfigLoader {
             logger.info("Command altprefix: " + config.getAltprefix());
             logger.info("Status Type:       " + config.getStatustype());
             logger.info("Status:            " + config.getStatus());
-            logger.info("Text channel:      " + config.getChannel());
+            logger.info("Text channel:      " + config.getLtgTxChannel());
+            logger.info("Pun channel:       " + config.getPunVcChannel());
+            logger.info("Pun Role:          " + config.getPunRole());
             logger.info("==========================================");
             return config;
         } catch (Exception e) {

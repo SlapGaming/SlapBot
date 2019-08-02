@@ -1,12 +1,16 @@
 package com.telluur.SlapBot.util;
 
 import com.telluur.SlapBot.SlapBot;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Comparator;
+import java.util.Optional;
 
 /**
  * Some helpful functions for checking roles and permissions
@@ -31,7 +35,7 @@ public class AccessUtil {
     public static boolean isAdmin(SlapBot slapBot, User user) {
         Guild guild = slapBot.getGuild();
         if (guild.isMember(user)) {
-            return isOwner(slapBot, user) || hasRole(guild.getMember(user), slapBot.getAdminRole());
+            return isGuildAdmin(guild.getMember(user)) || isOwner(slapBot, user) || hasRole(guild.getMember(user), slapBot.getAdminRole());
         } else {
             return false;
         }
@@ -65,5 +69,40 @@ public class AccessUtil {
      */
     private static boolean hasRole(Member member, Role role) {
         return member.getRoles().contains(role);
+    }
+
+    /**
+     * Returns the highest position of the a member
+     *
+     * @param member
+     * @return int highest role position
+     */
+    public static int getHighestRolePosition(Member member) {
+        Optional<Integer> i = member.getRoles().stream()
+                .map(Role::getPosition)
+                .max(Comparator.naturalOrder());
+        return i.orElse(0);
+    }
+
+    /**
+     * Checks whether the user has a higher rank than the bot
+     *
+     * @param member
+     * @return whether the user has a higher rank than the bot
+     */
+    public static boolean hasHigherRoleThanBot(Member member) {
+        int memberPosition = getHighestRolePosition(member);
+        int botPosition = getHighestRolePosition(member.getGuild().getSelfMember());
+        return memberPosition > botPosition;
+    }
+
+    /**
+     * Whether the member is a guildAdmin
+     *
+     * @param member
+     * @return Whether the member is a guildAdmin
+     */
+    public static boolean isGuildAdmin(Member member) {
+        return member.hasPermission(Permission.MANAGE_SERVER);
     }
 }

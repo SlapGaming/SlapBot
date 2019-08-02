@@ -5,10 +5,7 @@ import com.telluur.SlapBot.config.Config;
 import com.telluur.SlapBot.ltg.LTGHandler;
 import lombok.Getter;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +32,9 @@ public class SlapBot {
      */
     @Getter private Guild guild;
     @Getter private User owner;
-    @Getter private Role adminRole, moderatorRole;
-    @Getter private TextChannel textChannel;
+    @Getter private Role adminRole, moderatorRole, punRole;
+    @Getter private TextChannel ltgTxChannel;
+    @Getter private VoiceChannel punVcChannel;
     @Getter private String prefix, altPrefix;
 
     public SlapBot(Config config, EventWaiter eventWaiter) {
@@ -52,7 +50,9 @@ public class SlapBot {
         this.owner = jda.getUserById(config.getOwner());
         this.adminRole = jda.getRoleById(config.getAdmin());
         this.moderatorRole = jda.getRoleById(config.getModerator());
-        this.textChannel = jda.getTextChannelById(config.getChannel());
+        this.ltgTxChannel = jda.getTextChannelById(config.getLtgTxChannel());
+        this.punRole = jda.getRoleById(config.getPunRole());
+        this.punVcChannel = jda.getVoiceChannelById(config.getPunVcChannel());
 
         this.ltgHandler = new LTGHandler(this);
     }
