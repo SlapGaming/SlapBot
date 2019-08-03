@@ -34,7 +34,7 @@ public class AboutCommand extends Command {
     protected void execute(CommandEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setAuthor("All about " + event.getSelfUser().getName() + "!", null, event.getSelfUser().getAvatarUrl());
-        eb.setColor(SlapBot.getCOLOR());
+        eb.setColor(SlapBot.COLOR);
 
         /*
         Description Builder

@@ -18,8 +18,8 @@ import java.awt.*;
  */
 
 public class SlapBot {
+    public static final Color COLOR = Color.ORANGE;
     static final Logger logger = LoggerFactory.getLogger("BOT");
-    @Getter private static final Color COLOR = new Color(255, 90, 50);
     private final Config config;
     /*
     Handlers
