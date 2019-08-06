@@ -44,7 +44,12 @@ public class UnsubscribeCommand extends UserCommand {
         Role LTGRole = mentionedRoles.get(0);
         User subscriber = event.getAuthor();
         slapBot.getLtgHandler().leaveGameRole(LTGRole, subscriber,
-                success -> event.replySuccess(String.format("%s unsubscribed from `%s`.", subscriber.getAsMention(), LTGRole.getName())),
+                success -> {
+                    String reply = String.format("`%s` unsubscribed from `%s`.", subscriber.getName(), LTGRole.getName());
+                    event.replySuccess(reply);
+                    String logNSA = String.format("LTG | **%s** unsubscribed from __%s__", subscriber.getName(), LTGRole.getName());
+                    slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
+                },
                 failure -> event.replyError(failure.getMessage()));
     }
 }

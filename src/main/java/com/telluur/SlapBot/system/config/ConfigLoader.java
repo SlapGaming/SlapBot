@@ -1,4 +1,4 @@
-package com.telluur.SlapBot.config;
+package com.telluur.SlapBot.system.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -42,7 +42,8 @@ public class ConfigLoader {
             logger.info("Command altprefix: " + config.getAltprefix());
             logger.info("Status Type:       " + config.getStatustype());
             logger.info("Status:            " + config.getStatus());
-            logger.info("Text channel:      " + config.getLtgTxChannel());
+            logger.info("LTG tx channel:    " + config.getLtgTxChannel());
+            logger.info("NSA tx channel:    " + config.getNsaTxChannel());
             logger.info("Pun channel:       " + config.getPunVcChannel());
             logger.info("Pun Role:          " + config.getPunRole());
             logger.info("==========================================");

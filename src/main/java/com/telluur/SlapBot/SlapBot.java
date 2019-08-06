@@ -1,8 +1,8 @@
 package com.telluur.SlapBot;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.SlapBot.config.Config;
 import com.telluur.SlapBot.ltg.LTGHandler;
+import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
@@ -33,7 +33,7 @@ public class SlapBot {
     @Getter private Guild guild;
     @Getter private User owner;
     @Getter private Role adminRole, moderatorRole, punRole;
-    @Getter private TextChannel ltgTxChannel;
+    @Getter private TextChannel ltgTxChannel, nsaTxChannel;
     @Getter private VoiceChannel punVcChannel;
     @Getter private String prefix, altPrefix;
 
@@ -51,6 +51,7 @@ public class SlapBot {
         this.adminRole = jda.getRoleById(config.getAdmin());
         this.moderatorRole = jda.getRoleById(config.getModerator());
         this.ltgTxChannel = jda.getTextChannelById(config.getLtgTxChannel());
+        this.nsaTxChannel = jda.getTextChannelById(config.getNsaTxChannel());
         this.punRole = jda.getRoleById(config.getPunRole());
         this.punVcChannel = jda.getVoiceChannelById(config.getPunVcChannel());
 

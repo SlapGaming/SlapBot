@@ -1,4 +1,4 @@
-package com.telluur.SlapBot.config;
+package com.telluur.SlapBot.system.config;
 
 import com.vdurmont.emoji.EmojiParser;
 import lombok.Getter;
@@ -25,6 +25,11 @@ public class Config {
      * The LTG text channel.
      */
     @Getter private String ltgTxChannel;
+
+    /**
+     * The NSA text channel.
+     */
+    @Getter private String nsaTxChannel;
 
     /**
      * The punishment voice channel

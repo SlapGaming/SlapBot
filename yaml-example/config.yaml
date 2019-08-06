@@ -4,6 +4,7 @@ owner:        "123456789012345678"                                          # Di
 admin:        "123456789012345678"                                          # Discord guild role snowflake ID
 moderator:    "123456789012345678"                                          # Discord guild role snowflake ID
 ltgTxChannel: "123456789012345678"                                          # LTG Discord text channel snowflake ID
+nsaTxChannel: "123456789012345678"                                          # NSA Discord text channel snowflake ID
 punRole:      "123456789012345678"                                          # Pun Discord guild role snowflake ID
 punVcChannel: "123456789012345678"                                          # Pun Discord voice channel snowflake ID
 statustype:   "listening"                                                   # Status type: (playing, watching, listening)

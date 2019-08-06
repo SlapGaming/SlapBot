@@ -44,7 +44,12 @@ public class SubscribeCommand extends UserCommand {
         Role LTGRole = mentionedRoles.get(0);
         User subscriber = event.getAuthor();
         slapBot.getLtgHandler().joinGameRole(LTGRole, subscriber,
-                success -> event.replySuccess(String.format("%s is now subscribed to `%s`.", subscriber.getAsMention(), LTGRole.getName())),
+                success -> {
+                    String reply = String.format("`%s` is now subscribed to `%s`.", subscriber.getName(), LTGRole.getName());
+                    event.replySuccess(reply);
+                    String logNSA = String.format("LTG | **%s** subscribed to __%s__", subscriber.getName(), LTGRole.getName());
+                    slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
+                },
                 failure -> event.replyError(failure.getMessage()));
     }
 }

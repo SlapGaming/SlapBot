@@ -49,7 +49,12 @@ public class AddGameCommand extends ModeratorCommand {
         }
 
         slapBot.getLtgHandler().createGameRole(parts[0], parts[1],
-                role -> event.replySuccess(String.format("Created LTG role %s.", role.getAsMention())),
+                role -> {
+                    String reply = String.format("Created LTG role %s.", role.getAsMention());
+                    event.replySuccess(reply);
+                    String logNSA = String.format("LTG | **%s** created LTG role __%s__", event.getAuthor().getName(), role.getName());
+                    slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
+                },
                 failure -> event.replyError(failure.getMessage()));
     }
 }

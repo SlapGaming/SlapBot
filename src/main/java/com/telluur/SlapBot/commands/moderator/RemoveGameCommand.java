@@ -43,7 +43,12 @@ public class RemoveGameCommand extends ModeratorCommand {
         Role LTGRole = mentionedRoles.get(0);
 
         slapBot.getLtgHandler().deleteGameRole(LTGRole,
-                success -> event.replySuccess(String.format("Deleted LTG role `%s`.", LTGRole.getName())),
+                success -> {
+                    String reply = String.format("Deleted LTG role %s.", LTGRole.getName());
+                    event.replySuccess(reply);
+                    String logNSA = String.format("LTG | **%s** deleted LTG role __%s__", event.getAuthor().getName(), LTGRole.getName());
+                    slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
+                },
                 failure -> event.replyError(failure.getMessage()));
     }
 }
