@@ -21,13 +21,8 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>${project.artifactId}</finalName>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>All</shadedClassifierName>
-                            <artifactSet>
-                                <includes>
-                                    <include>*:*</include>
-                                </includes>
-                            </artifactSet>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
@@ -47,20 +42,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>test.App</mainClass>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
         </plugins>
+        <finalName>${project.artifactId}-unshaded</finalName>
     </build>
 
     <properties>
