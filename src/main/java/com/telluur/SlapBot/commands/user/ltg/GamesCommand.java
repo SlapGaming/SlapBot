@@ -7,6 +7,7 @@ import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.ltg.LTGHandler;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.ltg.storage.StoredGame;
+import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -100,11 +101,13 @@ public class GamesCommand extends UserCommand {
                         .display(event.getChannel());
                 break;
             case PRIVATE:
-                MessageEmbed me = privateChatBuilder
-                        .setDescription(String.join("\r\n", games))
-                        .build();
                 event.reply(REPLY_HEADER);
-                event.reply(me);
+                for (String message : EmbedUtil.splitDiscordLimit(games)) {
+                    MessageEmbed me = privateChatBuilder
+                            .setDescription(message)
+                            .build();
+                    event.reply(me);
+                }
                 break;
             default:
                 event.replyError("Could not display message in this channel.");

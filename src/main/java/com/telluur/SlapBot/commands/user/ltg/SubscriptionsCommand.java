@@ -7,6 +7,7 @@ import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.ltg.LTGHandler;
 import com.telluur.SlapBot.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -62,13 +63,16 @@ public class SubscriptionsCommand extends UserCommand {
         Member issuer = event.getMember();
 
         if (issuer == null && slapBot.getGuild().isMember(event.getAuthor())) {
-            issuer = slapBot.getGuild().getMember(event.getAuthor());
-        } else {
-            event.replyError(String.format("You need to be a member of `%s`", slapBot.getGuild().getName()));
+            if (slapBot.getGuild().isMember(event.getAuthor())) {
+                issuer = slapBot.getGuild().getMember(event.getAuthor());
+            } else {
+                event.replyError(String.format("You need to be a member of `%s`", slapBot.getGuild().getName()));
+                return;
+            }
         }
 
         //Handle no argument
-        if (event.getArgs().isEmpty()) {
+        if (issuer != null && event.getArgs().isEmpty()) {
             memberDisplay(event, issuer);
             return;
         }
@@ -154,11 +158,13 @@ public class SubscriptionsCommand extends UserCommand {
                         .display(event.getChannel());
                 break;
             case PRIVATE:
-                MessageEmbed me = privateChatBuilder
-                        .setDescription(String.join("\r\n", subscribers))
-                        .build();
                 event.reply(replyHeader);
-                event.reply(me);
+                for (String messages : EmbedUtil.splitDiscordLimit(subscribers)) {
+                    MessageEmbed me = privateChatBuilder
+                            .setDescription(messages)
+                            .build();
+                    event.reply(me);
+                }
                 break;
             default:
                 event.replyError("Could not display message in this channel.");
