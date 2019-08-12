@@ -41,7 +41,7 @@ public class AboutCommand extends Command {
          */
         StringBuilder sb = new StringBuilder();
         //general description
-        sb.append(String.format("'Ello gov'na! I am **%s** (v%s), a bot that is tailored to the Slap Gaming clan!\r\n",
+        sb.append(String.format("'Ello gov'na! I am **%s** (v%s), a bot that is tailored to the Slap Gaming Community!\r\n",
                 event.getSelfUser().getName(),
                 VERSION));
         //credits
