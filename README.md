@@ -11,11 +11,11 @@ See pom.xml for complete list
 * Lombok
 
 ## Credits 
-Part of the Slapgaming clan.
+Part of the Slap Gaming Community.
 
 Contributors:
 - Rick Fontein (Telluur)
-- Denby.
+- Denby
 
 ## Open source
 Feel free to use this code under the provisions of the MIT license. 
