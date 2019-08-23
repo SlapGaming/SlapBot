@@ -1,4 +1,4 @@
-package com.telluur.SlapBot.pun;
+package com.telluur.SlapBot.features.pun;
 
 /**
  * Pun Exception placeholder

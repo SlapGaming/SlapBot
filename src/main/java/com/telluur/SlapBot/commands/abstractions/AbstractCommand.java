@@ -43,7 +43,6 @@ public abstract class AbstractCommand extends Command {
                                 Member m = possibleMembers.get(0);
                                 return String.format("`%s`", m.getEffectiveName());
                             } else if (possibleRoles.size() == 1) {
-                                System.out.println("roles");
                                 return String.format("`%s`", possibleRoles.get(0).getName());
                             } else {
                                 return stringPart;

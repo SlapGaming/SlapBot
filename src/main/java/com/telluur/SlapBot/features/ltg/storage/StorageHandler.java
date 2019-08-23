@@ -1,4 +1,4 @@
-package com.telluur.SlapBot.ltg.storage;
+package com.telluur.SlapBot.features.ltg.storage;
 
 /**
  * Handles the yaml storage for the LTG games.

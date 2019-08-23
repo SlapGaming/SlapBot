@@ -1,9 +1,9 @@
-package com.telluur.SlapBot.ltg;
+package com.telluur.SlapBot.features.ltg;
 
 import com.telluur.SlapBot.Main;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.ltg.storage.StorageHandler;
-import com.telluur.SlapBot.ltg.storage.StoredGame;
+import com.telluur.SlapBot.features.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.features.ltg.storage.StoredGame;
 import lombok.Getter;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
@@ -157,5 +157,15 @@ public class LTGHandler {
             Member member = guild.getMember(user);
             guildController.removeRolesFromMember(member, role).queue(success, failure);
         }
+    }
+
+    /**
+     * Whether a role is a stored LTG role
+     *
+     * @param role the role to compare
+     * @return whether role is a LTG role
+     */
+    public boolean isGameRole(Role role) {
+        return storageHandler.hasGameBySnowflake(role.getId());
     }
 }

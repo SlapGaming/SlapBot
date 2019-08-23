@@ -1,7 +1,7 @@
 package com.telluur.SlapBot;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.SlapBot.ltg.LTGHandler;
+import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
 import net.dv8tion.jda.core.JDA;

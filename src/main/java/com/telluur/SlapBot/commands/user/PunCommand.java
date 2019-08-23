@@ -3,9 +3,9 @@ package com.telluur.SlapBot.commands.user;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
-import com.telluur.SlapBot.pun.PunException;
-import com.telluur.SlapBot.pun.PunHandler;
-import com.telluur.SlapBot.pun.Punishment;
+import com.telluur.SlapBot.features.pun.PunException;
+import com.telluur.SlapBot.features.pun.PunHandler;
+import com.telluur.SlapBot.features.pun.Punishment;
 import net.dv8tion.jda.core.entities.Member;
 
 import java.util.List;

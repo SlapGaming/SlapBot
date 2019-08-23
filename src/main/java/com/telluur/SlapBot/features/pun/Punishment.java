@@ -1,4 +1,4 @@
-package com.telluur.SlapBot.pun;
+package com.telluur.SlapBot.features.pun;
 
 import net.dv8tion.jda.core.entities.Member;
 

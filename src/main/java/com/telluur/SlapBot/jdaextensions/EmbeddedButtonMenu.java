@@ -2,6 +2,8 @@ package com.telluur.SlapBot.jdaextensions;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.menu.Menu;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.requests.RestAction;
@@ -20,12 +22,12 @@ import java.util.function.Consumer;
 public class EmbeddedButtonMenu extends Menu {
 
     private final List<String> choices;
-    private final Consumer<MessageReaction.ReactionEmote> action;
+    private final Consumer<MenuActionEvent> action;
     private final Consumer<Message> finalAction;
     private final MessageEmbed messageEmbed;
 
     EmbeddedButtonMenu(EventWaiter waiter, Set<User> users, Set<Role> roles, long timeout, TimeUnit unit,
-                       MessageEmbed messageEmbed, List<String> choices, Consumer<MessageReaction.ReactionEmote> action, Consumer<Message> finalAction) {
+                       MessageEmbed messageEmbed, List<String> choices, Consumer<MenuActionEvent> action, Consumer<Message> finalAction) {
         super(waiter, users, roles, timeout, unit);
         this.messageEmbed = messageEmbed;
         this.choices = choices;
@@ -102,7 +104,7 @@ public class EmbeddedButtonMenu extends Menu {
                             // is fired and processed above.
 
                             // Preform the specified action with the ReactionEmote
-                            action.accept(event.getReaction().getReactionEmote());
+                            action.accept(new MenuActionEvent(event.getReaction().getReactionEmote(), event.getMember()));
                             finalAction.accept(m);
                         }, timeout, unit, () -> finalAction.accept(m));
                     });
@@ -125,7 +127,7 @@ public class EmbeddedButtonMenu extends Menu {
     public static class Builder extends Menu.Builder<Builder, EmbeddedButtonMenu> {
         private final List<String> choices = new LinkedList<>();
         private MessageEmbed messageEmbed;
-        private Consumer<MessageReaction.ReactionEmote> action;
+        private Consumer<MenuActionEvent> action;
         private Consumer<Message> finalAction = (m) -> {
         };
 
@@ -165,7 +167,7 @@ public class EmbeddedButtonMenu extends Menu {
          * @param action The Consumer action to perform upon selecting a button
          * @return This builder
          */
-        public Builder setAction(Consumer<MessageReaction.ReactionEmote> action) {
+        public Builder setAction(Consumer<MenuActionEvent> action) {
             this.action = action;
             return this;
         }
@@ -275,5 +277,15 @@ public class EmbeddedButtonMenu extends Menu {
             this.choices.clear();
             return addChoices(emotes);
         }
+    }
+
+    /**
+     * Simple class to encapsulate the reaction add event with additional information
+     * Currently, that is just the author.
+     */
+    @AllArgsConstructor
+    public class MenuActionEvent {
+        @Getter private final MessageReaction.ReactionEmote reactionEmote;
+        @Getter private final Member member;
     }
 }

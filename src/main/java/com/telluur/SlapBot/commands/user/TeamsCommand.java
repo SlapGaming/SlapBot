@@ -103,8 +103,8 @@ public class TeamsCommand extends UserCommand {
                 .setTimeout(30, TimeUnit.SECONDS)
                 .setEventWaiter(bot.getEventWaiter())
                 .setUsers(pool.stream().map(Member::getUser).toArray(User[]::new))
-                .setAction(re -> {
-                    if (SHUFFLE.equals(re.getName())) {
+                .setAction(menuActionEvent -> {
+                    if (SHUFFLE.equals(menuActionEvent.getReactionEmote().getName())) {
                         m.delete().queue();
                         if (shuffles == 5) {
                             event.replyWarning("How often are you going to bash that shuffle button, hmm?");
