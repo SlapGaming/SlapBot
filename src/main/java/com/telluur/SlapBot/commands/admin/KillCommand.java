@@ -23,7 +23,7 @@ public class KillCommand extends AdminCommand {
 
     @Override
     public void handle(CommandEvent event) {
-        event.replySuccess(EmojiParser.parseToUnicode("Committing suicide `ε/̵͇̿̿/’̿’̿ ̿(◡︵◡)`"));
+        event.getTextChannel().sendMessage(EmojiParser.parseToUnicode("`ε/̵͇̿̿/’̿’̿ ̿(◡︵◡)`")).complete();
         Main.shutdown("Killed by user");
     }
 }
