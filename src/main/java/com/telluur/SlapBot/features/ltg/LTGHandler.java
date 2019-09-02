@@ -5,17 +5,17 @@ import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.features.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.features.ltg.storage.StoredGame;
 import lombok.Getter;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.managers.GuildController;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -27,17 +27,13 @@ import java.util.function.Consumer;
 public class LTGHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
     @Getter private static final Color COLOR = new Color(26, 188, 156);
-    private SlapBot slapBot;
     private Guild guild;
-    private GuildController guildController;
     @Getter private StorageHandler storageHandler;
 
 
     public LTGHandler(SlapBot slapBot) {
         try {
-            this.slapBot = slapBot;
             this.guild = slapBot.getGuild();
-            this.guildController = slapBot.getGuild().getController();
             this.storageHandler = new StorageHandler();
         } catch (IOException e) {
             logger.error("Failed to read storage", e.getCause());
@@ -58,7 +54,7 @@ public class LTGHandler {
      * @param failure      Consumer that accepts an exception when creation failed
      */
     public void createGameRole(String abbreviation, String fullname, Consumer<Role> success, Consumer<Throwable> failure) {
-        guildController.createRole()
+        guild.createRole()
                 .setName(String.format("%s | %s", abbreviation, fullname))
                 .setPermissions(Permission.EMPTY_PERMISSIONS)
                 .setMentionable(true)
@@ -128,7 +124,7 @@ public class LTGHandler {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
             Member member = guild.getMember(user);
-            guildController.addRolesToMember(member, role).queue(
+            guild.addRoleToMember(Objects.requireNonNull(member), role).queue(
                     ok -> {
                         logger.info(String.format("User `%s` subscribed to `%s`", user.getName(), role.getName()));
                         success.accept(ok);
@@ -155,7 +151,7 @@ public class LTGHandler {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
             Member member = guild.getMember(user);
-            guildController.removeRolesFromMember(member, role).queue(success, failure);
+            guild.removeRoleFromMember(Objects.requireNonNull(member), role).queue(success, failure);
         }
     }
 
@@ -165,6 +161,7 @@ public class LTGHandler {
      * @param role the role to compare
      * @return whether role is a LTG role
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean isGameRole(Role role) {
         return storageHandler.hasGameBySnowflake(role.getId());
     }

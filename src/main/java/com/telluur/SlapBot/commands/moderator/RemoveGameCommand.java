@@ -3,7 +3,7 @@ package com.telluur.SlapBot.commands.moderator;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.ModeratorCommand;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 

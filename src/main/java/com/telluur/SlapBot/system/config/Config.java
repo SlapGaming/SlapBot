@@ -2,7 +2,7 @@ package com.telluur.SlapBot.system.config;
 
 import com.vdurmont.emoji.EmojiParser;
 import lombok.Getter;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.entities.Activity;
 
 /**
  * Bean for the config.yaml file.
@@ -81,17 +81,17 @@ public class Config {
      *
      * @return Game object containing the statustype and status
      */
-    public Game getGameStatus() {
+    public Activity getGameStatus() {
         String parsedStatus = EmojiParser.parseToUnicode(status);
         switch (statustype) {
             case "watching":
-                return Game.watching(parsedStatus);
+                return Activity.watching(parsedStatus);
             case "listening":
-                return Game.listening(parsedStatus);
+                return Activity.listening(parsedStatus);
             case "playing":
-                return Game.playing(parsedStatus);
+                return Activity.playing(parsedStatus);
             default:
-                return Game.listening("for commands.");
+                return Activity.listening("for commands.");
         }
     }
 }

@@ -6,7 +6,7 @@ import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.pun.PunException;
 import com.telluur.SlapBot.features.pun.PunHandler;
 import com.telluur.SlapBot.features.pun.Punishment;
-import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.List;
 import java.util.Optional;

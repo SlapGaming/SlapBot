@@ -6,8 +6,8 @@ import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.telluur.SlapBot.Main;
 import com.telluur.SlapBot.SlapBot;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.JDAInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDAInfo;
 
 
 /**
@@ -39,6 +39,7 @@ public class AboutCommand extends Command {
         /*
         Description Builder
          */
+        @SuppressWarnings("StringBufferReplaceableByString")
         StringBuilder sb = new StringBuilder();
         //general description
         sb.append(String.format("'Ello gov'na! I am **%s** (v%s), a bot that is tailored to the Slap Gaming Community!\r\n",
@@ -90,36 +91,22 @@ public class AboutCommand extends Command {
         Add some stats at the bottom
         Make sure multiples of 3
          */
-        if (event.getJDA().getShardInfo() == null) {
-            String stats = String.format("%s servers\n1 shard", event.getJDA().getGuilds().size());
-            eb.addField("Stats", stats, true);
+        event.getJDA().getShardInfo();
+        String stats = String.format("%s Servers\nShard %d/%d",
+                event.getClient().getTotalGuilds(),
+                event.getJDA().getShardInfo().getShardId() + 1,
+                event.getJDA().getShardInfo().getShardTotal());
+        eb.addField("Stats", stats, true);
 
-            String users = String.format("%s unique\n%s total",
-                    event.getJDA().getUsers().size(),
-                    event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum());
-            eb.addField("Users", users, true);
+        String users = String.format("%s Users\n%s Servers",
+                event.getJDA().getUsers().size(),
+                event.getJDA().getGuilds().size());
+        eb.addField("This shard", users, true);
 
-            String channels = String.format("%s Text\n%s Voice",
-                    event.getJDA().getTextChannels().size(),
-                    event.getJDA().getVoiceChannels().size());
-            eb.addField("Channels", channels, true);
-        } else {
-            String stats = String.format("%s Servers\nShard %d/%d",
-                    event.getClient().getTotalGuilds(),
-                    event.getJDA().getShardInfo().getShardId() + 1,
-                    event.getJDA().getShardInfo().getShardTotal());
-            eb.addField("Stats", stats, true);
-
-            String users = String.format("%s Users\n%s Servers",
-                    event.getJDA().getUsers().size(),
-                    event.getJDA().getGuilds().size());
-            eb.addField("This shard", users, true);
-
-            String channels = String.format("%s Text Channels\n%s Voice Channels",
-                    event.getJDA().getTextChannels().size(),
-                    event.getJDA().getVoiceChannels().size());
-            eb.addField("", channels, true);
-        }
+        String channels = String.format("%s Text Channels\n%s Voice Channels",
+                event.getJDA().getTextChannels().size(),
+                event.getJDA().getVoiceChannels().size());
+        eb.addField("", channels, true);
 
         /*
         Set footer

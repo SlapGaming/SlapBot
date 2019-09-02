@@ -5,12 +5,12 @@ import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.jdaextensions.EmbeddedButtonMenu;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -103,8 +103,8 @@ public class TeamsCommand extends UserCommand {
                 .setTimeout(30, TimeUnit.SECONDS)
                 .setEventWaiter(bot.getEventWaiter())
                 .setUsers(pool.stream().map(Member::getUser).toArray(User[]::new))
-                .setAction(menuActionEvent -> {
-                    if (SHUFFLE.equals(menuActionEvent.getReactionEmote().getName())) {
+                .setAction(response -> {
+                    if (SHUFFLE.equals(response.getName())) {
                         m.delete().queue();
                         if (shuffles == 5) {
                             event.replyWarning("How often are you going to bash that shuffle button, hmm?");

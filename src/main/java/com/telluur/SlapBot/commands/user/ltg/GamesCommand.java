@@ -8,11 +8,11 @@ import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.features.ltg.storage.StoredGame;
 import com.telluur.SlapBot.util.EmbedUtil;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -73,7 +73,7 @@ public class GamesCommand extends UserCommand {
                 .stream()
                 .map(s -> {
                     try {
-                        return new HashMap.SimpleEntry<Role, StoredGame>(g.getRoleById(s), handler.getGameBySnowflake(s));
+                        return new HashMap.SimpleEntry<>(g.getRoleById(s), handler.getGameBySnowflake(s));
                     } catch (IOException e) {
                         return new HashMap.SimpleEntry<Role, StoredGame>(null, null);
                     }

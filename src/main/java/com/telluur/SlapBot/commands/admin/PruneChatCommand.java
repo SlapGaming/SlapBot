@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.AdminCommand;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.List;
 import java.util.stream.Collectors;

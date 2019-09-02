@@ -5,8 +5,8 @@ import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.List;
 

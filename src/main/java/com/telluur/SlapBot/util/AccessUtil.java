@@ -1,13 +1,11 @@
 package com.telluur.SlapBot.util;
 
 import com.telluur.SlapBot.SlapBot;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -18,8 +16,8 @@ import java.util.Optional;
  * @author Rick Fontein
  */
 
+@SuppressWarnings("WeakerAccess")
 public class AccessUtil {
-    protected static final Logger logger = LoggerFactory.getLogger("ACCESSUTIL");
 
     public static boolean isOwner(SlapBot slapBot, User user) {
         return user.equals(slapBot.getOwner());
@@ -34,8 +32,9 @@ public class AccessUtil {
      */
     public static boolean isAdmin(SlapBot slapBot, User user) {
         Guild guild = slapBot.getGuild();
-        if (guild.isMember(user)) {
-            return isGuildAdmin(guild.getMember(user)) || isOwner(slapBot, user) || hasRole(guild.getMember(user), slapBot.getAdminRole());
+        Member member = guild.getMember(user);
+        if (member != null) {
+            return isGuildAdmin(member) || isOwner(slapBot, user) || hasRole(member, slapBot.getAdminRole());
         } else {
             return false;
         }
@@ -50,8 +49,8 @@ public class AccessUtil {
      */
     public static boolean isModerator(SlapBot slapBot, User user) {
         Guild guild = slapBot.getGuild();
-        if (guild.isMember(user)) {
-            Member member = guild.getMember(user);
+        Member member = guild.getMember(user);
+        if (member != null) {
             return isOwner(slapBot, user) || hasRole(member, slapBot.getAdminRole()) || hasRole(member, slapBot.getModeratorRole());
         } else {
             return false;
@@ -63,8 +62,8 @@ public class AccessUtil {
      * Checks whether a member has a certain role.
      * Should only be called from this class, as it makes sure that member is never null.
      *
-     * @param member
-     * @param role
+     * @param member involved member
+     * @param role   involved role
      * @return whether the member has role
      */
     private static boolean hasRole(Member member, Role role) {
@@ -74,7 +73,7 @@ public class AccessUtil {
     /**
      * Returns the highest position of the a member
      *
-     * @param member
+     * @param member involved member
      * @return int highest role position
      */
     public static int getHighestRolePosition(Member member) {
@@ -87,7 +86,7 @@ public class AccessUtil {
     /**
      * Checks whether the user has a higher rank than the bot
      *
-     * @param member
+     * @param member involved member
      * @return whether the user has a higher rank than the bot
      */
     public static boolean hasHigherRoleThanBot(Member member) {
@@ -99,7 +98,7 @@ public class AccessUtil {
     /**
      * Whether the member is a guildAdmin
      *
-     * @param member
+     * @param member involved member
      * @return Whether the member is a guildAdmin
      */
     public static boolean isGuildAdmin(Member member) {

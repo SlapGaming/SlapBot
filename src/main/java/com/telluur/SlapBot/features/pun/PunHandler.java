@@ -3,11 +3,7 @@ package com.telluur.SlapBot.features.pun;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.util.AccessUtil;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.managers.GuildController;
+import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author Rick Fontein
  */
 
+@SuppressWarnings("unused")
 public class PunHandler {
     private SlapBot bot;
     private Map<Guild, List<Member>> punishedGuilds = new HashMap<>();
@@ -76,29 +73,39 @@ public class PunHandler {
         //fetch punished members of guild, create if doesn't exist yet
         List<Member> punished = getPunishedIfValidPunishment(event, punishment);
 
-        GuildController gc = guild.getController();
-        VoiceChannel origin = punMember.getVoiceState().getChannel();
+        GuildVoiceState voiceState = punMember.getVoiceState();
+        if (voiceState == null) {
+            return;
+        }
+
+        VoiceChannel origin = voiceState.getChannel();
+        if (origin == null) {
+            return;
+        }
+
         final boolean punRolable = !AccessUtil.hasHigherRoleThanBot(punMember);
 
         //Add role and move user if still in voice.
         punished.add(punMember);
         if (punRolable) {
-            gc.addSingleRoleToMember(punMember, punRole).queue();
+            guild.addRoleToMember(punMember, punRole).queue();
         }
         if (punMember.getVoiceState().inVoiceChannel()) {
-            gc.moveVoiceMember(punMember, punVC).queue();
+            guild.moveVoiceMember(punMember, punVC).queue();
         }
 
         //Start Async task for moving the user back/removing pun role
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         Runnable unpunish = () -> {
             if (punRolable) {
-                gc.removeSingleRoleFromMember(punMember, punRole).queue();
+                guild.removeRoleFromMember(punMember, punRole).queue();
             }
 
             //check if user has left voice, or has already been moved to origin.
-            if (punMember.getVoiceState().inVoiceChannel() && !punMember.getVoiceState().getChannel().equals(origin)) {
-                gc.moveVoiceMember(punMember, origin).queue();
+
+            GuildVoiceState postState = punMember.getVoiceState();
+            if (postState.inVoiceChannel() && postState.getChannel() != null && !postState.getChannel().equals(origin)) {
+                guild.moveVoiceMember(punMember, origin).queue();
             }
             punished.remove(punMember);
         };

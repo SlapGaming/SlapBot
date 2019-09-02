@@ -2,12 +2,10 @@ package com.telluur.SlapBot.jdaextensions;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.menu.Menu;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.requests.RestAction;
-import net.dv8tion.jda.core.utils.Checks;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.internal.utils.Checks;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,15 +17,17 @@ import java.util.function.Consumer;
  * Extends the ButtonMenu to work with messageEmbeds properly.
  */
 
+
+@SuppressWarnings("WeakerAccess")
 public class EmbeddedButtonMenu extends Menu {
 
     private final List<String> choices;
-    private final Consumer<MenuActionEvent> action;
+    private final Consumer<MessageReaction.ReactionEmote> action;
     private final Consumer<Message> finalAction;
     private final MessageEmbed messageEmbed;
 
     EmbeddedButtonMenu(EventWaiter waiter, Set<User> users, Set<Role> roles, long timeout, TimeUnit unit,
-                       MessageEmbed messageEmbed, List<String> choices, Consumer<MenuActionEvent> action, Consumer<Message> finalAction) {
+                       MessageEmbed messageEmbed, List<String> choices, Consumer<MessageReaction.ReactionEmote> action, Consumer<Message> finalAction) {
         super(waiter, users, roles, timeout, unit);
         this.messageEmbed = messageEmbed;
         this.choices = choices;
@@ -36,8 +36,8 @@ public class EmbeddedButtonMenu extends Menu {
     }
 
     /**
-     * Shows the ButtonMenu as a new {@link net.dv8tion.jda.core.entities.Message Message}
-     * in the provided {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * Shows the ButtonMenu as a new {@link net.dv8tion.jda.api.entities.Message Message}
+     * in the provided {@link net.dv8tion.jda.api.entities.MessageChannel MessageChannel}.
      *
      * @param channel The MessageChannel to send the new Message to
      */
@@ -47,7 +47,7 @@ public class EmbeddedButtonMenu extends Menu {
     }
 
     /**
-     * Displays this ButtonMenu by editing the provided {@link net.dv8tion.jda.core.entities.Message Message}.
+     * Displays this ButtonMenu by editing the provided {@link net.dv8tion.jda.api.entities.Message Message}.
      *
      * @param message The Message to display the Menu in
      */
@@ -78,36 +78,34 @@ public class EmbeddedButtonMenu extends Menu {
                     r.queue(); // If there is still more reactions to add we delay using the EventWaiter
                 else {
                     // This is the last reaction added.
-                    r.queue(v -> {
-                        waiter.waitForEvent(MessageReactionAddEvent.class, event -> {
-                            // If the message is not the same as the ButtonMenu
-                            // currently being displayed.
-                            if (!event.getMessageId().equals(m.getId()))
-                                return false;
+                    r.queue(v -> waiter.waitForEvent(MessageReactionAddEvent.class, event -> {
+                        // If the message is not the same as the ButtonMenu
+                        // currently being displayed.
+                        if (!event.getMessageId().equals(m.getId()))
+                            return false;
 
-                            // If the reaction is an Emote we get the Snowflake,
-                            // otherwise we get the unicode value.
-                            String re = event.getReaction().getReactionEmote().isEmote()
-                                    ? event.getReaction().getReactionEmote().getId()
-                                    : event.getReaction().getReactionEmote().getName();
+                        // If the reaction is an Emote we get the Snowflake,
+                        // otherwise we get the unicode value.
+                        String re = event.getReaction().getReactionEmote().isEmote()
+                                ? event.getReaction().getReactionEmote().getId()
+                                : event.getReaction().getReactionEmote().getName();
 
-                            // If the value we got is not registered as a button to
-                            // the ButtonMenu being displayed we return false.
-                            if (!choices.contains(re))
-                                return false;
+                        // If the value we got is not registered as a button to
+                        // the ButtonMenu being displayed we return false.
+                        if (!choices.contains(re))
+                            return false;
 
-                            // Last check is that the person who added the reaction
-                            // is a valid user.
-                            return isValidUser(event.getUser(), event.getGuild());
-                        }, (MessageReactionAddEvent event) -> {
-                            // What happens next is after a valid event
-                            // is fired and processed above.
+                        // Last check is that the person who added the reaction
+                        // is a valid user.
+                        return isValidUser(event.getUser(), event.getGuild());
+                    }, (MessageReactionAddEvent event) -> {
+                        // What happens next is after a valid event
+                        // is fired and processed above.
 
-                            // Preform the specified action with the ReactionEmote
-                            action.accept(new MenuActionEvent(event.getReaction().getReactionEmote(), event.getMember()));
-                            finalAction.accept(m);
-                        }, timeout, unit, () -> finalAction.accept(m));
-                    });
+                        // Preform the specified action with the ReactionEmote
+                        action.accept(event.getReaction().getReactionEmote());
+                        finalAction.accept(m);
+                    }, timeout, unit, () -> finalAction.accept(m)));
                 }
             }
         });
@@ -124,10 +122,11 @@ public class EmbeddedButtonMenu extends Menu {
      *
      * @author John Grosh
      */
+    @SuppressWarnings("unused")
     public static class Builder extends Menu.Builder<Builder, EmbeddedButtonMenu> {
         private final List<String> choices = new LinkedList<>();
         private MessageEmbed messageEmbed;
-        private Consumer<MenuActionEvent> action;
+        private Consumer<MessageReaction.ReactionEmote> action;
         private Consumer<Message> finalAction = (m) -> {
         };
 
@@ -167,7 +166,7 @@ public class EmbeddedButtonMenu extends Menu {
          * @param action The Consumer action to perform upon selecting a button
          * @return This builder
          */
-        public Builder setAction(Consumer<MenuActionEvent> action) {
+        public Builder setAction(Consumer<MessageReaction.ReactionEmote> action) {
             this.action = action;
             return this;
         }
@@ -190,7 +189,7 @@ public class EmbeddedButtonMenu extends Menu {
         /**
          * Adds a single String unicode emoji as a button choice.
          *
-         * <p>Any non-unicode {@link net.dv8tion.jda.core.entities.Emote Emote} should be
+         * <p>Any non-unicode {@link net.dv8tion.jda.api.entities.Emote Emote} should be
          * added using {@link EmbeddedButtonMenu.Builder#addChoice(Emote)
          * EmbeddedButtonMenu.Builder#addChoice(Emote)}.
          *
@@ -203,7 +202,7 @@ public class EmbeddedButtonMenu extends Menu {
         }
 
         /**
-         * Adds a single custom {@link net.dv8tion.jda.core.entities.Emote Emote} as button choices.
+         * Adds a single custom {@link net.dv8tion.jda.api.entities.Emote Emote} as button choices.
          *
          * <p>Any regular unicode emojis should be added using {@link
          * EmbeddedButtonMenu.Builder#addChoice(String)
@@ -219,7 +218,7 @@ public class EmbeddedButtonMenu extends Menu {
         /**
          * Adds String unicode emojis as button choices.
          *
-         * <p>Any non-unicode {@link net.dv8tion.jda.core.entities.Emote Emote}s should be
+         * <p>Any non-unicode {@link net.dv8tion.jda.api.entities.Emote Emote}s should be
          * added using {@link EmbeddedButtonMenu.Builder#addChoices(Emote...)
          * EmbeddedButtonMenu.Builder#addChoices(Emote...)}.
          *
@@ -233,7 +232,7 @@ public class EmbeddedButtonMenu extends Menu {
         }
 
         /**
-         * Adds custom {@link net.dv8tion.jda.core.entities.Emote Emote}s as button choices.
+         * Adds custom {@link net.dv8tion.jda.api.entities.Emote Emote}s as button choices.
          *
          * <p>Any regular unicode emojis should be added using {@link
          * EmbeddedButtonMenu.Builder#addChoices(String...)
@@ -251,7 +250,7 @@ public class EmbeddedButtonMenu extends Menu {
         /**
          * Sets the String unicode emojis as button choices.
          *
-         * <p>Any non-unicode {@link net.dv8tion.jda.core.entities.Emote Emote}s should be
+         * <p>Any non-unicode {@link net.dv8tion.jda.api.entities.Emote Emote}s should be
          * set using {@link EmbeddedButtonMenu.Builder#setChoices(Emote...)
          * EmbeddedButtonMenu.Builder#setChoices(Emote...)}.
          *
@@ -264,7 +263,7 @@ public class EmbeddedButtonMenu extends Menu {
         }
 
         /**
-         * Sets the {@link net.dv8tion.jda.core.entities.Emote Emote}s as button choices.
+         * Sets the {@link net.dv8tion.jda.api.entities.Emote Emote}s as button choices.
          *
          * <p>Any regular unicode emojis should be set using {@link
          * EmbeddedButtonMenu.Builder#setChoices(String...)
@@ -277,15 +276,5 @@ public class EmbeddedButtonMenu extends Menu {
             this.choices.clear();
             return addChoices(emotes);
         }
-    }
-
-    /**
-     * Simple class to encapsulate the reaction add event with additional information
-     * Currently, that is just the author.
-     */
-    @AllArgsConstructor
-    public class MenuActionEvent {
-        @Getter private final MessageReaction.ReactionEmote reactionEmote;
-        @Getter private final Member member;
     }
 }

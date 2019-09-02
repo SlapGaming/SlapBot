@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public abstract class UserCommand extends AbstractCommand {
-    protected static final Logger logger = LoggerFactory.getLogger("USER");
+    private static final Logger logger = LoggerFactory.getLogger("USER");
 
     public UserCommand(SlapBot slapBot) {
         super(slapBot);

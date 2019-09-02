@@ -46,7 +46,7 @@ public class PingCmd extends Command {
     protected void execute(CommandEvent event) {
         String message = String.format("%s\r\nPing to discord gateway: `%d ms`",
                 puns[random.nextInt(puns.length)],
-                event.getJDA().getPing());
+                event.getJDA().getGatewayPing());
         event.reply(message);
     }
 }

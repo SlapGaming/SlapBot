@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.telluur.SlapBot.SlapBot;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +56,7 @@ public abstract class AbstractCommand extends Command {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean inValidGuildOrPrivate(CommandEvent event) {
         User user = event.getAuthor();
         String cmd = event.getMessage().getContentDisplay();

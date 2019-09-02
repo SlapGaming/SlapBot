@@ -4,10 +4,8 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
 
@@ -19,7 +17,6 @@ import java.awt.*;
 
 public class SlapBot {
     public static final Color COLOR = Color.ORANGE;
-    static final Logger logger = LoggerFactory.getLogger("BOT");
     private final Config config;
     /*
     Handlers

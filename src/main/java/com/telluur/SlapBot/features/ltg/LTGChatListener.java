@@ -2,15 +2,17 @@ package com.telluur.SlapBot.features.ltg;
 
 import com.telluur.SlapBot.SlapBot;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.EventListener;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.EventListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Transforms LTG game role mentions into fancy embeds.
@@ -29,7 +31,7 @@ public class LTGChatListener implements EventListener {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(@NotNull GenericEvent event) {
         //Chat listener
         if (event instanceof MessageReceivedEvent) {
             Message message = ((MessageReceivedEvent) event).getMessage();
@@ -61,7 +63,7 @@ public class LTGChatListener implements EventListener {
                         .setColor(LTGHandler.getCOLOR())
                         .setTitle("Looking-to-game notifier")
                         .setDescription(String.format("> %s: %s",
-                                bot.getGuild().getMember(message.getAuthor()).getAsMention(),
+                                Objects.requireNonNull(bot.getGuild().getMember(message.getAuthor())).getAsMention(),
                                 message.getContentRaw()))
                         .setFooter(String.format("Click on %s to quick subscribe to this game.", SUBSCRIBE), null)
                         .build();
@@ -86,7 +88,7 @@ public class LTGChatListener implements EventListener {
                     Member subscriber = bot.getGuild().getMember(mrea.getUser());
                     TextChannel textChannel = mrea.getTextChannel();
 
-                    if (subscriber.getRoles().contains(role)) {
+                    if (Objects.requireNonNull(subscriber).getRoles().contains(role)) {
                         subscriber.getUser().openPrivateChannel().queue(
                                 priv -> priv.sendMessage(String.format("You are already subscribed to `%s`.", role.getName())).queue()
                         );

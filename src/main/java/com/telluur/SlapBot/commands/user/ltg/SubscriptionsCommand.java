@@ -8,11 +8,11 @@ import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.storage.StorageHandler;
 import com.telluur.SlapBot.util.EmbedUtil;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.io.IOException;
 import java.util.List;

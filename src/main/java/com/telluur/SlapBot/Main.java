@@ -24,13 +24,14 @@ import com.telluur.SlapBot.features.ltg.LTGChatListener;
 import com.telluur.SlapBot.system.config.Config;
 import com.telluur.SlapBot.system.config.ConfigLoader;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.util.Objects;
 
 /**
  * Entry point of the Looking-to-game bot
@@ -50,7 +51,7 @@ public class Main {
 
         logger.info("Bot start");
         EventWaiter waiter = new EventWaiter();
-        SlapBot slapBot = new SlapBot(config, waiter);
+        SlapBot slapBot = new SlapBot(Objects.requireNonNull(config), waiter);
         LTGChatListener ltgChatListener = new LTGChatListener(slapBot);
 
         logger.info("Building commands");
@@ -58,7 +59,7 @@ public class Main {
         cmdBuilder.setOwnerId(config.getOwner());
         cmdBuilder.setPrefix(config.getPrefix());
         cmdBuilder.setAlternativePrefix(config.getAltprefix());
-        cmdBuilder.setGame(config.getGameStatus());
+        cmdBuilder.setActivity(config.getGameStatus());
         cmdBuilder.addCommands(
                 /*
                 Listen in alphabetical order
@@ -100,9 +101,8 @@ public class Main {
             String token = config.getToken();
             JDA jda = new JDABuilder()
                     .setToken(token)
-                    .addEventListener(cmdClient, waiter, ltgChatListener)
-                    .setAudioEnabled(false)
-                    .setGame(Game.playing(EmojiParser.parseToUnicode("with myself...")))
+                    .addEventListeners(cmdClient, waiter, ltgChatListener)
+                    .setActivity(Activity.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
             slapBot.finishBot(jda);

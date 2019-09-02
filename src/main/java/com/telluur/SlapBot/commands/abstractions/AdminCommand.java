@@ -3,7 +3,7 @@ package com.telluur.SlapBot.commands.abstractions;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.util.AccessUtil;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public abstract class AdminCommand extends AbstractCommand {
-    protected static final Logger logger = LoggerFactory.getLogger("ADMIN");
+    private static final Logger logger = LoggerFactory.getLogger("ADMIN");
 
     public AdminCommand(SlapBot slapBot) {
         super(slapBot);
