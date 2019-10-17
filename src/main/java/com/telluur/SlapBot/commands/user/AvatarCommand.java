@@ -4,9 +4,10 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
+import com.telluur.SlapBot.features.avatar.AvatarMessageBuilder;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.List;
 
@@ -40,10 +41,8 @@ public class AvatarCommand extends UserCommand {
         }
 
         Member m = memberList.get(0);
-        EmbedBuilder builder = new EmbedBuilder()
-                .setColor(SlapBot.COLOR)
-                .setTitle(String.format("%s's avatar", m.getEffectiveName()))
-                .setImage(String.format("%s%s", m.getUser().getEffectiveAvatarUrl(), "?size=2048"));
-        event.reply(builder.build());
+        String title = String.format("`%s`'s avatar:", m.getEffectiveName());
+        MessageEmbed message = AvatarMessageBuilder.buildEmbed(title, m.getUser().getEffectiveAvatarUrl());
+        event.reply(message);
     }
 }

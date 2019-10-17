@@ -60,18 +60,18 @@ public abstract class AbstractCommand extends Command {
     boolean inValidGuildOrPrivate(CommandEvent event) {
         User user = event.getAuthor();
         String cmd = event.getMessage().getContentDisplay();
-        Guild eventGuild = event.getGuild();
         Guild configGuild = slapBot.getGuild();
 
-        if (eventGuild != null && !eventGuild.equals(configGuild)) {
+        if (event.isFromType(ChannelType.PRIVATE) ||
+                (event.isFromType(ChannelType.TEXT) && event.getGuild().equals(configGuild))) {
+            return true;
+        } else {
             logger.info(String.format("<DENIED> %s: %s", user.getName(), cmd));
             event.replyError(String.format(
                     "This bot is locked to `%s`, and can only be used there or in private chat.",
                     configGuild.getName()
             ));
             return false;
-        } else {
-            return true;
         }
     }
 }

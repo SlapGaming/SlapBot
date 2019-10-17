@@ -46,6 +46,11 @@ public class LTGChatListener implements EventListener {
                 return;
             }
 
+            //Only listen to messages in guild text channels
+            if (!message.isFromType(ChannelType.TEXT)) {
+                return;
+            }
+
             //Message is not in the guild we're interested in.
             TextChannel textChannel = message.getTextChannel();
             List<TextChannel> guildChannels = bot.getGuild().getTextChannels();

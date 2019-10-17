@@ -22,6 +22,11 @@ public class Config {
     @Getter private String guild;
 
     /**
+     * The General text channel.
+     */
+    @Getter private String genTxChannel;
+
+    /**
      * The LTG text channel.
      */
     @Getter private String ltgTxChannel;

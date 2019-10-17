@@ -27,12 +27,7 @@ public class SlapBot {
     /*
     Config stuff
      */
-    @Getter private Guild guild;
-    @Getter private User owner;
-    @Getter private Role adminRole, moderatorRole, punRole;
-    @Getter private TextChannel ltgTxChannel, nsaTxChannel;
-    @Getter private VoiceChannel punVcChannel;
-    @Getter private String prefix, altPrefix;
+    @Getter private String prefix, altPrefix; //String
 
     public SlapBot(Config config, EventWaiter eventWaiter) {
         this.config = config;
@@ -43,15 +38,43 @@ public class SlapBot {
 
     void finishBot(JDA jda) throws IllegalArgumentException {
         this.jda = jda;
-        this.guild = jda.getGuildById(config.getGuild());
-        this.owner = jda.getUserById(config.getOwner());
-        this.adminRole = jda.getRoleById(config.getAdmin());
-        this.moderatorRole = jda.getRoleById(config.getModerator());
-        this.ltgTxChannel = jda.getTextChannelById(config.getLtgTxChannel());
-        this.nsaTxChannel = jda.getTextChannelById(config.getNsaTxChannel());
-        this.punRole = jda.getRoleById(config.getPunRole());
-        this.punVcChannel = jda.getVoiceChannelById(config.getPunVcChannel());
-
         this.ltgHandler = new LTGHandler(this);
+    }
+
+
+    public Guild getGuild() {
+        return jda.getGuildById(config.getGuild());
+    }
+
+    public User getOwner() {
+        return jda.getUserById(config.getOwner());
+    }
+
+    public Role getAdminRole() {
+        return jda.getRoleById(config.getAdmin());
+    }
+
+    public Role getModeratorRole() {
+        return jda.getRoleById(config.getModerator());
+    }
+
+    public Role getPunRole() {
+        return jda.getRoleById(config.getPunRole());
+    }
+
+    public TextChannel getGenTxChannel() {
+        return jda.getTextChannelById(config.getGenTxChannel());
+    }
+
+    public TextChannel getLtgTxChannel() {
+        return jda.getTextChannelById(config.getLtgTxChannel());
+    }
+
+    public TextChannel getNsaTxChannel() {
+        return jda.getTextChannelById(config.getNsaTxChannel());
+    }
+
+    public VoiceChannel getPunVcChannel() {
+        return jda.getVoiceChannelById(config.getPunVcChannel());
     }
 }

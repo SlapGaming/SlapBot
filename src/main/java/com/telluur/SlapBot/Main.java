@@ -20,6 +20,7 @@ import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
 import com.telluur.SlapBot.commands.user.ltg.UnsubscribeCommand;
+import com.telluur.SlapBot.features.avatar.AvatarUpdateListener;
 import com.telluur.SlapBot.features.ltg.LTGChatListener;
 import com.telluur.SlapBot.system.config.Config;
 import com.telluur.SlapBot.system.config.ConfigLoader;
@@ -53,6 +54,7 @@ public class Main {
         EventWaiter waiter = new EventWaiter();
         SlapBot slapBot = new SlapBot(Objects.requireNonNull(config), waiter);
         LTGChatListener ltgChatListener = new LTGChatListener(slapBot);
+        AvatarUpdateListener avatarUpdateListener = new AvatarUpdateListener(slapBot);
 
         logger.info("Building commands");
         CommandClientBuilder cmdBuilder = new CommandClientBuilder();
@@ -101,7 +103,7 @@ public class Main {
             String token = config.getToken();
             JDA jda = new JDABuilder()
                     .setToken(token)
-                    .addEventListeners(cmdClient, waiter, ltgChatListener)
+                    .addEventListeners(cmdClient, waiter, ltgChatListener, avatarUpdateListener)
                     .setActivity(Activity.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();

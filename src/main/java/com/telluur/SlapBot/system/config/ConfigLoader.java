@@ -42,6 +42,7 @@ public class ConfigLoader {
             logger.info("Command altprefix: " + config.getAltprefix());
             logger.info("Status Type:       " + config.getStatustype());
             logger.info("Status:            " + config.getStatus());
+            logger.info("Gen tx channel:    " + config.getGenTxChannel());
             logger.info("LTG tx channel:    " + config.getLtgTxChannel());
             logger.info("NSA tx channel:    " + config.getNsaTxChannel());
             logger.info("Pun channel:       " + config.getPunVcChannel());
