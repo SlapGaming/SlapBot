@@ -24,7 +24,7 @@ public class AboutCommand extends Command {
     public AboutCommand(SlapBot slapBot) {
         this.slapBot = slapBot;
         this.name = "about";
-        this.aliases = new String[]{"config", "settings"};
+        this.aliases = new String[]{"config", "settings", "version"};
         this.help = "About this bot, displays the loaded configuration file (excluding token).";
         this.guildOnly = false;
     }
