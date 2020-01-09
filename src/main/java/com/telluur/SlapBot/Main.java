@@ -21,6 +21,7 @@ import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
 import com.telluur.SlapBot.commands.user.ltg.UnsubscribeCommand;
 import com.telluur.SlapBot.features.avatar.AvatarUpdateListener;
+import com.telluur.SlapBot.features.joinroles.JoinRoleAssignmentListener;
 import com.telluur.SlapBot.features.ltg.LTGChatListener;
 import com.telluur.SlapBot.system.config.Config;
 import com.telluur.SlapBot.system.config.ConfigLoader;
@@ -55,6 +56,7 @@ public class Main {
         SlapBot slapBot = new SlapBot(Objects.requireNonNull(config), waiter);
         LTGChatListener ltgChatListener = new LTGChatListener(slapBot);
         AvatarUpdateListener avatarUpdateListener = new AvatarUpdateListener(slapBot);
+        JoinRoleAssignmentListener joinRoleAssignmentListener = new JoinRoleAssignmentListener(slapBot);
 
         logger.info("Building commands");
         CommandClientBuilder cmdBuilder = new CommandClientBuilder();
@@ -103,11 +105,19 @@ public class Main {
             String token = config.getToken();
             JDA jda = new JDABuilder()
                     .setToken(token)
-                    .addEventListeners(cmdClient, waiter, ltgChatListener, avatarUpdateListener)
+                    .addEventListeners(
+                            cmdClient,
+                            waiter,
+                            ltgChatListener,
+                            avatarUpdateListener
+                            //,joinRoleAssignmentListener
+                    )
                     .setActivity(Activity.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
             slapBot.finishBot(jda);
+            //TODO uncomment
+            //joinRoleAssignmentListener.inviteCountUpdate();
         } catch (LoginException e) {
             logger.error("Failed to login", e.getCause());
             shutdown("caught exception");

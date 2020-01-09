@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 public class LTGHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
-    @Getter private static final Color COLOR = new Color(26, 188, 156);
+    @Getter private static final Color COLOR = new Color(17, 128, 106);
     private Guild guild;
     @Getter private StorageHandler storageHandler;
 
