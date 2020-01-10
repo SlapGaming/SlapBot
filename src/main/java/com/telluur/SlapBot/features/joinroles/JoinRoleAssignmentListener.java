@@ -16,17 +16,14 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * TODO add class description
+ * Adds a role to a new member when a specific join link has been used.
  *
  * @author Rick Fontein
  */
 
 public class JoinRoleAssignmentListener implements EventListener {
     private final SlapBot bot;
-
-    //TODO Set correct values here
-    private InviteTracker wow = new InviteTracker("code", "count", 0);
-    private InviteTracker community = new InviteTracker("code", "count", 0);
+    private InviteTracker wow = new InviteTracker("aZu2FEP", "604512744640872449", 0);
 
     public JoinRoleAssignmentListener(SlapBot bot) {
         this.bot = bot;
@@ -39,14 +36,10 @@ public class JoinRoleAssignmentListener implements EventListener {
             bot.getGuild().retrieveInvites().queue(result -> {
 
                 int wowUses = findInviteCountByCode(result, wow.getCode());
-                int communityUses = findInviteCountByCode(result, community.getCode());
 
                 if (wowUses > wow.getInvitationCount()) {
                     wow.setInvitationCount(wowUses);
                     assignRoleAndNotify(event.getMember(), wow);
-                } else if (communityUses > community.getInvitationCount()) {
-                    community.setInvitationCount(communityUses);
-                    assignRoleAndNotify(event.getMember(), community);
                 } else {
                     bot.getGenTxChannel().sendMessage(
                             String.format("Welcome `%s`! No roles assigned.", event.getMember())
@@ -62,7 +55,6 @@ public class JoinRoleAssignmentListener implements EventListener {
     public void inviteCountUpdate() {
         bot.getGuild().retrieveInvites().queue(result -> {
             wow.setInvitationCount(findInviteCountByCode(result, wow.getCode()));
-            community.setInvitationCount(findInviteCountByCode(result, community.getCode()));
         });
 
     }
@@ -98,6 +90,12 @@ public class JoinRoleAssignmentListener implements EventListener {
         }
     }
 
+    /**
+     * Custom wrapper for the invite links.
+     * code: Discord invite code used
+     * roleId: The role to be assigned
+     * invitationCount: number of uses of `code` as retrieved by discord api.
+     */
     @AllArgsConstructor
     private class InviteTracker {
         @Getter private String code;

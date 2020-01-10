@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 public class LTGHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
     @Getter private static final Color COLOR = new Color(17, 128, 106);
+    private static final String communityRoleId = "663755925248802826";
     private Guild guild;
     @Getter private StorageHandler storageHandler;
 
@@ -111,6 +112,7 @@ public class LTGHandler {
 
     /**
      * Adds a role to a user when both the user and role are part of the guild
+     * Adds the user to the community game role if they aren't already
      *
      * @param role    the role to be added
      * @param user    the user to add the role to
@@ -123,6 +125,7 @@ public class LTGHandler {
         } else if (!storageHandler.hasGameBySnowflake(role.getId())) {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
+            //Join role
             Member member = guild.getMember(user);
             guild.addRoleToMember(Objects.requireNonNull(member), role).queue(
                     ok -> {
@@ -133,6 +136,12 @@ public class LTGHandler {
                         logger.error(String.format("Failed to add user `%s` to role `%s`", user.getName(), role.getName()));
                         failure.accept(fail);
                     });
+
+            //Add community role
+            Role communityRole = guild.getRoleById(communityRoleId);
+            if(communityRole != null && !member.getRoles().contains(communityRole)){
+                guild.addRoleToMember(member, communityRole).queue();
+            }
         }
     }
 

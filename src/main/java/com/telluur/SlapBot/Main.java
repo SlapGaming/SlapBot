@@ -109,15 +109,14 @@ public class Main {
                             cmdClient,
                             waiter,
                             ltgChatListener,
-                            avatarUpdateListener
-                            //,joinRoleAssignmentListener
+                            avatarUpdateListener,
+                            joinRoleAssignmentListener
                     )
                     .setActivity(Activity.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
             slapBot.finishBot(jda);
-            //TODO uncomment
-            //joinRoleAssignmentListener.inviteCountUpdate();
+            joinRoleAssignmentListener.inviteCountUpdate();
         } catch (LoginException e) {
             logger.error("Failed to login", e.getCause());
             shutdown("caught exception");
