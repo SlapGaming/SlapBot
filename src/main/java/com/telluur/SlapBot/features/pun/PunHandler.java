@@ -97,12 +97,9 @@ public class PunHandler {
         //Start Async task for moving the user back/removing pun role
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         Runnable unpunish = () -> {
-            if (punRolable) {
-                guild.removeRoleFromMember(punMember, punRole).queue();
-            }
+            guild.removeRoleFromMember(punMember, punRole).queue();
 
             //check if user has left voice, or has already been moved to origin.
-
             GuildVoiceState postState = punMember.getVoiceState();
             if (postState.inVoiceChannel() && postState.getChannel() != null && !postState.getChannel().equals(origin)) {
                 guild.moveVoiceMember(punMember, origin).queue();
