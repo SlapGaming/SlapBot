@@ -140,7 +140,9 @@ public class LTGHandler {
             //Add community role
             Role communityRole = guild.getRoleById(communityRoleId);
             if(communityRole != null && !member.getRoles().contains(communityRole)){
-                guild.addRoleToMember(member, communityRole).queue();
+                guild.addRoleToMember(member, communityRole).queue(
+                        ok -> logger.info(String.format("User `%s` subscribed to `%s`", user.getName(), role.getName()))
+                );
             }
         }
     }

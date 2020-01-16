@@ -1,13 +1,16 @@
 package com.telluur.SlapBot;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.telluur.SlapBot.features.lan.LanStorageHandler;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import org.joda.time.DateTimeZone;
 
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Singleton JDA bot class
@@ -16,13 +19,18 @@ import java.awt.*;
  */
 
 public class SlapBot {
-    public static final Color COLOR = Color.ORANGE;
     private final Config config;
+    /*
+    In bot constants
+     */
+    public static final DateTimeZone TIME_ZONE = DateTimeZone.forID("Europe/London");
+    public static final Color COLOR = Color.ORANGE;
     /*
     Handlers
      */
     @Getter private JDA jda;
     @Getter private LTGHandler ltgHandler;
+    @Getter private LanStorageHandler lanStorageHandler;
     @Getter private EventWaiter eventWaiter;
     /*
     Config stuff
@@ -36,9 +44,10 @@ public class SlapBot {
         this.eventWaiter = eventWaiter;
     }
 
-    void finishBot(JDA jda) throws IllegalArgumentException {
+    void finishBot(JDA jda) throws IOException {
         this.jda = jda;
         this.ltgHandler = new LTGHandler(this);
+        this.lanStorageHandler = new LanStorageHandler();
     }
 
 

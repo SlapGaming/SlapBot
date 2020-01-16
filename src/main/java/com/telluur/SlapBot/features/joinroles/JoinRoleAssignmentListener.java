@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
  */
 
 public class JoinRoleAssignmentListener implements EventListener {
+    private static final Logger ltgLogger = LoggerFactory.getLogger("LTG");
     private final SlapBot bot;
     private InviteTracker wow = new InviteTracker("aZu2FEP", "604512744640872449", 0);
 
@@ -53,10 +56,9 @@ public class JoinRoleAssignmentListener implements EventListener {
      * Updates the invitation counts for the defined InviteTrackers
      */
     public void inviteCountUpdate() {
-        bot.getGuild().retrieveInvites().queue(result -> {
-            wow.setInvitationCount(findInviteCountByCode(result, wow.getCode()));
-        });
-
+        bot.getGuild().retrieveInvites().queue(
+                result -> wow.setInvitationCount(findInviteCountByCode(result, wow.getCode()))
+        );
     }
 
     /**
@@ -83,10 +85,13 @@ public class JoinRoleAssignmentListener implements EventListener {
         // Add role
         Role role = guild.getRoleById(inviteTracker.getRoleID());
         if (role != null) {
-            guild.addRoleToMember(member, role).queue(s -> {
-                String msg = String.format("Assigned `%s` to `%s`, welcome!", role.getName(), member.getEffectiveName());
-                bot.getGenTxChannel().sendMessage(msg).queue();
-            });
+            guild.addRoleToMember(member, role).queue(
+                    ok -> {
+                        String msg = String.format("Assigned `%s` to `%s`, welcome!", role.getName(), member.getEffectiveName());
+                        bot.getGenTxChannel().sendMessage(msg).queue();
+                        ltgLogger.info(String.format("User `%s` subscribed to `%s`", member.getEffectiveName(), role.getName()));
+                    }
+            );
         }
     }
 

@@ -40,6 +40,8 @@ public class StorageHandler {
         mapper = new ObjectMapper(new YAMLFactory());
 
 
+
+
         // Read the file and print all top level games
         root = (ObjectNode) mapper.readTree(storage);
 
