@@ -51,6 +51,11 @@ public class LTGChatListener implements EventListener {
                 return;
             }
 
+            //Filter out the WOW section
+            if (Objects.requireNonNull(bot.getGuild().getCategoryById("663438826890330133")).getTextChannels().contains(message.getTextChannel())){
+                return;
+            }
+
             //Message is not in the guild we're interested in.
             TextChannel textChannel = message.getTextChannel();
             List<TextChannel> guildChannels = bot.getGuild().getTextChannels();
