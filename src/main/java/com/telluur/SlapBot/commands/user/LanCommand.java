@@ -4,8 +4,10 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.lan.LanStorageHandler;
+import com.vdurmont.emoji.EmojiParser;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
@@ -21,12 +23,11 @@ public class LanCommand extends UserCommand {
     private static final String MESSAGE = "**%s** (%s)\r\nTime remaining: %s";
     private static final String DATE_FMT = "EEEE d MMMM yyyy - HH:mm z";
     private static final PeriodFormatter REMAINING_FMT = new PeriodFormatterBuilder()
-            .printZeroNever()
+            .printZeroRarelyLast()
             .appendYears()
             .appendSuffix(" year, ", " years, ")
             .appendMonths()
             .appendSuffix(" month, ", " months, ")
-            .printZeroRarelyLast()
             .appendDays()
             .appendSuffix(" day, ", " days, ")
             .appendHours()
@@ -53,11 +54,14 @@ public class LanCommand extends UserCommand {
             DateTime eventDate = slapBot.getLanStorageHandler().getDate().withZone(SlapBot.TIME_ZONE);
 
             DateTime current = new DateTime();
-            Period period = new Period(current.getMillis(), lanStorageHandler.getDate().getMillis());
+            DateTime lan = lanStorageHandler.getDate();
+            Period period = new Period(current, lan, PeriodType.yearMonthDayTime());
 
-            event.reply(String.format(MESSAGE, eventName, eventDate.toString(DATE_FMT), period.toString(REMAINING_FMT)));
-
-
+            if (lan.getMillis() - current.getMillis() >= 0) {
+                event.reply(String.format(MESSAGE, eventName, eventDate.toString(DATE_FMT), period.toString(REMAINING_FMT)));
+            } else {
+                event.reply(EmojiParser.parseToUnicode("SLAP has no future events planned... :sob:"));
+            }
         } catch (IOException e) {
             event.replyError("An IO exceoption has occurred.");
         }

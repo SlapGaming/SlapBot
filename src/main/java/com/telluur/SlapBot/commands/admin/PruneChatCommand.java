@@ -27,9 +27,6 @@ public class PruneChatCommand extends AdminCommand {
 
     @Override
     public void handle(CommandEvent event) {
-        //delete the message that triggered the clean
-        event.getMessage().delete().queue();
-
         //parse arguments
         int limit = 0;
 

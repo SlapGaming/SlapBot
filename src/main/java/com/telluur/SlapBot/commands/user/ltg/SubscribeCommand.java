@@ -3,6 +3,7 @@ package com.telluur.SlapBot.commands.user.ltg;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 
@@ -23,7 +24,7 @@ public class SubscribeCommand extends UserCommand {
         this.aliases = new String[]{"subscribe", "sub"};
         this.arguments = "<@role>";
         this.help = "Subscribes to a game group.";
-        this.guildOnly = false;
+        this.guildOnly = true;
     }
 
     @SuppressWarnings("Duplicates")
@@ -42,12 +43,13 @@ public class SubscribeCommand extends UserCommand {
         }
 
         Role LTGRole = mentionedRoles.get(0);
-        User subscriber = event.getAuthor();
+        Member member = event.getMember();
+        User subscriber = member.getUser();
         slapBot.getLtgHandler().joinGameRole(LTGRole, subscriber,
                 success -> {
-                    String reply = String.format("`%s` is now subscribed to `%s`.", subscriber.getName(), LTGRole.getName());
+                    String reply = String.format("`%s` is now subscribed to `%s`.", member.getEffectiveName(), LTGRole.getName());
                     event.replySuccess(reply);
-                    String logNSA = String.format("LTG | **%s** subscribed to __%s__", subscriber.getName(), LTGRole.getName());
+                    String logNSA = String.format("LTG | **%s** subscribed to __%s__", member.getEffectiveName(), LTGRole.getName());
                     slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
                 },
                 failure -> event.replyError(failure.getMessage()));

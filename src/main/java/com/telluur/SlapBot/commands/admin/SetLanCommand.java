@@ -36,6 +36,14 @@ public class SetLanCommand extends AdminCommand {
         this.guildOnly = false;
     }
 
+    private static String currentTimeMessage() {
+        DateTime current = new DateTime();
+        return String.format("__**Current Time**__\r\n UK: `%s`\r\n System: `%s`\r\n",
+                current.withZone(SlapBot.TIME_ZONE).toString(FORMAT),
+                current.toString(FORMAT)
+        );
+    }
+
     @Override
     public void handle(CommandEvent event) {
         LanStorageHandler lanStorageHandler = slapBot.getLanStorageHandler();
@@ -79,13 +87,5 @@ public class SetLanCommand extends AdminCommand {
         } else {
             event.reply(HELP);
         }
-    }
-
-    private static String currentTimeMessage() {
-        DateTime current = new DateTime();
-        return String.format("__**Current Time**__\r\n UK: `%s`\r\n System: `%s`\r\n",
-                current.withZone(SlapBot.TIME_ZONE).toString(FORMAT),
-                current.toString(FORMAT)
-        );
     }
 }

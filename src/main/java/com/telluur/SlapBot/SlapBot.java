@@ -19,12 +19,12 @@ import java.io.IOException;
  */
 
 public class SlapBot {
-    private final Config config;
     /*
     In bot constants
      */
     public static final DateTimeZone TIME_ZONE = DateTimeZone.forID("Europe/London");
     public static final Color COLOR = Color.ORANGE;
+    private final Config config;
     /*
     Handlers
      */

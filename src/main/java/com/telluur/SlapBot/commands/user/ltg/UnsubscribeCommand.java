@@ -3,6 +3,7 @@ package com.telluur.SlapBot.commands.user.ltg;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 
@@ -23,7 +24,7 @@ public class UnsubscribeCommand extends UserCommand {
         this.aliases = new String[]{"unsubscribe", "unsub"};
         this.arguments = "<@role>";
         this.help = "Unsubscribe from a game group.";
-        this.guildOnly = false;
+        this.guildOnly = true;
     }
 
     @SuppressWarnings("Duplicates")
@@ -42,12 +43,13 @@ public class UnsubscribeCommand extends UserCommand {
         }
 
         Role LTGRole = mentionedRoles.get(0);
-        User subscriber = event.getAuthor();
+        Member member = event.getMember();
+        User subscriber = member.getUser();
         slapBot.getLtgHandler().leaveGameRole(LTGRole, subscriber,
                 success -> {
-                    String reply = String.format("`%s` unsubscribed from `%s`.", subscriber.getName(), LTGRole.getName());
+                    String reply = String.format("`%s` unsubscribed from `%s`.", member.getEffectiveName(), LTGRole.getName());
                     event.replySuccess(reply);
-                    String logNSA = String.format("LTG | **%s** unsubscribed from __%s__", subscriber.getName(), LTGRole.getName());
+                    String logNSA = String.format("LTG | **%s** unsubscribed from __%s__", member.getEffectiveName(), LTGRole.getName());
                     slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
                 },
                 failure -> event.replyError(failure.getMessage()));

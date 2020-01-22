@@ -6,7 +6,7 @@
 
     <groupId>com.telluur</groupId>
     <artifactId>SlapBot</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
 
     <build>
         <plugins>

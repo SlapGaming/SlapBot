@@ -48,11 +48,6 @@ public class LanStorageHandler {
         }
     }
 
-    public synchronized void setEventName(String eventName) throws IOException {
-        root.put(EVENT_KEY, eventName);
-        writeToStorage();
-    }
-
     public synchronized String getEventName() throws IOException {
         if (root.hasNonNull(EVENT_KEY)) {
             return root.get(EVENT_KEY).asText();
@@ -61,8 +56,8 @@ public class LanStorageHandler {
         }
     }
 
-    public synchronized void setDate(DateTime eventDate) throws IOException {
-        root.put(DATE_KEY, eventDate.toDateTimeISO().toString());
+    public synchronized void setEventName(String eventName) throws IOException {
+        root.put(EVENT_KEY, eventName);
         writeToStorage();
     }
 
@@ -73,6 +68,11 @@ public class LanStorageHandler {
         } else {
             throw new IOException("Could not get date.");
         }
+    }
+
+    public synchronized void setDate(DateTime eventDate) throws IOException {
+        root.put(DATE_KEY, eventDate.toDateTimeISO().toString());
+        writeToStorage();
     }
 
     /*
