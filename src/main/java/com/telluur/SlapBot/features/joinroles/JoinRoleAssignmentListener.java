@@ -1,13 +1,7 @@
 package com.telluur.SlapBot.features.joinroles;
 
 import com.telluur.SlapBot.SlapBot;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Invite;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
@@ -26,7 +20,7 @@ import java.util.List;
 public class JoinRoleAssignmentListener implements EventListener {
     private static final Logger ltgLogger = LoggerFactory.getLogger("LTG");
     private final SlapBot bot;
-    private InviteTracker wow = new InviteTracker("aZu2FEP", "604512744640872449", 0);
+    private InviteTracker wow = new InviteTracker("aZu2FEP", 0, "604512744640872449", "663438874113998859");
 
     public JoinRoleAssignmentListener(SlapBot bot) {
         this.bot = bot;
@@ -36,18 +30,39 @@ public class JoinRoleAssignmentListener implements EventListener {
     public void onEvent(@Nonnull GenericEvent genericEvent) {
         if (genericEvent instanceof GuildMemberJoinEvent) {
             GuildMemberJoinEvent event = (GuildMemberJoinEvent) genericEvent;
-            bot.getGuild().retrieveInvites().queue(result -> {
+            Guild guild = bot.getGuild();
+            Member member = event.getMember();
 
-                int wowUses = findInviteCountByCode(result, wow.getCode());
+            guild.retrieveInvites().queue(retrievedInvites -> {
 
-                if (wowUses > wow.getInvitationCount()) {
-                    wow.setInvitationCount(wowUses);
-                    assignRoleAndNotify(event.getMember(), wow);
+                int wowUses = findInviteCountByCode(retrievedInvites, wow.getCode());
+
+                if (wowUses == (wow.getLocalInvitationCount() + 1)) {
+                    /* WOW Code used
+                    - Add wow role to user
+                    - Send message to wow general
+                    - (Update wow invitation count, happens on every join event)
+                     */
+                    Role role = guild.getRoleById(wow.getRoleID());
+                    TextChannel tx = guild.getTextChannelById(wow.getTextChannelID());
+                    if (role != null && tx != null) {
+                        guild.addRoleToMember(member, role).queue(
+                                ok -> {
+                                    tx.sendMessage(
+                                            String.format(JoinMessages.randomJoinMessage(), member.getAsMention())
+                                    ).queue();
+                                    ltgLogger.info(String.format("User `%s` subscribed to `%s`", member.getEffectiveName(), role.getName()));
+                                }
+                        );
+                    }
                 } else {
+                    // No tracked code used, send to general text.
                     bot.getGenTxChannel().sendMessage(
-                            String.format("Welcome `%s`! No roles assigned.", event.getMember())
+                            String.format(JoinMessages.randomJoinMessage(), member.getAsMention())
                     ).queue();
                 }
+                //Finally, update invite count.
+                inviteCountUpdate(retrievedInvites);
             });
         }
     }
@@ -57,12 +72,20 @@ public class JoinRoleAssignmentListener implements EventListener {
      */
     public void inviteCountUpdate() {
         bot.getGuild().retrieveInvites().queue(
-                result -> wow.setInvitationCount(findInviteCountByCode(result, wow.getCode()))
+                result -> wow.setLocalInvitationCount(findInviteCountByCode(result, wow.getCode()))
         );
     }
 
     /**
-     * Find the number of uses for a code, throws when illegal code is supplied
+     * Updates the invitation counts for the defined InviteTrackers by a supplied invites list
+     * DOES NOT CHECK VALIDITY OF INVITES LIST.
+     */
+    private void inviteCountUpdate(List<Invite> invitesList){
+        wow.setLocalInvitationCount(findInviteCountByCode(invitesList, wow.getCode()));
+    }
+
+    /**
+     * Find the number of uses for a code, throws when illegal code is8 supplied
      *
      * @param invites List of Invites (discord API)
      * @param code    The invite Code
@@ -76,35 +99,5 @@ public class JoinRoleAssignmentListener implements EventListener {
             }
         }
         throw new IllegalArgumentException("Could not find code " + code);
-    }
-
-
-    private void assignRoleAndNotify(Member member, InviteTracker inviteTracker) {
-        Guild guild = bot.getGuild();
-
-        // Add role
-        Role role = guild.getRoleById(inviteTracker.getRoleID());
-        if (role != null) {
-            guild.addRoleToMember(member, role).queue(
-                    ok -> {
-                        String msg = String.format("Assigned `%s` to `%s`, welcome!", role.getName(), member.getEffectiveName());
-                        bot.getGenTxChannel().sendMessage(msg).queue();
-                        ltgLogger.info(String.format("User `%s` subscribed to `%s`", member.getEffectiveName(), role.getName()));
-                    }
-            );
-        }
-    }
-
-    /**
-     * Custom wrapper for the invite links.
-     * code: Discord invite code used
-     * roleId: The role to be assigned
-     * invitationCount: number of uses of `code` as retrieved by discord api.
-     */
-    @AllArgsConstructor
-    private class InviteTracker {
-        @Getter private String code;
-        @Getter private String roleID;
-        @Getter @Setter private int invitationCount;
     }
 }
