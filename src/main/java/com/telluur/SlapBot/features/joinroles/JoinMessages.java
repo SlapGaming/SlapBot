@@ -1,9 +1,12 @@
 package com.telluur.SlapBot.features.joinroles;
 
+import com.vdurmont.emoji.EmojiParser;
+
 import java.util.Random;
 
 class JoinMessages {
     private static final Random random = new Random();
+    private static final String JOIN_EMOJI = EmojiParser.parseToUnicode(":raising_hand:");
     private static final String[] messages = {
             "%s just joined the server - glhf!",
             "%s just joined. Everyone, look busy!",
@@ -39,7 +42,7 @@ class JoinMessages {
     };
 
     public static String randomJoinMessage() {
-        return messages[random.nextInt(messages.length)];
+        return String.format("%s %s", JOIN_EMOJI, messages[random.nextInt(messages.length)]);
     }
 
 }

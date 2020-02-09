@@ -58,10 +58,11 @@ public class AboutCommand extends Command {
         sb.append(String.format("Type `%s%s` to see my commands!\r\n", event.getClient().getTextualPrefix(), event.getClient().getHelpWord()));
         //features
         sb.append("\r\n\r\nSome of my features include: ```css\r\n" +
+                ":wrench: Automated guild management\r\n" +
                 ":video_game: Looking-to-game\r\n" +
-                ":twisted_rightwards_arrows: Teams generator\r\n" +
                 ":hammer: Pun-ishment\r\n" +
-                ":notes: Soundboard (suggested/soon)\r\n" +
+                ":calendar: Slap Lan Tracker\r\n" +
+                ":twisted_rightwards_arrows: Teams generator\r\n" +
                 "```");
         //settings/stats header
         sb.append("\r\n\r\n**Settings from config.yaml and some stats:**");
