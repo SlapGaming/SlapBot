@@ -3,7 +3,7 @@ package com.telluur.SlapBot.features.ltg.storage;
 import lombok.*;
 
 /**
- * POJO for the games stored in the storage.yaml file
+ * POJO for the games stored in the ltg.yaml file
  * <p>
  * private NoArgsConstructor for jackson databind
  *

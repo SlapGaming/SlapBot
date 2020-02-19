@@ -24,7 +24,7 @@ import java.util.List;
  * @author Rick Fontein
  */
 
-public class StorageHandler {
+public class LTGStorageHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
     private File storage;
     private ObjectMapper mapper;
@@ -35,13 +35,17 @@ public class StorageHandler {
      * - opening the file
      * - reading the contents
      */
-    public StorageHandler() throws IOException {
-        storage = new File("yaml/storage.yaml");
+    public LTGStorageHandler() throws IOException {
+        storage = new File("yaml/ltg.yaml");
         mapper = new ObjectMapper(new YAMLFactory());
 
 
         // Read the file and print all top level games
-        root = (ObjectNode) mapper.readTree(storage);
+        try {
+            root = (ObjectNode) mapper.readTree(storage);
+        } catch (ClassCastException e) {
+            root = null;
+        }
 
 
         if (root == null) {

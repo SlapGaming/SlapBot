@@ -1,8 +1,8 @@
 package com.telluur.SlapBot;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.SlapBot.features.lan.LanStorageHandler;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
+import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -30,7 +30,7 @@ public class SlapBot {
      */
     @Getter private JDA jda;
     @Getter private LTGHandler ltgHandler;
-    @Getter private LanStorageHandler lanStorageHandler;
+    @Getter private SlapEventStorageHandler slapEventStorageHandler;
     @Getter private EventWaiter eventWaiter;
     /*
     Config stuff
@@ -47,7 +47,7 @@ public class SlapBot {
     void finishBot(JDA jda) throws IOException {
         this.jda = jda;
         this.ltgHandler = new LTGHandler(this);
-        this.lanStorageHandler = new LanStorageHandler();
+        this.slapEventStorageHandler = new SlapEventStorageHandler();
     }
 
 

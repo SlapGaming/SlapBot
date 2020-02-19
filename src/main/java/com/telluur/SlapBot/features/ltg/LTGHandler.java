@@ -2,7 +2,7 @@ package com.telluur.SlapBot.features.ltg;
 
 import com.telluur.SlapBot.Main;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.features.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.features.ltg.storage.LTGStorageHandler;
 import com.telluur.SlapBot.features.ltg.storage.StoredGame;
 import lombok.Getter;
 import net.dv8tion.jda.api.Permission;
@@ -29,13 +29,13 @@ public class LTGHandler {
     @Getter private static final Color COLOR = new Color(17, 128, 106);
     private static final String communityRoleId = "663755925248802826";
     private Guild guild;
-    @Getter private StorageHandler storageHandler;
+    @Getter private LTGStorageHandler storageHandler;
 
 
     public LTGHandler(SlapBot slapBot) {
         try {
             this.guild = slapBot.getGuild();
-            this.storageHandler = new StorageHandler();
+            this.storageHandler = new LTGStorageHandler();
         } catch (IOException e) {
             logger.error("Failed to read storage", e.getCause());
             Main.shutdown("Caught Exception");

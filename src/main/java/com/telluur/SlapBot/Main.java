@@ -9,9 +9,9 @@ import com.telluur.SlapBot.commands.PingCmd;
 import com.telluur.SlapBot.commands.admin.EvalCommand;
 import com.telluur.SlapBot.commands.admin.KillCommand;
 import com.telluur.SlapBot.commands.admin.PruneChatCommand;
-import com.telluur.SlapBot.commands.admin.SetLanCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
+import com.telluur.SlapBot.commands.admin.EventManageCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
 import com.telluur.SlapBot.commands.user.AvatarCommand;
@@ -84,8 +84,8 @@ public class Main {
                     new ForceSaveCommand(slapBot),
                     new ForceReloadCommand(slapBot),
                     new KillCommand(slapBot),
+                    new EventManageCommand(slapBot),
                     new PruneChatCommand(slapBot),
-                    new SetLanCommand(slapBot),
 
                     /*
                     Moderator

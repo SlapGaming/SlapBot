@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
-import com.telluur.SlapBot.features.ltg.storage.StorageHandler;
+import com.telluur.SlapBot.features.ltg.storage.LTGStorageHandler;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -81,7 +81,7 @@ public class SubscriptionsCommand extends UserCommand {
         String[] parts = event.getArgs().split("\\s+");
 
         List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], slapBot.getGuild());
-        StorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
+        LTGStorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
             if (handler.hasGameBySnowflake(role.getId())) {
@@ -106,7 +106,7 @@ public class SubscriptionsCommand extends UserCommand {
 
     private void memberDisplay(CommandEvent event, Member member) {
         List<String> discordRoles = member.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-        StorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
+        LTGStorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
         String[] games = handler.getGameSnowflakes()
                 .stream()
                 .filter(discordRoles::contains)
