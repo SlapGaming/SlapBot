@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -154,7 +155,19 @@ public class SlapEventStorageHandler {
      * @return wether event is valid
      */
     public static boolean isValidEvent(SlapEvent event) {
-        return (event.getDescription() != null && event.getStart() != null && event.getEnd() != null);
+        String begin = event.getStart();
+        String end = event.getEnd();
+        if (event.getDescription() != null && begin != null && end != null) {
+            try{
+                DateTime b = new DateTime(begin);
+                DateTime e = new DateTime(end);
+                return b.isBefore(e);
+            }catch (IllegalArgumentException e){
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**

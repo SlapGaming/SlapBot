@@ -59,7 +59,8 @@ public class EventManageCommand extends AdminCommand {
                 "<ISO> expects a valid ISO 8601 string as argument, e.g. 2020-12-31T23:59:59+00:00\n" +
                 "```\n" +
                 "To create an event, you need to create a new event with `create`, then set the indivual fields with `edit`." +
-                "An event is only considered valid and presented in the user commands when `description` and `begin` are set.", this.name);
+                "__An event is only considered valid when `description`, `begin` and `end` are set and begin is before end.__" +
+                "__Invalid events will not be visible in the normal user commands.__", this.name);
     }
 
     @Override
@@ -187,6 +188,9 @@ public class EventManageCommand extends AdminCommand {
                                         String msg = String.format("Updated description of `%s` to `%s`", id, desc);
                                         event.reply(msg);
                                         el.info(msg);
+                                        if(!SlapEventStorageHandler.isValidEvent(myEvent)){
+                                            event.reply(String.format("**Event** `%s` **is not valid/incomplete, and won't be visible to users.**", id));
+                                        }
                                         return;
 
                                     case "begin":
@@ -196,6 +200,9 @@ public class EventManageCommand extends AdminCommand {
                                         storage.setEventByID(id, myEvent);
                                         event.reply(String.format("Updated start date of `%s` to `%s`", id, startDateTime.toString(FORMAT)));
                                         el.info(String.format("Updated begin of `%s` to `%s`", id, beginISO));
+                                        if(!SlapEventStorageHandler.isValidEvent(myEvent)){
+                                            event.reply(String.format("**Event** `%s` **is not valid/incomplete, and won't be visible to users.**", id));
+                                        }
                                         return;
 
                                     case "end":
@@ -205,6 +212,9 @@ public class EventManageCommand extends AdminCommand {
                                         storage.setEventByID(id, myEvent);
                                         event.reply(String.format("Updated end date of `%s` to `%s`", id, endDateTime.toString(FORMAT)));
                                         el.info(String.format("Updated end of `%s` to `%s`", id, endISO));
+                                        if(!SlapEventStorageHandler.isValidEvent(myEvent)){
+                                            event.reply(String.format("**Event** `%s` **is not valid/incomplete, and won't be visible to users.**", id));
+                                        }
                                         return;
 
                                     default:

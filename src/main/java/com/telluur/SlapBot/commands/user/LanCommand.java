@@ -52,8 +52,6 @@ public class LanCommand extends UserCommand {
     public void handle(CommandEvent event) {
         SlapEventStorageHandler storage = slapBot.getSlapEventStorageHandler();
         String[] params = event.getArgs().split("\\s+");
-        System.out.println(params.length);
-        System.out.println(params[0]);
 
         if (params.length >= 1 && params[0].toLowerCase().equals("")) {
             SlapEvent nextEvent = storage.getCurrentOrNextEvent();
