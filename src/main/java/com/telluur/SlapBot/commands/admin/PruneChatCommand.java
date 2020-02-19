@@ -23,6 +23,7 @@ public class PruneChatCommand extends AdminCommand {
         this.arguments = "<1-200>";
         this.help = "Deletes the last <1-200> messages in a textchannel, skips pinned messages.";
         this.guildOnly = true;
+        this.echoUserIssue = false;
     }
 
     @Override
