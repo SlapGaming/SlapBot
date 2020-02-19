@@ -22,7 +22,6 @@ public class AddGameCommand extends ModeratorCommand {
     public AddGameCommand(SlapBot slapBot) {
         super(slapBot);
         this.name = "addgame";
-        this.aliases = new String[]{"add", "create"};
         this.arguments = "<abbreviation=6> <fullname+>";
         this.help = "Adds a new LTG role.";
         this.guildOnly = false;

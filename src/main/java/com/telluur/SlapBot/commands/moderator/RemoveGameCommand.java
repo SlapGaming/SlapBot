@@ -19,7 +19,6 @@ public class RemoveGameCommand extends ModeratorCommand {
     public RemoveGameCommand(SlapBot slapBot) {
         super(slapBot);
         this.name = "removegame";
-        this.aliases = new String[]{"remove", "delete", "del"};
         this.arguments = "<@role>";
         this.help = "Delete a LTG role.";
         this.guildOnly = false;
