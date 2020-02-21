@@ -2,6 +2,7 @@ package com.telluur.SlapBot;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
+import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class SlapBot {
     @Getter private LTGHandler ltgHandler;
     @Getter private SlapEventStorageHandler slapEventStorageHandler;
     @Getter private EventWaiter eventWaiter;
+    @Getter private QuickSubscribeListener quickSubscribeListener;
     /*
     Config stuff
      */
@@ -44,10 +46,11 @@ public class SlapBot {
         this.eventWaiter = eventWaiter;
     }
 
-    void finishBot(JDA jda) throws IOException {
+    void finishBot(JDA jda, QuickSubscribeListener quickSubscribeListener) throws IOException {
         this.jda = jda;
         this.ltgHandler = new LTGHandler(this);
         this.slapEventStorageHandler = new SlapEventStorageHandler();
+        this.quickSubscribeListener = quickSubscribeListener;
     }
 
 

@@ -6,9 +6,11 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
+import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.features.ltg.storage.LTGStorageHandler;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -145,6 +147,7 @@ public class SubscriptionsCommand extends UserCommand {
         } else {
             String replyHeader = String.format("**Looking-to-game subscribers of `%s`, total subscriber count: `%d`.**", role.getName(), subscribers.length);
             createReply(event, subscribers, replyHeader);
+            createSubscribeButtonIfPossible(event, role);
         }
     }
 
@@ -169,6 +172,14 @@ public class SubscriptionsCommand extends UserCommand {
             default:
                 event.replyError("Could not display message in this channel.");
                 break;
+        }
+    }
+
+    private void createSubscribeButtonIfPossible(CommandEvent event, Role role) {
+        //Button is only possible in guild chat channels.
+        if (event.getChannel().getType() == ChannelType.TEXT) {
+            String msg = String.format("Click %s to subscribe to `%s`.", QuickSubscribeListener.SUBSCRIBE, role.getName());
+            event.replySuccess(msg, m -> slapBot.getQuickSubscribeListener().addButton(m, role));
         }
     }
 }
