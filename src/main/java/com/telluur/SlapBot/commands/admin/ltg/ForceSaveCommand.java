@@ -23,7 +23,7 @@ public class ForceSaveCommand extends AdminCommand {
     @Override
     public void handle(CommandEvent event) {
         try {
-            slapBot.getLtgHandler().getStorageHandler().forceWrite();
+            slapBot.getLtgHandler().getLtgStorageHandler().forceWrite();
             event.replySuccess("Successfully saved to storage.");
         } catch (IOException e) {
             event.replyError("An IO Exception occurred. Good job, you broke the bot!");

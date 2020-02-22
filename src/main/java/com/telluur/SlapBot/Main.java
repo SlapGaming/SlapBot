@@ -1,31 +1,6 @@
 package com.telluur.SlapBot;
 
 
-import com.jagrosh.jdautilities.command.CommandClient;
-import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.telluur.SlapBot.commands.AboutCommand;
-import com.telluur.SlapBot.commands.PingCmd;
-import com.telluur.SlapBot.commands.admin.EvalCommand;
-import com.telluur.SlapBot.commands.admin.KillCommand;
-import com.telluur.SlapBot.commands.admin.PruneChatCommand;
-import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
-import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
-import com.telluur.SlapBot.commands.admin.EventManageCommand;
-import com.telluur.SlapBot.commands.moderator.AddGameCommand;
-import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
-import com.telluur.SlapBot.commands.user.AvatarCommand;
-import com.telluur.SlapBot.commands.user.LanCommand;
-import com.telluur.SlapBot.commands.user.PunCommand;
-import com.telluur.SlapBot.commands.user.TeamsCommand;
-import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
-import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
-import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
-import com.telluur.SlapBot.commands.user.ltg.UnsubscribeCommand;
-import com.telluur.SlapBot.features.avatar.AvatarUpdateListener;
-import com.telluur.SlapBot.features.joinroles.JoinRoleAssignmentListener;
-import com.telluur.SlapBot.features.ltg.listeners.LTGChatListener;
-import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.system.config.Config;
 import com.telluur.SlapBot.system.config.ConfigLoader;
 import com.vdurmont.emoji.EmojiParser;
@@ -48,6 +23,7 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
 
     public static void main(String[] args) {
+        logger.info("System startup");
         final String VERSION = Main.class.getPackage().getImplementationVersion() != null ?
                 Main.class.getPackage().getImplementationVersion() :
                 "DEVELOPMENT NON PACKAGED";
@@ -55,77 +31,16 @@ public class Main {
         logger.info("Loading config.yaml");
         Config config = ConfigLoader.loadYAML();
 
-        logger.info("Bot start");
         try {
-            EventWaiter waiter = new EventWaiter();
-            SlapBot slapBot = new SlapBot(Objects.requireNonNull(config), waiter);
-            LTGChatListener ltgChatListener = new LTGChatListener(slapBot);
-            QuickSubscribeListener quickSubscribeListener = new QuickSubscribeListener(slapBot);
-            AvatarUpdateListener avatarUpdateListener = new AvatarUpdateListener(slapBot);
-            JoinRoleAssignmentListener joinRoleAssignmentListener = new JoinRoleAssignmentListener(slapBot);
-
-
-            logger.info("Building commands");
-            CommandClientBuilder cmdBuilder = new CommandClientBuilder();
-            cmdBuilder.setOwnerId(config.getOwner());
-            cmdBuilder.setPrefix(config.getPrefix());
-            cmdBuilder.setAlternativePrefix(config.getAltprefix());
-            cmdBuilder.setActivity(config.getGameStatus());
-            cmdBuilder.addCommands(
-                    /*
-                    Listen in alphabetical order
-                    About command
-                     */
-                    new AboutCommand(slapBot),
-                    new PingCmd(),
-
-                    /*
-                    Admin
-                    */
-                    new EvalCommand(slapBot),
-                    new ForceSaveCommand(slapBot),
-                    new ForceReloadCommand(slapBot),
-                    new KillCommand(slapBot),
-                    new EventManageCommand(slapBot),
-                    new PruneChatCommand(slapBot),
-
-                    /*
-                    Moderator
-                    */
-                    new AddGameCommand(slapBot),
-                    new RemoveGameCommand(slapBot),
-
-                    /*
-                    User
-                     */
-                    new AvatarCommand(slapBot),
-                    new LanCommand(slapBot),
-                    new PunCommand(slapBot),
-                    new TeamsCommand(slapBot),
-                    new GamesCommand(slapBot),
-                    new SubscriptionsCommand(slapBot), //info
-                    new SubscribeCommand(slapBot), //join
-                    new UnsubscribeCommand(slapBot) //leave
-            );
-            CommandClient cmdClient = cmdBuilder.build();
-
             logger.info("Building JDA client and logging in");
-            String token = config.getToken();
+            String token = Objects.requireNonNull(config).getToken();
             JDA jda = new JDABuilder()
                     .setToken(token)
-                    .addEventListeners(
-                            cmdClient,
-                            waiter,
-                            ltgChatListener,
-                            quickSubscribeListener,
-                            avatarUpdateListener,
-                            joinRoleAssignmentListener
-                    )
                     .setActivity(Activity.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
-            slapBot.finishBot(jda, quickSubscribeListener);
-            joinRoleAssignmentListener.inviteCountUpdate();
+
+            new SlapBot(jda, config);
         } catch (LoginException e) {
             logger.error("Failed to login", e.getCause());
             shutdown("caught exception");

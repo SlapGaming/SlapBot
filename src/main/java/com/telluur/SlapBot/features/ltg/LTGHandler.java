@@ -29,13 +29,13 @@ public class LTGHandler {
     @Getter private static final Color COLOR = new Color(17, 128, 106);
     private static final String communityRoleId = "663755925248802826";
     private Guild guild;
-    @Getter private LTGStorageHandler storageHandler;
+    @Getter private LTGStorageHandler ltgStorageHandler;
 
 
     public LTGHandler(SlapBot slapBot) {
         try {
             this.guild = slapBot.getGuild();
-            this.storageHandler = new LTGStorageHandler();
+            this.ltgStorageHandler = new LTGStorageHandler();
         } catch (IOException e) {
             logger.error("Failed to read storage", e.getCause());
             Main.shutdown("Caught Exception");
@@ -65,7 +65,7 @@ public class LTGHandler {
                             try {
 
                                 StoredGame storedGame = new StoredGame(abbreviation, fullname);
-                                storageHandler.setGameBySnowflake(role.getId(), storedGame);
+                                ltgStorageHandler.setGameBySnowflake(role.getId(), storedGame);
                                 success.accept(role);
                                 logger.info(String.format("Role `%s` with id `%s` created", role.getName(), role.getId()));
                             } catch (IOException e) {
@@ -90,11 +90,11 @@ public class LTGHandler {
      */
     public void deleteGameRole(Role role, Consumer<Void> success, Consumer<Throwable> failure) {
         String snowflake = role.getId();
-        if (storageHandler.hasGameBySnowflake(snowflake)) {
+        if (ltgStorageHandler.hasGameBySnowflake(snowflake)) {
             role.delete().queue(
                     ok -> {
                         try {
-                            storageHandler.deleteGameBySnowflake(snowflake);
+                            ltgStorageHandler.deleteGameBySnowflake(snowflake);
                             logger.info("Successfully deleted role `%s` with id `%s`.");
                             success.accept(ok);
                         } catch (IOException e) {
@@ -122,7 +122,7 @@ public class LTGHandler {
     public void joinGameRole(Role role, User user, Consumer<Void> success, Consumer<Throwable> failure) {
         if (!guild.isMember(user)) {
             failure.accept(new IllegalArgumentException(String.format("User `%s` is not a member of `%s`", user.getName(), guild.getName())));
-        } else if (!storageHandler.hasGameBySnowflake(role.getId())) {
+        } else if (!ltgStorageHandler.hasGameBySnowflake(role.getId())) {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
             //Join role
@@ -158,7 +158,7 @@ public class LTGHandler {
     public void leaveGameRole(Role role, User user, Consumer<Void> success, Consumer<Throwable> failure) {
         if (!guild.isMember(user)) {
             failure.accept(new IllegalArgumentException(String.format("User `%s` is not a member of `%s`", user.getName(), guild.getName())));
-        } else if (!storageHandler.hasGameBySnowflake(role.getId())) {
+        } else if (!ltgStorageHandler.hasGameBySnowflake(role.getId())) {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
             Member member = guild.getMember(user);
@@ -174,6 +174,6 @@ public class LTGHandler {
      */
     @SuppressWarnings("WeakerAccess")
     public boolean isGameRole(Role role) {
-        return storageHandler.hasGameBySnowflake(role.getId());
+        return ltgStorageHandler.hasGameBySnowflake(role.getId());
     }
 }

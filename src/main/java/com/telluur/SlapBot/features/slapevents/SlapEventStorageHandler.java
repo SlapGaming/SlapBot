@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +54,28 @@ public class SlapEventStorageHandler {
     GET/SET
     These methods are synchronized as the commands are executed async
      */
+
+    /**
+     * Checks wether the event has the description, begin and end non null
+     *
+     * @param event Event to be checked
+     * @return wether event is valid
+     */
+    public static boolean isValidEvent(SlapEvent event) {
+        String begin = event.getStart();
+        String end = event.getEnd();
+        if (event.getDescription() != null && begin != null && end != null) {
+            try {
+                DateTime b = new DateTime(begin);
+                DateTime e = new DateTime(end);
+                return b.isBefore(e);
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Checks whether the event ID exists in storage
@@ -110,17 +131,17 @@ public class SlapEventStorageHandler {
         }
     }
 
-    public synchronized List<String> getEventIDs() {
-        LinkedList<String> IDs = new LinkedList<>();
-        root.fieldNames().forEachRemaining(IDs::add);
-        return IDs;
-    }
-
     /*
     Expanded Functionality
     These methods implement further user facing functionality
     These methods are synchronized as the commands are executed async
      */
+
+    public synchronized List<String> getEventIDs() {
+        LinkedList<String> IDs = new LinkedList<>();
+        root.fieldNames().forEachRemaining(IDs::add);
+        return IDs;
+    }
 
     /**
      * Of all events, lists those that are
@@ -146,28 +167,6 @@ public class SlapEventStorageHandler {
                 .filter(e -> (isValidEvent(e) && now.isBefore(new DateTime(e.getEnd()))))
                 .sorted(new SlapEventComparator())
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Checks wether the event has the description, begin and end non null
-     *
-     * @param event Event to be checked
-     * @return wether event is valid
-     */
-    public static boolean isValidEvent(SlapEvent event) {
-        String begin = event.getStart();
-        String end = event.getEnd();
-        if (event.getDescription() != null && begin != null && end != null) {
-            try{
-                DateTime b = new DateTime(begin);
-                DateTime e = new DateTime(end);
-                return b.isBefore(e);
-            }catch (IllegalArgumentException e){
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
     /**

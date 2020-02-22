@@ -23,7 +23,7 @@ public class ForceReloadCommand extends AdminCommand {
     @Override
     public void handle(CommandEvent event) {
         try {
-            slapBot.getLtgHandler().getStorageHandler().forceReload();
+            slapBot.getLtgHandler().getLtgStorageHandler().forceReload();
             event.replySuccess("Successfully reloaded from storage.");
         } catch (IOException e) {
             event.replyError("An IO Exception occurred. Good job, you broke the bot!");

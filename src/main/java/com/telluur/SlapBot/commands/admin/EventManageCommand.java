@@ -188,7 +188,7 @@ public class EventManageCommand extends AdminCommand {
                                         String msg = String.format("Updated description of `%s` to `%s`", id, desc);
                                         event.reply(msg);
                                         el.info(msg);
-                                        if(!SlapEventStorageHandler.isValidEvent(myEvent)){
+                                        if (!SlapEventStorageHandler.isValidEvent(myEvent)) {
                                             event.reply(String.format("**Event** `%s` **is not valid/incomplete, and won't be visible to users.**", id));
                                         }
                                         return;
@@ -200,7 +200,7 @@ public class EventManageCommand extends AdminCommand {
                                         storage.setEventByID(id, myEvent);
                                         event.reply(String.format("Updated start date of `%s` to `%s`", id, startDateTime.toString(FORMAT)));
                                         el.info(String.format("Updated begin of `%s` to `%s`", id, beginISO));
-                                        if(!SlapEventStorageHandler.isValidEvent(myEvent)){
+                                        if (!SlapEventStorageHandler.isValidEvent(myEvent)) {
                                             event.reply(String.format("**Event** `%s` **is not valid/incomplete, and won't be visible to users.**", id));
                                         }
                                         return;
@@ -212,7 +212,7 @@ public class EventManageCommand extends AdminCommand {
                                         storage.setEventByID(id, myEvent);
                                         event.reply(String.format("Updated end date of `%s` to `%s`", id, endDateTime.toString(FORMAT)));
                                         el.info(String.format("Updated end of `%s` to `%s`", id, endISO));
-                                        if(!SlapEventStorageHandler.isValidEvent(myEvent)){
+                                        if (!SlapEventStorageHandler.isValidEvent(myEvent)) {
                                             event.reply(String.format("**Event** `%s` **is not valid/incomplete, and won't be visible to users.**", id));
                                         }
                                         return;

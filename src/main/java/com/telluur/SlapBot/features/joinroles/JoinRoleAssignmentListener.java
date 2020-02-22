@@ -24,6 +24,7 @@ public class JoinRoleAssignmentListener implements EventListener {
 
     public JoinRoleAssignmentListener(SlapBot bot) {
         this.bot = bot;
+        inviteCountUpdate();
     }
 
     @Override
@@ -80,7 +81,7 @@ public class JoinRoleAssignmentListener implements EventListener {
      * Updates the invitation counts for the defined InviteTrackers by a supplied invites list
      * DOES NOT CHECK VALIDITY OF INVITES LIST.
      */
-    private void inviteCountUpdate(List<Invite> invitesList){
+    private void inviteCountUpdate(List<Invite> invitesList) {
         wow.setLocalInvitationCount(findInviteCountByCode(invitesList, wow.getCode()));
     }
 

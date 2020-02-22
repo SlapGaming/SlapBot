@@ -1,7 +1,6 @@
 package com.telluur.SlapBot.features.slapevents;
 
 import lombok.*;
-import org.joda.time.DateTime;
 
 /**
  * POJO for the events stored in the events.yaml file

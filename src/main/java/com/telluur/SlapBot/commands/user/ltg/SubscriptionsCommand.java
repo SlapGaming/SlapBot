@@ -83,7 +83,7 @@ public class SubscriptionsCommand extends UserCommand {
         String[] parts = event.getArgs().split("\\s+");
 
         List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], slapBot.getGuild());
-        LTGStorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
+        LTGStorageHandler handler = slapBot.getLtgHandler().getLtgStorageHandler();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
             if (handler.hasGameBySnowflake(role.getId())) {
@@ -108,7 +108,7 @@ public class SubscriptionsCommand extends UserCommand {
 
     private void memberDisplay(CommandEvent event, Member member) {
         List<String> discordRoles = member.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-        LTGStorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
+        LTGStorageHandler handler = slapBot.getLtgHandler().getLtgStorageHandler();
         String[] games = handler.getGameSnowflakes()
                 .stream()
                 .filter(discordRoles::contains)

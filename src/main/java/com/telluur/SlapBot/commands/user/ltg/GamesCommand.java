@@ -59,7 +59,7 @@ public class GamesCommand extends UserCommand {
     @Override
     public void handle(CommandEvent event) {
         Guild g = slapBot.getGuild();
-        LTGStorageHandler handler = slapBot.getLtgHandler().getStorageHandler();
+        LTGStorageHandler handler = slapBot.getLtgHandler().getLtgStorageHandler();
 
         /*
         Get gameSnowflakes from storage
