@@ -37,7 +37,7 @@ public class EventManageCommand extends AdminCommand {
         this.guildOnly = false;
 
         this.NOT_ENOUGH_PARAMS = String.format("Not enough arguments given. Use `%s%s help` to see the help page.", slapBot.getPrefix(), this.name);
-        this.HELP = String.format("This command manages the events.\n" +
+        this.HELP = String.format("\n**Event Management Commands**\n" +
                 "```markdown\n" +
                 "%1$s help - displays this message\n" +
                 "%1$s status - displays system and local time\n" +
@@ -58,9 +58,9 @@ public class EventManageCommand extends AdminCommand {
                 "\n" +
                 "<ISO> expects a valid ISO 8601 string as argument, e.g. 2020-12-31T23:59:59+00:00\n" +
                 "```\n" +
-                "To create an event, you need to create a new event with `create`, then set the indivual fields with `edit`." +
-                "__An event is only considered valid when `description`, `begin` and `end` are set and begin is before end.__" +
-                "__Invalid events will not be visible in the normal user commands.__", this.name);
+                "To create an event, you need to create a new event with `create`, then set the indivual fields with `edit`.\n\n" +
+                "An event is only considered valid when `<description>`, `<begin>` and `<end>` are set and `<begin>` is chronologically before `<end>`.\n" +
+                "__Invalid events will not be visible in the normal user commands__, you can use `list` and `info` to view these events.", this.name);
     }
 
     @Override
