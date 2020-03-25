@@ -26,11 +26,6 @@ public class PunHandler {
 
     public PunHandler(SlapBot slapBot) {
         this.bot = slapBot;
-        forceUnpunish();
-    }
-
-    private void forceUnpunish() {
-        //TODO Implement a clear role of all channels on bot startup.
     }
 
     public void canPunish(CommandEvent event, Punishment punishment) throws PunException {
@@ -67,7 +62,6 @@ public class PunHandler {
 
         //Fetch guild settings
         Guild guild = bot.getGuild();
-        Role punRole = bot.getPunRole();
         VoiceChannel punVC = bot.getPunVcChannel();
 
         //fetch punished members of guild, create if doesn't exist yet
@@ -83,13 +77,8 @@ public class PunHandler {
             return;
         }
 
-        final boolean punRolable = !AccessUtil.hasHigherRoleThanBot(punMember);
-
-        //Add role and move user if still in voice.
+        //Move user if still in voice.
         punished.add(punMember);
-        if (punRolable) {
-            guild.addRoleToMember(punMember, punRole).queue();
-        }
         if (punMember.getVoiceState().inVoiceChannel()) {
             guild.moveVoiceMember(punMember, punVC).queue();
         }
@@ -97,8 +86,6 @@ public class PunHandler {
         //Start Async task for moving the user back/removing pun role
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         Runnable unpunish = () -> {
-            guild.removeRoleFromMember(punMember, punRole).queue();
-
             //check if user has left voice, or has already been moved to origin.
             GuildVoiceState postState = punMember.getVoiceState();
             if (postState.inVoiceChannel() && postState.getChannel() != null && !postState.getChannel().equals(origin)) {
