@@ -1,4 +1,4 @@
-package com.telluur.SlapBot.features.joinroles;
+package com.telluur.SlapBot.features.joinnotifier;
 
 import com.vdurmont.emoji.EmojiParser;
 

@@ -22,7 +22,7 @@ import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
 import com.telluur.SlapBot.commands.user.ltg.UnsubscribeCommand;
 import com.telluur.SlapBot.features.avatar.AvatarUpdateListener;
-import com.telluur.SlapBot.features.joinroles.JoinRoleAssignmentListener;
+import com.telluur.SlapBot.features.joinnotifier.JoinNotifierListener;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.listeners.LTGChatListener;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
@@ -86,7 +86,7 @@ public class SlapBot {
     /*
     Join roles
      */
-    @Getter private JoinRoleAssignmentListener joinRoleAssignmentListener;
+    @Getter private JoinNotifierListener joinNotifierListener;
 
     /*
     Slap Events
@@ -189,8 +189,8 @@ public class SlapBot {
         Join roles
          */
         logger.info("Building Join Roles Assigner");
-        this.joinRoleAssignmentListener = new JoinRoleAssignmentListener(this);
-        jda.addEventListener(this.joinRoleAssignmentListener);
+        this.joinNotifierListener = new JoinNotifierListener(this);
+        jda.addEventListener(this.joinNotifierListener);
 
         /*
         Slap Events
