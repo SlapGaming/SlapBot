@@ -53,7 +53,8 @@ public class SlapBot {
     public static final Color COLOR = Color.ORANGE;
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
     private final Config config;
-    @Getter private final String prefix, altPrefix; //String
+    @Getter
+    private final String prefix, altPrefix; //String
 
     /*
     JDA
@@ -64,34 +65,42 @@ public class SlapBot {
     /*
     Commands
      */
-    @Getter private CommandClient commandClient;
+    @Getter
+    private CommandClient commandClient;
 
     /*
     Eventwaiter
      */
-    @Getter private EventWaiter eventWaiter;
+    @Getter
+    private EventWaiter eventWaiter;
 
     /*
     Looking to game
      */
-    @Getter private LTGHandler ltgHandler;
-    @Getter private LTGChatListener ltgChatListener;
-    @Getter private QuickSubscribeListener quickSubscribeListener;
+    @Getter
+    private LTGHandler ltgHandler;
+    @Getter
+    private LTGChatListener ltgChatListener;
+    @Getter
+    private QuickSubscribeListener quickSubscribeListener;
 
     /*
     Avatar updates
      */
-    @Getter private AvatarUpdateListener avatarUpdateListener;
+    @Getter
+    private AvatarUpdateListener avatarUpdateListener;
 
     /*
     Join roles
      */
-    @Getter private JoinNotifierListener joinNotifierListener;
+    @Getter
+    private JoinNotifierListener joinNotifierListener;
 
     /*
     Slap Events
      */
-    @Getter private SlapEventStorageHandler slapEventStorageHandler;
+    @Getter
+    private SlapEventStorageHandler slapEventStorageHandler;
 
 
     public SlapBot(JDA jda, Config config) throws IOException {
@@ -114,8 +123,43 @@ public class SlapBot {
         logger.info("Validating discord IDs in config");
         //TODO Validate config IDs
 
+        /*
+        Eventwaiter for JDA utilities
+         */
+        logger.info("Building JDA-Utilities Event Waiter");
+        this.eventWaiter = new EventWaiter();
+        jda.addEventListener(this.eventWaiter);
 
         /*
+        Looking to game
+         */
+        logger.info("Building Looking-To-Game");
+        this.ltgHandler = new LTGHandler(this);
+        this.ltgChatListener = new LTGChatListener(this);
+        this.quickSubscribeListener = new QuickSubscribeListener(this);
+        jda.addEventListener(this.ltgChatListener, this.quickSubscribeListener);
+
+        /*
+        Avatar update listener
+         */
+        logger.info("Building Avatar Updater");
+        this.avatarUpdateListener = new AvatarUpdateListener(this);
+        jda.addEventListener(this.avatarUpdateListener);
+
+        /*
+        Join roles
+         */
+        logger.info("Building Join Roles Assigner");
+        this.joinNotifierListener = new JoinNotifierListener(this);
+        jda.addEventListener(this.joinNotifierListener);
+
+        /*
+        Slap Events
+         */
+        logger.info("Building Slap Events");
+        this.slapEventStorageHandler = new SlapEventStorageHandler();
+
+                /*
         Commands
          */
         logger.info("Building Command Client");
@@ -155,48 +199,12 @@ public class SlapBot {
                         new LanCommand(this),
                         new PunCommand(this),
                         new TeamsCommand(this),
-                        new GamesCommand(this),
-                        new SubscriptionsCommand(this), //info
+                        new GamesCommand(this, eventWaiter),
+                        new SubscriptionsCommand(this, eventWaiter), //info
                         new SubscribeCommand(this), //join
                         new UnsubscribeCommand(this) //leave
                 ).build();
         jda.addEventListener(this.commandClient);
-
-        /*
-        Eventwaiter for JDA utilities
-         */
-        logger.info("Building JDA-Utilities Event Waiter");
-        this.eventWaiter = new EventWaiter();
-        jda.addEventListener(this.eventWaiter);
-
-        /*
-        Looking to game
-         */
-        logger.info("Building Looking-To-Game");
-        this.ltgHandler = new LTGHandler(this);
-        this.ltgChatListener = new LTGChatListener(this);
-        this.quickSubscribeListener = new QuickSubscribeListener(this);
-        jda.addEventListener(this.ltgChatListener, this.quickSubscribeListener);
-
-        /*
-        Avatar update listener
-         */
-        logger.info("Building Avatar Updater");
-        this.avatarUpdateListener = new AvatarUpdateListener(this);
-        jda.addEventListener(this.avatarUpdateListener);
-
-        /*
-        Join roles
-         */
-        logger.info("Building Join Roles Assigner");
-        this.joinNotifierListener = new JoinNotifierListener(this);
-        jda.addEventListener(this.joinNotifierListener);
-
-        /*
-        Slap Events
-         */
-        logger.info("Building Slap Events");
-        this.slapEventStorageHandler = new SlapEventStorageHandler();
 
         logger.info("SlapBot Build Complete. Ready.");
     }

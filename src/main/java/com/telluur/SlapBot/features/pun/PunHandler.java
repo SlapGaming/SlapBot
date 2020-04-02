@@ -2,8 +2,10 @@ package com.telluur.SlapBot.features.pun;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.util.AccessUtil;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

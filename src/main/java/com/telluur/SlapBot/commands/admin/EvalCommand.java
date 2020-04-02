@@ -33,7 +33,7 @@ public class EvalCommand extends AdminCommand {
         se.put("event", event);
         se.put("jda", event.getJDA());
         se.put("guild", event.getGuild());
-        se.put("channel", event.getChannel());
+        se.put("tx", event.getChannel());
         try {
             event.replySuccess(String.format("Evaluated Successfully:\r\n```\r\n%s```", se.eval(event.getArgs())));
         } catch (Exception e) {

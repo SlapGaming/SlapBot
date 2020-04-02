@@ -2,6 +2,7 @@ package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
@@ -33,7 +34,7 @@ public class SubscriptionsCommand extends UserCommand {
     private final Paginator.Builder textChatBuilder;
     private final EmbedBuilder privateChatBuilder;
 
-    public SubscriptionsCommand(SlapBot slapBot) {
+    public SubscriptionsCommand(SlapBot slapBot, EventWaiter eventWaiter) {
         super(slapBot);
         this.name = "info";
         this.aliases = new String[]{"subscriptions", "subs"};
@@ -54,7 +55,7 @@ public class SubscriptionsCommand extends UserCommand {
                 .waitOnSinglePage(false)
                 .useNumberedItems(false)
                 .showPageNumbers(true)
-                .setEventWaiter(slapBot.getEventWaiter())
+                .setEventWaiter(eventWaiter)
                 .setTimeout(1, TimeUnit.MINUTES);
         privateChatBuilder = new EmbedBuilder()
                 .setColor(LTGHandler.getCOLOR());

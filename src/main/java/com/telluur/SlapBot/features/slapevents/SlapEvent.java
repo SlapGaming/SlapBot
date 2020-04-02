@@ -13,5 +13,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class SlapEvent {
-    @Getter @Setter private String description, start, end = null;
+    @Getter
+    @Setter
+    private String description, start, end = null;
 }

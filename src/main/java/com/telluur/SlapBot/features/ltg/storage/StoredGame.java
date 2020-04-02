@@ -12,5 +12,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StoredGame {
-    @Getter @Setter private String abbreviation, fullName;
+    @Getter
+    @Setter
+    private String abbreviation, fullName;
 }

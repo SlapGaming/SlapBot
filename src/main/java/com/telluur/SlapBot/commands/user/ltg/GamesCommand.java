@@ -1,6 +1,7 @@
 package com.telluur.SlapBot.commands.user.ltg;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
@@ -30,7 +31,7 @@ public class GamesCommand extends UserCommand {
     private final Paginator.Builder textChatBuilder;
     private final EmbedBuilder privateChatBuilder;
 
-    public GamesCommand(SlapBot slapBot) {
+    public GamesCommand(SlapBot slapBot, EventWaiter eventWaiter) {
         super(slapBot);
         this.name = "games";
         this.help = "Shows an alphabetical list of all LTG games";
@@ -49,7 +50,7 @@ public class GamesCommand extends UserCommand {
                 .waitOnSinglePage(false)
                 .useNumberedItems(false)
                 .showPageNumbers(true)
-                .setEventWaiter(slapBot.getEventWaiter())
+                .setEventWaiter(eventWaiter)
                 .setTimeout(1, TimeUnit.MINUTES);
         privateChatBuilder = new EmbedBuilder()
                 .setColor(LTGHandler.getCOLOR());

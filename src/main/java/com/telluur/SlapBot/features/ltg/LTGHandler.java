@@ -26,15 +26,18 @@ import java.util.function.Consumer;
 
 public class LTGHandler {
     private static final Logger logger = LoggerFactory.getLogger("LTG");
-    @Getter private static final Color COLOR = new Color(17, 128, 106);
+    @Getter
+    private static final Color COLOR = new Color(17, 128, 106);
     private static final String communityRoleId = "663755925248802826";
-    private Guild guild;
-    @Getter private LTGStorageHandler ltgStorageHandler;
+
+    @Getter
+    private LTGStorageHandler ltgStorageHandler;
+    private SlapBot slapBot;
 
 
     public LTGHandler(SlapBot slapBot) {
         try {
-            this.guild = slapBot.getGuild();
+            this.slapBot = slapBot;
             this.ltgStorageHandler = new LTGStorageHandler();
         } catch (IOException e) {
             logger.error("Failed to read storage", e.getCause());
@@ -55,7 +58,7 @@ public class LTGHandler {
      * @param failure      Consumer that accepts an exception when creation failed
      */
     public void createGameRole(String abbreviation, String fullname, Consumer<Role> success, Consumer<Throwable> failure) {
-        guild.createRole()
+        slapBot.getGuild().createRole()
                 .setName(String.format("%s | %s", abbreviation, fullname))
                 .setPermissions(Permission.EMPTY_PERMISSIONS)
                 .setMentionable(true)
@@ -120,6 +123,7 @@ public class LTGHandler {
      * @param failure failure callback
      */
     public void joinGameRole(Role role, User user, Consumer<Void> success, Consumer<Throwable> failure) {
+        Guild guild = slapBot.getGuild();
         if (!guild.isMember(user)) {
             failure.accept(new IllegalArgumentException(String.format("User `%s` is not a member of `%s`", user.getName(), guild.getName())));
         } else if (!ltgStorageHandler.hasGameBySnowflake(role.getId())) {
@@ -156,6 +160,7 @@ public class LTGHandler {
      * @param failure failure callback
      */
     public void leaveGameRole(Role role, User user, Consumer<Void> success, Consumer<Throwable> failure) {
+        Guild guild = slapBot.getGuild();
         if (!guild.isMember(user)) {
             failure.accept(new IllegalArgumentException(String.format("User `%s` is not a member of `%s`", user.getName(), guild.getName())));
         } else if (!ltgStorageHandler.hasGameBySnowflake(role.getId())) {

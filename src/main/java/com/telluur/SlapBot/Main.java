@@ -41,17 +41,8 @@ public class Main {
             jda.awaitReady();
 
             new SlapBot(jda, config);
-        } catch (LoginException e) {
-            logger.error("Failed to login", e.getCause());
-            shutdown("caught exception");
-        } catch (IllegalArgumentException e) {
-            logger.error("Malformed config file", e.getCause());
-            shutdown("caught exception");
-        } catch (InterruptedException e) {
-            logger.error("Could not complete JDA", e.getCause());
-            shutdown("caught exception");
-        } catch (IOException e) {
-            logger.error(String.format("Failed to read storage: %s", e.getMessage()), e.getCause());
+        } catch (LoginException | IllegalArgumentException | InterruptedException | IOException e) {
+            logger.error(e.getMessage());
             shutdown("caught exception");
         }
     }

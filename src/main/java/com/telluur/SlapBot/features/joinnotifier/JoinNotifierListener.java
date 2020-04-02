@@ -1,7 +1,7 @@
 package com.telluur.SlapBot.features.joinnotifier;
 
 import com.telluur.SlapBot.SlapBot;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.EventListener;

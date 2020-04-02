@@ -32,7 +32,6 @@ public class QuickSubscribeListener implements EventListener {
     public void addButton(Message message, Role role) {
         message.addReaction(SUBSCRIBE).queue();
         buttons.put(message.getId(), role);
-        System.out.println("button added.");
     }
 
     @Override
