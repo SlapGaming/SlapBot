@@ -30,11 +30,9 @@ import java.util.stream.Collectors;
 public class TeamsCommand extends UserCommand {
     private final static String SHUFFLE = EmojiParser.parseToUnicode(":arrows_counterclockwise:");
     private final static String SLAP_LOGO = "https://telluur.com/img/slaplogoemoji.jpg";
-    private SlapBot bot;
 
     public TeamsCommand(SlapBot slapBot) {
         super(slapBot);
-        this.bot = slapBot;
         this.name = "teams";
         this.help = "creates random teams from users in VC";
         this.arguments = "<number of teams> <?excluded @mentioned users>";
@@ -101,7 +99,7 @@ public class TeamsCommand extends UserCommand {
                 .setMessageEmbed(createMessageEmbedTeams(numberOfTeams, pool))
                 .setChoices(SHUFFLE)
                 .setTimeout(30, TimeUnit.SECONDS)
-                .setEventWaiter(bot.getEventWaiter())
+                .setEventWaiter(slapBot.getEventWaiter())
                 .setUsers(pool.stream().map(Member::getUser).toArray(User[]::new))
                 .setAction(response -> {
                     if (SHUFFLE.equals(response.getName())) {

@@ -1,10 +1,9 @@
 package com.telluur.SlapBot.commands;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
-import com.telluur.SlapBot.Main;
 import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
@@ -16,22 +15,20 @@ import net.dv8tion.jda.api.JDAInfo;
  * @author Rick Fontein
  */
 
-public class AboutCommand extends Command {
-    private static final String VERSION = Main.class.getPackage().getImplementationVersion() != null ?
-            Main.class.getPackage().getImplementationVersion() : "DEV";
-    private final SlapBot slapBot;
+public class AboutCommand extends UserCommand {
 
     public AboutCommand(SlapBot slapBot) {
+        super(slapBot);
         this.slapBot = slapBot;
         this.name = "about";
-        this.aliases = new String[]{"config", "settings", "version"};
+        this.aliases = new String[]{"config", "settings"};
         this.help = "About this bot, displays the loaded configuration file (excluding token).";
         this.guildOnly = false;
     }
 
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void handle(CommandEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setAuthor("All about " + event.getSelfUser().getName() + "!", null, event.getSelfUser().getAvatarUrl());
         eb.setColor(SlapBot.COLOR);
@@ -44,7 +41,7 @@ public class AboutCommand extends Command {
         //general description
         sb.append(String.format("'Ello gov'na! I am **%s** (v%s), a bot that is tailored to the Slap Gaming Community!\r\n",
                 event.getSelfUser().getName(),
-                VERSION));
+                SlapBot.VERSION));
         //credits
         sb.append(String.format("I was written in Java using [JDA](https://github.com/DV8FromTheWorld/JDA) (v%s) " +
                         "and [JDA-Utilities](https://github.com/JDA-Applications/JDA-Utilities) (v%s).\r\n",

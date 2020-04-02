@@ -1,7 +1,8 @@
 package com.telluur.SlapBot.commands;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.telluur.SlapBot.SlapBot;
+import com.telluur.SlapBot.commands.abstractions.UserCommand;
 
 import java.util.Random;
 
@@ -11,7 +12,7 @@ import java.util.Random;
  * @author Rick Fontein
  */
 
-public class PingCmd extends Command {
+public class PingCommand extends UserCommand {
     private static final String[] puns = {
             "What do you serve but not eat? \n" +
                     "A ping pong ball. ",
@@ -36,14 +37,15 @@ public class PingCmd extends Command {
     };
     private Random random = new Random();
 
-    public PingCmd() {
+    public PingCommand(SlapBot slapBot) {
+        super(slapBot);
         this.name = "ping";
         this.help = "pong!";
         this.guildOnly = false;
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void handle(CommandEvent event) {
         String message = String.format("%s\r\nPing to discord gateway: `%d ms`",
                 puns[random.nextInt(puns.length)],
                 event.getJDA().getGatewayPing());

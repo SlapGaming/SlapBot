@@ -24,10 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         logger.info("System startup");
-        final String VERSION = Main.class.getPackage().getImplementationVersion() != null ?
-                Main.class.getPackage().getImplementationVersion() :
-                "DEVELOPMENT NON PACKAGED";
-        logger.info(String.format("Starting bot, version: [%s]", VERSION));
+        logger.info("Starting bot, version: [{}]", SlapBot.VERSION);
         logger.info("Loading config.yaml");
         Config config = ConfigLoader.loadYAML();
 
@@ -48,7 +45,7 @@ public class Main {
     }
 
     public static void shutdown(String reason) {
-        logger.info(String.format("Shutting down (%s)", reason));
+        logger.info("Shutting down ({})", reason);
         System.exit(1);
     }
 }

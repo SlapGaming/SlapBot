@@ -4,7 +4,8 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.commands.AboutCommand;
-import com.telluur.SlapBot.commands.PingCmd;
+import com.telluur.SlapBot.commands.PingCommand;
+import com.telluur.SlapBot.commands.VersionCommand;
 import com.telluur.SlapBot.commands.admin.EvalCommand;
 import com.telluur.SlapBot.commands.admin.EventManageCommand;
 import com.telluur.SlapBot.commands.admin.KillCommand;
@@ -49,6 +50,9 @@ public class SlapBot {
     In bot constants & Config
     TODO: Clean this up, move stuff in here away from yaml storage.
      */
+
+    public static final String VERSION = Main.class.getPackage().getImplementationVersion() != null ?
+            Main.class.getPackage().getImplementationVersion() : "DEV";
     public static final DateTimeZone TIME_ZONE = DateTimeZone.forID("Europe/London");
     public static final Color COLOR = Color.ORANGE;
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
@@ -174,7 +178,8 @@ public class SlapBot {
                     About command
                      */
                         new AboutCommand(this),
-                        new PingCmd(),
+                        new VersionCommand(this),
+                        new PingCommand(this),
 
                     /*
                     Admin
