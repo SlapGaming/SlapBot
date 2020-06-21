@@ -6,7 +6,7 @@
 
     <groupId>com.telluur</groupId>
     <artifactId>SlapBot</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
 
     <build>
         <plugins>
@@ -68,19 +68,19 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.1.0_95</version>
+            <version>4.1.1_165</version>
         </dependency>
         <dependency>
             <groupId>com.jagrosh</groupId>
             <artifactId>jda-utilities</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.4</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
-            <version>4.0.0</version>
+            <version>5.1.1</version>
         </dependency>
 
         <dependency>

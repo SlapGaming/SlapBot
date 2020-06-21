@@ -32,17 +32,11 @@ public class AvatarUpdateListener implements EventListener {
                 return;
             }
 
-            String title = String.format("`%s` has a new avatar!", member.getEffectiveName());
+            String title = String.format("DC | **%s** has a new avatar!", member.getEffectiveName());
             MessageEmbed message = AvatarMessageBuilder.buildEmbed(title, event.getNewAvatarUrl());
 
-            /*
-            // Originally this went to the main channel, disables cause jack :(
-            bot.getGenTxChannel().sendMessage(message).queue();
 
-
-             */
-            // Redirect the updates to bot owner for now.
-            bot.getOwner().openPrivateChannel().queue(pc -> pc.sendMessage(message).queue());
+            bot.getNsaTxChannel().sendMessage(message).queue();
         }
     }
 }

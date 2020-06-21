@@ -14,10 +14,7 @@ import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
-import com.telluur.SlapBot.commands.user.AvatarCommand;
-import com.telluur.SlapBot.commands.user.LanCommand;
-import com.telluur.SlapBot.commands.user.PunCommand;
-import com.telluur.SlapBot.commands.user.TeamsCommand;
+import com.telluur.SlapBot.commands.user.*;
 import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
@@ -27,6 +24,7 @@ import com.telluur.SlapBot.features.joinnotifier.JoinNotifierListener;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.listeners.LTGChatListener;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
+import com.telluur.SlapBot.features.nsa.NSAChatListener;
 import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
@@ -106,6 +104,12 @@ public class SlapBot {
     @Getter
     private SlapEventStorageHandler slapEventStorageHandler;
 
+    /*
+    NSA
+     */
+    @Getter
+    private NSAChatListener nsaChatListener;
+
 
     public SlapBot(JDA jda, Config config) throws IOException {
         logger.info("Building SlapBot");
@@ -163,7 +167,14 @@ public class SlapBot {
         logger.info("Building Slap Events");
         this.slapEventStorageHandler = new SlapEventStorageHandler();
 
-                /*
+        /*
+        NSA
+         */
+        logger.info("Building NSA");
+        this.nsaChatListener = new NSAChatListener(this);
+        jda.addEventListener(this.nsaChatListener);
+
+        /*
         Commands
          */
         logger.info("Building Command Client");
@@ -203,6 +214,7 @@ public class SlapBot {
                         new AvatarCommand(this),
                         new LanCommand(this),
                         new PunCommand(this),
+                        new RollCommand(this),
                         new TeamsCommand(this),
                         new GamesCommand(this, eventWaiter),
                         new SubscriptionsCommand(this, eventWaiter), //info
