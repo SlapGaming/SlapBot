@@ -8,9 +8,9 @@ import java.util.Comparator;
  * @author Rick Fontein
  */
 
-public class SlapEventComparator implements Comparator<SlapEvent> {
+public class SlapEventComparator implements Comparator<OldSlapEvent> {
     @Override
-    public int compare(SlapEvent o1, SlapEvent o2) {
+    public int compare(OldSlapEvent o1, OldSlapEvent o2) {
         return o1.getStart().compareTo(o2.getStart());
     }
 }

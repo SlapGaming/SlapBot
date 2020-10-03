@@ -59,9 +59,9 @@ public class SlapEventStorageHandler {
      * Checks wether the event has the description, begin and end non null
      *
      * @param event Event to be checked
-     * @return wether event is valid
+     * @return whether event is valid
      */
-    public static boolean isValidEvent(SlapEvent event) {
+    public static boolean isValidEvent(OldSlapEvent event) {
         String begin = event.getStart();
         String end = event.getEnd();
         if (event.getDescription() != null && begin != null && end != null) {
@@ -95,9 +95,9 @@ public class SlapEventStorageHandler {
      * @throws JsonProcessingException
      * @throws IllegalArgumentException
      */
-    public synchronized SlapEvent getEventByID(String ID) throws IOException, IllegalArgumentException {
+    public synchronized OldSlapEvent getEventByID(String ID) throws IOException, IllegalArgumentException {
         if (root.has(ID)) {
-            return mapper.treeToValue(root.get(ID), SlapEvent.class);
+            return mapper.treeToValue(root.get(ID), OldSlapEvent.class);
         } else {
             throw new IllegalArgumentException("Event ID does not exist.");
         }
@@ -110,7 +110,7 @@ public class SlapEventStorageHandler {
      * @param event the game object
      * @throws IOException
      */
-    public synchronized void setEventByID(String ID, SlapEvent event) throws IOException {
+    public synchronized void setEventByID(String ID, OldSlapEvent event) throws IOException {
         root.putPOJO(ID, event);
         mapper.writeValue(storage, root);
         writeToStorage();
@@ -151,11 +151,11 @@ public class SlapEventStorageHandler {
      *
      * @return ordered events by start date
      */
-    public synchronized List<SlapEvent> getValidFutureEventsOrderedByStart() {
-        List<SlapEvent> events = new ArrayList<>();
+    public synchronized List<OldSlapEvent> getValidFutureEventsOrderedByStart() {
+        List<OldSlapEvent> events = new ArrayList<>();
         root.fields().forEachRemaining(e -> {
             try {
-                SlapEvent itEvent = mapper.treeToValue(e.getValue(), SlapEvent.class);
+                OldSlapEvent itEvent = mapper.treeToValue(e.getValue(), OldSlapEvent.class);
                 events.add(itEvent);
             } catch (JsonProcessingException ex) {
                 ex.printStackTrace();
@@ -174,11 +174,11 @@ public class SlapEventStorageHandler {
      *
      * @return current or next event.
      */
-    public synchronized SlapEvent getCurrentOrNextEvent() {
-        List<SlapEvent> events = getValidFutureEventsOrderedByStart();
+    public synchronized OldSlapEvent getCurrentOrNextEvent() {
+        List<OldSlapEvent> events = getValidFutureEventsOrderedByStart();
         DateTime now = new DateTime();
 
-        for (SlapEvent event : events) {
+        for (OldSlapEvent event : events) {
             if (now.isBefore(new DateTime(event.getEnd()))) {
                 return event;
             }

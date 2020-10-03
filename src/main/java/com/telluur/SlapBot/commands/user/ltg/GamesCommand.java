@@ -6,16 +6,13 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
-import com.telluur.SlapBot.features.ltg.storage.LTGStorageHandler;
-import com.telluur.SlapBot.features.ltg.storage.StoredGame;
+import com.telluur.SlapBot.features.ltg.jpa.LTGRepository;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +57,7 @@ public class GamesCommand extends UserCommand {
     @Override
     public void handle(CommandEvent event) {
         Guild g = slapBot.getGuild();
-        LTGStorageHandler handler = slapBot.getLtgHandler().getLtgStorageHandler();
+        LTGRepository repository = slapBot.getLtgHandler().getLtgRepository();
 
         /*
         Get gameSnowflakes from storage
@@ -70,15 +67,10 @@ public class GamesCommand extends UserCommand {
         Sort alphabetically
         Collect to array for varargs paginator
          */
-        String[] games = handler.getGameSnowflakes()
+        String[] games = repository.findAllIds()
                 .stream()
-                .map(s -> {
-                    try {
-                        return new HashMap.SimpleEntry<>(g.getRoleById(s), handler.getGameBySnowflake(s));
-                    } catch (IOException e) {
-                        return new HashMap.SimpleEntry<Role, StoredGame>(null, null);
-                    }
-                })
+                .map(s -> new HashMap.SimpleEntry<>(g.getRoleById(s), repository.findById(s))
+                )
                 .filter(entry -> entry.getKey() != null)
                 .map(entry -> String.format(
                         "`%-6s | %-40s | %2d subs`",

@@ -3,7 +3,7 @@ package com.telluur.SlapBot.commands.user;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
-import com.telluur.SlapBot.features.slapevents.SlapEvent;
+import com.telluur.SlapBot.features.slapevents.OldSlapEvent;
 import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
 import com.telluur.SlapBot.features.slapevents.SlapEventUtil;
 import com.vdurmont.emoji.EmojiParser;
@@ -54,7 +54,7 @@ public class LanCommand extends UserCommand {
         String[] params = event.getArgs().split("\\s+");
 
         if (params.length >= 1 && params[0].toLowerCase().equals("")) {
-            SlapEvent nextEvent = storage.getCurrentOrNextEvent();
+            OldSlapEvent nextEvent = storage.getCurrentOrNextEvent();
             if (nextEvent == null) {
                 event.reply(EmojiParser.parseToUnicode("SLAP has no future events planned... :sob:"));
             } else {
@@ -97,7 +97,7 @@ public class LanCommand extends UserCommand {
                 }
             }
         } else if (params.length >= 1 && params[0].toLowerCase().equals("all")) {
-            List<SlapEvent> events = storage.getValidFutureEventsOrderedByStart();
+            List<OldSlapEvent> events = storage.getValidFutureEventsOrderedByStart();
             StringBuilder sb = new StringBuilder();
             sb.append("__**All events:**__\r\n");
             sb.append("```\r\n");

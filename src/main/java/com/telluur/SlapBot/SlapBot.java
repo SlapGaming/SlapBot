@@ -10,8 +10,6 @@ import com.telluur.SlapBot.commands.admin.EvalCommand;
 import com.telluur.SlapBot.commands.admin.EventManageCommand;
 import com.telluur.SlapBot.commands.admin.KillCommand;
 import com.telluur.SlapBot.commands.admin.PruneChatCommand;
-import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
-import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
 import com.telluur.SlapBot.commands.user.*;
@@ -196,8 +194,6 @@ public class SlapBot {
                     Admin
                     */
                         new EvalCommand(this),
-                        new ForceSaveCommand(this),
-                        new ForceReloadCommand(this),
                         new KillCommand(this),
                         new EventManageCommand(this),
                         new PruneChatCommand(this),

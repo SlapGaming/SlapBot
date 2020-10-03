@@ -2,8 +2,8 @@ package com.telluur.SlapBot.features.ltg;
 
 import com.telluur.SlapBot.Main;
 import com.telluur.SlapBot.SlapBot;
-import com.telluur.SlapBot.features.ltg.storage.LTGStorageHandler;
-import com.telluur.SlapBot.features.ltg.storage.StoredGame;
+import com.telluur.SlapBot.features.ltg.jpa.LTGGame;
+import com.telluur.SlapBot.features.ltg.jpa.LTGRepository;
 import lombok.Getter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,6 +13,9 @@ import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -31,15 +34,18 @@ public class LTGHandler {
     private static final String communityRoleId = "663755925248802826";
 
     @Getter
-    private LTGStorageHandler ltgStorageHandler;
+    private LTGRepository ltgRepository;
     private SlapBot slapBot;
 
 
     public LTGHandler(SlapBot slapBot) {
         try {
             this.slapBot = slapBot;
-            this.ltgStorageHandler = new LTGStorageHandler();
-        } catch (IOException e) {
+
+            EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("slapbot");
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            this.ltgRepository = new LTGRepository(entityManager);
+        } catch (Exception e) {
             logger.error("Failed to read storage", e.getCause());
             Main.shutdown("Caught Exception");
         }
@@ -66,9 +72,8 @@ public class LTGHandler {
                 .queue(
                         role -> {
                             try {
-
-                                StoredGame storedGame = new StoredGame(abbreviation, fullname);
-                                ltgStorageHandler.setGameBySnowflake(role.getId(), storedGame);
+                                LTGGame ltgGame = new LTGGame(role.getId(), abbreviation, fullname);
+                                ltgRepository.save(ltgGame);
                                 success.accept(role);
                                 logger.info(String.format("Role `%s` with id `%s` created", role.getName(), role.getId()));
                             } catch (IOException e) {
@@ -93,11 +98,11 @@ public class LTGHandler {
      */
     public void deleteGameRole(Role role, Consumer<Void> success, Consumer<Throwable> failure) {
         String snowflake = role.getId();
-        if (ltgStorageHandler.hasGameBySnowflake(snowflake)) {
+        if (ltgRepository.hasId(snowflake)) {
             role.delete().queue(
                     ok -> {
                         try {
-                            ltgStorageHandler.deleteGameBySnowflake(snowflake);
+                            ltgRepository.deleteById(snowflake);
                             logger.info("Successfully deleted role `%s` with id `%s`.");
                             success.accept(ok);
                         } catch (IOException e) {
@@ -126,7 +131,7 @@ public class LTGHandler {
         Guild guild = slapBot.getGuild();
         if (!guild.isMember(user)) {
             failure.accept(new IllegalArgumentException(String.format("User `%s` is not a member of `%s`", user.getName(), guild.getName())));
-        } else if (!ltgStorageHandler.hasGameBySnowflake(role.getId())) {
+        } else if (!ltgRepository.hasId(role.getId())) {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
             //Join role
@@ -163,7 +168,7 @@ public class LTGHandler {
         Guild guild = slapBot.getGuild();
         if (!guild.isMember(user)) {
             failure.accept(new IllegalArgumentException(String.format("User `%s` is not a member of `%s`", user.getName(), guild.getName())));
-        } else if (!ltgStorageHandler.hasGameBySnowflake(role.getId())) {
+        } else if (!ltgRepository.hasId(role.getId())) {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         } else {
             Member member = guild.getMember(user);
@@ -179,6 +184,6 @@ public class LTGHandler {
      */
     @SuppressWarnings("WeakerAccess")
     public boolean isGameRole(Role role) {
-        return ltgStorageHandler.hasGameBySnowflake(role.getId());
+        return ltgRepository.hasId(role.getId());
     }
 }

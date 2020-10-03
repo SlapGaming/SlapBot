@@ -3,7 +3,7 @@ package com.telluur.SlapBot.commands.admin;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.AdminCommand;
-import com.telluur.SlapBot.features.slapevents.SlapEvent;
+import com.telluur.SlapBot.features.slapevents.OldSlapEvent;
 import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
 import com.telluur.SlapBot.features.slapevents.SlapEventUtil;
 import org.joda.time.DateTime;
@@ -109,7 +109,7 @@ public class EventManageCommand extends AdminCommand {
                         String id = params[1];
                         if (storage.hasEventByID(id)) {
                             try {
-                                SlapEvent myEvent = storage.getEventByID(id);
+                                OldSlapEvent myEvent = storage.getEventByID(id);
                                 String begin = myEvent.getStart();
                                 String end = myEvent.getEnd();
                                 event.reply(String.format("```\r\n" +
@@ -136,7 +136,7 @@ public class EventManageCommand extends AdminCommand {
                             event.replyError(String.format("Event with id `%s` already exists.", id));
                         } else {
                             try {
-                                storage.setEventByID(id, new SlapEvent());
+                                storage.setEventByID(id, new OldSlapEvent());
                                 event.reply(String.format("Event with id `%s` created.", id));
                                 el.info(String.format("Created event with ID: %s", id));
                             } catch (IOException e) {
@@ -179,7 +179,7 @@ public class EventManageCommand extends AdminCommand {
                         String id = params[1];
                         if (storage.hasEventByID(id)) {
                             try {
-                                SlapEvent myEvent = storage.getEventByID(id);
+                                OldSlapEvent myEvent = storage.getEventByID(id);
                                 switch (params[2].toLowerCase()) {
                                     case "description":
                                         String desc = params[3];
