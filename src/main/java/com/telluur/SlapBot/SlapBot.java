@@ -6,10 +6,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.commands.AboutCommand;
 import com.telluur.SlapBot.commands.PingCommand;
 import com.telluur.SlapBot.commands.VersionCommand;
-import com.telluur.SlapBot.commands.admin.EvalCommand;
-import com.telluur.SlapBot.commands.admin.EventManageCommand;
-import com.telluur.SlapBot.commands.admin.KillCommand;
-import com.telluur.SlapBot.commands.admin.PruneChatCommand;
+import com.telluur.SlapBot.commands.admin.*;
 import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
 import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
@@ -198,6 +195,7 @@ public class SlapBot {
                         new EvalCommand(this),
                         new ForceSaveCommand(this),
                         new ForceReloadCommand(this),
+                        new FakeHaloweenCommand(this),
                         new KillCommand(this),
                         new EventManageCommand(this),
                         new PruneChatCommand(this),
