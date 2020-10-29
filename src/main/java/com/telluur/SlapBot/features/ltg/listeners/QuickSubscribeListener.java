@@ -23,7 +23,7 @@ import java.util.Objects;
 public class QuickSubscribeListener implements EventListener {
     public static final String SUBSCRIBE = EmojiParser.parseToUnicode(":video_game:");
     private final SlapBot bot;
-    private HashMap<String, Role> buttons = new HashMap<>();
+    private final HashMap<String, Role> buttons = new HashMap<>();
 
     public QuickSubscribeListener(SlapBot bot) {
         this.bot = bot;

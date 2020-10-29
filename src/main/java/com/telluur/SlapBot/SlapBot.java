@@ -6,9 +6,10 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.commands.AboutCommand;
 import com.telluur.SlapBot.commands.PingCommand;
 import com.telluur.SlapBot.commands.VersionCommand;
-import com.telluur.SlapBot.commands.admin.*;
-import com.telluur.SlapBot.commands.admin.ltg.ForceReloadCommand;
-import com.telluur.SlapBot.commands.admin.ltg.ForceSaveCommand;
+import com.telluur.SlapBot.commands.admin.EvalCommand;
+import com.telluur.SlapBot.commands.admin.EventManageCommand;
+import com.telluur.SlapBot.commands.admin.KillCommand;
+import com.telluur.SlapBot.commands.admin.PruneChatCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
 import com.telluur.SlapBot.commands.user.*;
@@ -22,7 +23,7 @@ import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.listeners.LTGChatListener;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.features.nsa.NSAChatListener;
-import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
+import com.telluur.SlapBot.features.slapevents.jpa.SlapEventRepository;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -31,6 +32,9 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.awt.*;
 import java.io.IOException;
 
@@ -56,56 +60,62 @@ public class SlapBot {
     private final String prefix, altPrefix; //String
 
     /*
+    Hibernate entity manager
+     */
+    @Getter
+    private final EntityManager entityManager;
+
+    /*
     JDA
      */
     @Getter
-    private JDA jda;
+    private final JDA jda;
 
     /*
     Commands
      */
     @Getter
-    private CommandClient commandClient;
+    private final CommandClient commandClient;
 
     /*
     Eventwaiter
      */
     @Getter
-    private EventWaiter eventWaiter;
+    private final EventWaiter eventWaiter;
 
     /*
     Looking to game
      */
     @Getter
-    private LTGHandler ltgHandler;
+    private final LTGHandler ltgHandler;
     @Getter
-    private LTGChatListener ltgChatListener;
+    private final LTGChatListener ltgChatListener;
     @Getter
-    private QuickSubscribeListener quickSubscribeListener;
+    private final QuickSubscribeListener quickSubscribeListener;
 
     /*
     Avatar updates
      */
     @Getter
-    private AvatarUpdateListener avatarUpdateListener;
+    private final AvatarUpdateListener avatarUpdateListener;
 
     /*
     Join roles
      */
     @Getter
-    private JoinNotifierListener joinNotifierListener;
+    private final JoinNotifierListener joinNotifierListener;
 
     /*
     Slap Events
      */
     @Getter
-    private SlapEventStorageHandler slapEventStorageHandler;
+    private final SlapEventRepository slapEventRepository;
 
     /*
     NSA
      */
     @Getter
-    private NSAChatListener nsaChatListener;
+    private final NSAChatListener nsaChatListener;
 
 
     public SlapBot(JDA jda, Config config) throws IOException {
@@ -127,6 +137,13 @@ public class SlapBot {
          */
         logger.info("Validating discord IDs in config");
         //TODO Validate config IDs
+
+        /*
+        Connecting to storage backend
+         */
+        logger.info("Setting up hibernate session");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("slapbot");
+        this.entityManager = entityManagerFactory.createEntityManager();
 
         /*
         Eventwaiter for JDA utilities
@@ -162,7 +179,7 @@ public class SlapBot {
         Slap Events
          */
         logger.info("Building Slap Events");
-        this.slapEventStorageHandler = new SlapEventStorageHandler();
+        this.slapEventRepository = new SlapEventRepository(this);
 
         /*
         NSA
@@ -193,8 +210,6 @@ public class SlapBot {
                     Admin
                     */
                         new EvalCommand(this),
-                        new ForceSaveCommand(this),
-                        new ForceReloadCommand(this),
                         new FakeHaloweenCommand(this),
                         new KillCommand(this),
                         new EventManageCommand(this),
@@ -210,7 +225,7 @@ public class SlapBot {
                     User
                      */
                         new AvatarCommand(this),
-                        new LanCommand(this),
+                        new EventCommand(this),
                         new PunCommand(this),
                         new RollCommand(this),
                         new TeamsCommand(this),

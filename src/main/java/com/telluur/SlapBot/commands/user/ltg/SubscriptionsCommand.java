@@ -7,8 +7,8 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
+import com.telluur.SlapBot.features.ltg.jpa.LTGRepository;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
-import com.telluur.SlapBot.features.ltg.storage.LTGStorageHandler;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -84,10 +83,10 @@ public class SubscriptionsCommand extends UserCommand {
         String[] parts = event.getArgs().split("\\s+");
 
         List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], slapBot.getGuild());
-        LTGStorageHandler handler = slapBot.getLtgHandler().getLtgStorageHandler();
+        LTGRepository repository = slapBot.getLtgHandler().getLtgRepository();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
-            if (handler.hasGameBySnowflake(role.getId())) {
+            if (repository.hasId(role.getId())) {
                 roleDisplay(event, role);
             } else {
                 event.replyError(String.format("`%s` is not a looking-to-game role.", role.getName()));
@@ -109,17 +108,12 @@ public class SubscriptionsCommand extends UserCommand {
 
     private void memberDisplay(CommandEvent event, Member member) {
         List<String> discordRoles = member.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-        LTGStorageHandler handler = slapBot.getLtgHandler().getLtgStorageHandler();
-        String[] games = handler.getGameSnowflakes()
+        LTGRepository repository = slapBot.getLtgHandler().getLtgRepository();
+
+        String[] games = repository.findAllIds()
                 .stream()
                 .filter(discordRoles::contains)
-                .map(s -> {
-                    try {
-                        return handler.getGameBySnowflake(s);
-                    } catch (IOException e) {
-                        return null;
-                    }
-                })
+                .map(repository::findById)
                 .filter(Objects::nonNull)
                 .map(game -> String.format("`%-6s | %-40s `", game.getAbbreviation(), game.getFullName())
                         .replace(' ', SPACE))
@@ -131,7 +125,6 @@ public class SubscriptionsCommand extends UserCommand {
             event.replySuccess(String.format("`%s` does not have any subscriptions.", member.getEffectiveName()));
         } else {
             String replyHeader = String.format("**Looking-to-game subscriptions of `%s`**", member.getEffectiveName());
-            //noinspection DuplicatedCode
             createReply(event, games, replyHeader);
         }
     }
@@ -158,6 +151,7 @@ public class SubscriptionsCommand extends UserCommand {
                 textChatBuilder
                         .setText(replyHeader)
                         .setItems(subscribers)
+                        .setUsers(event.getAuthor())
                         .build()
                         .display(event.getChannel());
                 break;

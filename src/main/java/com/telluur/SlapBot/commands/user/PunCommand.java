@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class PunCommand extends UserCommand {
 
-    private PunHandler punHandler;
+    private final PunHandler punHandler;
 
     public PunCommand(SlapBot slapBot) {
         super(slapBot);
