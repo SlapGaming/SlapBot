@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import java.awt.*;
 import java.util.Random;
 
-public class FakeHaloweenCommand extends AdminCommand {
+public class FakeHalloweenCommand extends AdminCommand {
     public static final String TX_ID = "304728836883349516";
     public static final String[] IMAGES = new String[]{
             "https://cdn.discordapp.com/halloween-bot/Witch.png",
@@ -26,9 +26,9 @@ public class FakeHaloweenCommand extends AdminCommand {
     private static final Random random = new Random();
 
 
-    public FakeHaloweenCommand(SlapBot slapBot) {
+    public FakeHalloweenCommand(SlapBot slapBot) {
         super(slapBot);
-        this.name = "haloween";
+        this.name = "halloween";
         this.aliases = new String[]{"h"};
         this.help = "fucking them no life pricks";
         this.guildOnly = false;
