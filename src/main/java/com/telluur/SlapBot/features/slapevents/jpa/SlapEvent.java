@@ -18,11 +18,8 @@ import javax.persistence.*;
                 query = "SELECT e FROM SlapEvent e"),
         @NamedQuery(name = "SlapEvent.findEventById",
                 query = "SELECT e FROM SlapEvent e WHERE e.id = :id"),
-        @NamedQuery(name = "SlapEvent.findFutureEvents",
-                query = "SELECT e FROM SlapEvent e WHERE e.end > CURRENT_TIMESTAMP"),
-        @NamedQuery(name = "SlapEvent.findNextEvent",
-                query = "SELECT e FROM SlapEvent e WHERE e.end > CURRENT_TIMESTAMP ORDER BY e.start")
-
+        @NamedQuery(name = "SlapEvent.findFutureEventsOrderedByStart",
+                query = "SELECT e FROM SlapEvent e WHERE e.end > CURRENT_TIMESTAMP ORDER BY e.start"),
 })
 public class SlapEvent {
     @Id

@@ -21,7 +21,7 @@ public class SlapEventRepository {
     }
 
     public synchronized List<SlapEvent> getFutureEvents() {
-        return entityManager.createNamedQuery("SlapEvent.findFutureEvents", SlapEvent.class).getResultList();
+        return entityManager.createNamedQuery("SlapEvent.findFutureEventsOrderedByStart", SlapEvent.class).getResultList();
     }
 
     /**
@@ -41,7 +41,9 @@ public class SlapEventRepository {
 
     public synchronized Optional<SlapEvent> getNextEvent() {
         try {
-            SlapEvent event = entityManager.createNamedQuery("SlapEvent.findNextEvent", SlapEvent.class).getSingleResult();
+            SlapEvent event = entityManager.createNamedQuery("SlapEvent.findFutureEventsOrderedByStart", SlapEvent.class)
+                    .setMaxResults(1)
+                    .getSingleResult();
             return Optional.of(event);
         } catch (NoResultException e) {
             return Optional.empty();

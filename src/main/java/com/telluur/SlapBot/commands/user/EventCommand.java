@@ -107,10 +107,9 @@ public class EventCommand extends UserCommand {
                 StringBuilder sb = new StringBuilder();
                 sb.append("__**All events:**__\r\n");
                 sb.append("```\r\n");
-                events.forEach(e -> sb.append(String.format(":calendar: %s - %s: %s\r\n",
+                events.forEach(e -> sb.append(String.format(":calendar: %s: %s\r\n",
                         e.getStart().withZone(SlapBot.TIME_ZONE).toString(SHORT_DATE_FORMAT),
-                        e.getEnd().withZone(SlapBot.TIME_ZONE).toString(SHORT_DATE_FORMAT),
-                        e.getDescription())));
+                        e.getName())));
                 sb.append("```\r\n");
                 event.reply(EmojiParser.parseToUnicode(sb.toString()));
             } else {
