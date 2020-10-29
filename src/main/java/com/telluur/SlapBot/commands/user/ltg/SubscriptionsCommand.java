@@ -151,6 +151,7 @@ public class SubscriptionsCommand extends UserCommand {
                 textChatBuilder
                         .setText(replyHeader)
                         .setItems(subscribers)
+                        .setUsers(event.getAuthor())
                         .build()
                         .display(event.getChannel());
                 break;

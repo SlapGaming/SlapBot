@@ -1,39 +1,51 @@
 package com.telluur.SlapBot.features.slapevents.jpa;
 
 
+import com.telluur.SlapBot.SlapBot;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class SlapEventRepository {
-    /**
-     * Checks wether the event has the description, begin and end non null
-     *
-     * @param event Event to be checked
-     * @return whether event is valid
-     */
-    public static boolean isValidEvent(SlapEvent event) {
+    private final EntityManager entityManager;
 
+    public SlapEventRepository(SlapBot slapBot) {
+        this.entityManager = slapBot.getEntityManager();
     }
 
-    /**
-     * Checks whether the event ID exists in storage
-     *
-     * @param ID event ID
-     * @return whether the event exists
-     */
-    public synchronized boolean hasEventByID(String ID) {
+    public synchronized List<SlapEvent> getEvents() {
+        return entityManager.createNamedQuery("SlapEvent.findAllEvents", SlapEvent.class).getResultList();
+    }
 
+    public synchronized List<SlapEvent> getFutureEvents() {
+        return entityManager.createNamedQuery("SlapEvent.findFutureEvents", SlapEvent.class).getResultList();
     }
 
     /**
      * Gives back a event object
      *
      * @param ID event ID
-     * @return event object
-     * @throws IllegalArgumentException
+     * @return Optional of Event object, empty when ID does not exist
      */
-    public synchronized SlapEvent getEventByID(String ID) throws IOException, IllegalArgumentException {
+    public synchronized Optional<SlapEvent> getEventByID(String ID) throws IllegalArgumentException {
+        try {
+            SlapEvent event = entityManager.createNamedQuery("SlapEvent.findEventById", SlapEvent.class).setParameter("id", ID).getSingleResult();
+            return Optional.of(event);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    public synchronized Optional<SlapEvent> getNextEvent() {
+        try {
+            SlapEvent event = entityManager.createNamedQuery("SlapEvent.findNextEvent", SlapEvent.class).getSingleResult();
+            return Optional.of(event);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     /**
@@ -43,16 +55,32 @@ public class SlapEventRepository {
      * @param event the game object
      * @throws IOException
      */
-    public synchronized void setEventByID(String ID, SlapEvent event) throws IOException {
+    public synchronized Optional<SlapEvent> saveEvent(SlapEvent event) {
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(event);
+            entityManager.getTransaction().commit();
+            return Optional.of(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     /**
      * Deletes an event from storage
      *
-     * @param ID the id that identifies the event
+     * @param event event to be deleted
      * @throws IOException
      */
-    public synchronized void deleteEventByID(String ID) throws IOException {
+    public synchronized void deleteEventByID(SlapEvent event) throws IOException {
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.remove(event);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -60,9 +88,6 @@ public class SlapEventRepository {
     These methods implement further user facing functionality
     These methods are synchronized as the commands are executed async
      */
-
-    public synchronized List<String> getEventIDs() {
-    }
 
     /**
      * Of all events, lists those that are
@@ -73,6 +98,7 @@ public class SlapEventRepository {
      * @return ordered events by start date
      */
     public synchronized List<SlapEvent> getValidFutureEventsOrderedByStart() {
+        return null;
     }
 
     /**
@@ -81,13 +107,6 @@ public class SlapEventRepository {
      * @return current or next event.
      */
     public synchronized SlapEvent getCurrentOrNextEvent() {
+        return null;
     }
-
-    /**
-     * Deletes the event where the start date is in the past.
-     */
-    public synchronized void pruneOldEvents() {
-    }
-
-
 }

@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 public class PunHandler {
-    private SlapBot bot;
-    private Map<Guild, List<Member>> punishedGuilds = new HashMap<>();
+    private final SlapBot bot;
+    private final Map<Guild, List<Member>> punishedGuilds = new HashMap<>();
 
     public PunHandler(SlapBot slapBot) {
         this.bot = slapBot;

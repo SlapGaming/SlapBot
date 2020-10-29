@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class LTGRepository {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public LTGRepository(EntityManager entityManager) {
         this.entityManager = entityManager;

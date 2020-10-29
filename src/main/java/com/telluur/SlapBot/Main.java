@@ -7,11 +7,14 @@ import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Objects;
 
 /**
@@ -22,7 +25,7 @@ import java.util.Objects;
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         logger.info("System startup");
         logger.info("Starting bot, version: [{}]", SlapBot.VERSION);
         logger.info("Loading config.yaml");
@@ -31,8 +34,7 @@ public class Main {
         try {
             logger.info("Building JDA client and logging in");
             String token = Objects.requireNonNull(config).getToken();
-            JDA jda = new JDABuilder()
-                    .setToken(token)
+            JDA jda = JDABuilder.create(token, EnumSet.allOf(GatewayIntent.class))
                     .setActivity(Activity.playing(EmojiParser.parseToUnicode("with myself...")))
                     .build();
             jda.awaitReady();
@@ -40,6 +42,7 @@ public class Main {
             new SlapBot(jda, config);
         } catch (LoginException | IllegalArgumentException | InterruptedException | IOException e) {
             logger.error(e.getMessage());
+            logger.error(Arrays.toString(e.getStackTrace()));
             shutdown("caught exception");
         }
     }

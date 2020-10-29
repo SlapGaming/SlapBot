@@ -35,7 +35,7 @@ public class PingCommand extends UserCommand {
             "Are you a ping pong table? Cuz you ping pong my balls. ",
             "Stop staring at my \"Balls of Fury\". "
     };
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public PingCommand(SlapBot slapBot) {
         super(slapBot);

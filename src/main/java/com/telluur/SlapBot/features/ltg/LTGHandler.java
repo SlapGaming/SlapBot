@@ -13,9 +13,6 @@ import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -41,10 +38,7 @@ public class LTGHandler {
     public LTGHandler(SlapBot slapBot) {
         try {
             this.slapBot = slapBot;
-
-            EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("slapbot");
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
-            this.ltgRepository = new LTGRepository(entityManager);
+            this.ltgRepository = new LTGRepository(slapBot.getEntityManager());
         } catch (Exception e) {
             logger.error("Failed to read storage", e.getCause());
             Main.shutdown("Caught Exception");

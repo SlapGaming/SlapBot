@@ -3,9 +3,8 @@ package com.telluur.SlapBot.commands.user;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
-import com.telluur.SlapBot.features.slapevents.OldSlapEvent;
-import com.telluur.SlapBot.features.slapevents.SlapEventStorageHandler;
-import com.telluur.SlapBot.features.slapevents.SlapEventUtil;
+import com.telluur.SlapBot.features.slapevents.jpa.SlapEvent;
+import com.telluur.SlapBot.features.slapevents.jpa.SlapEventRepository;
 import com.vdurmont.emoji.EmojiParser;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -14,6 +13,7 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Displays date and time remaining to next slap lan event
@@ -21,7 +21,7 @@ import java.util.List;
  * @author Rick Fontein
  */
 
-public class LanCommand extends UserCommand {
+public class EventCommand extends UserCommand {
     private static final String SHORT_DATE_FORMAT = "EEE dd MMM yyyy";
     private static final String LONG_DATE_FORMAT = "EEEE d MMMM yyyy - HH:mm z";
     private static final PeriodFormatter REMAINING_FMT = new PeriodFormatterBuilder()
@@ -37,30 +37,32 @@ public class LanCommand extends UserCommand {
             .appendMinutes()
             .appendSuffix(" minute.", " minutes.")
             .toFormatter();
+    private static final String NO_EVENT = EmojiParser.parseToUnicode("SLAP has no future events planned... :sob:");
 
 
-    public LanCommand(SlapBot slapBot) {
+    public EventCommand(SlapBot slapBot) {
         super(slapBot);
-        this.name = "lan";
-        this.aliases = new String[]{"slan", "event", "events"};
-        this.help = "Displays time to next Slap LAN Event";
+        this.name = "event";
+        this.aliases = new String[]{"lan", "slan", "events"};
+        this.help = "Displays time to next Slap Event";
         this.arguments = "<?all>";
         this.guildOnly = false;
     }
 
     @Override
     public void handle(CommandEvent event) {
-        SlapEventStorageHandler storage = slapBot.getSlapEventStorageHandler();
+        SlapEventRepository repository = slapBot.getSlapEventRepository();
         String[] params = event.getArgs().split("\\s+");
 
         if (params.length >= 1 && params[0].toLowerCase().equals("")) {
-            OldSlapEvent nextEvent = storage.getCurrentOrNextEvent();
-            if (nextEvent == null) {
-                event.reply(EmojiParser.parseToUnicode("SLAP has no future events planned... :sob:"));
+            Optional<SlapEvent> optional = repository.getNextEvent();
+            if (!optional.isPresent()) {
+                event.reply(NO_EVENT);
             } else {
+                SlapEvent nextEvent = optional.get();
                 DateTime now = new DateTime().withZone(SlapBot.TIME_ZONE);
-                DateTime begin = SlapEventUtil.toDateTimeOrNull(nextEvent.getStart()).withZone(SlapBot.TIME_ZONE);
-                DateTime end = SlapEventUtil.toDateTimeOrNull(nextEvent.getEnd()).withZone(SlapBot.TIME_ZONE);
+                DateTime begin = nextEvent.getStart().withZone(SlapBot.TIME_ZONE);
+                DateTime end = nextEvent.getEnd().withZone(SlapBot.TIME_ZONE);
 
                 if (now.getMillis() - begin.getMillis() <= 0) {
                     //Future event
@@ -70,15 +72,16 @@ public class LanCommand extends UserCommand {
                                     "%s Event:           %s\r\n" +
                                     "%s Begins:          %s\r\n" +
                                     "%s Ends:            %s\r\n" +
-                                    "%s Time till start: %s\r\n" +
+                                    "%s Time till start: %s\r\n\r\n" +
+                                    "%s" +
                                     "```\r\n" +
                                     "Type `%s%s all` to see all scheduled events.",
-                            ":video_game:", nextEvent.getDescription(),
+                            ":video_game:", nextEvent.getName(),
                             ":calendar:", begin.toString(LONG_DATE_FORMAT),
                             ":calendar:", end.toString(LONG_DATE_FORMAT),
                             ":timer_clock:", period.toString(REMAINING_FMT),
+                            nextEvent.getDescription(),
                             slapBot.getPrefix(), this.name)));
-
                 } else {
                     Period period = new Period(now, end, PeriodType.yearMonthDayTime());
                     event.reply(EmojiParser.parseToUnicode(String.format("__**SLAP is currently attending:**__\r\n" +
@@ -86,32 +89,36 @@ public class LanCommand extends UserCommand {
                                     "%s Event:         %s\r\n" +
                                     "%s Begins:        %s\r\n" +
                                     "%s Ends:          %s\r\n" +
-                                    "%s Time till end: %s\r\n" +
+                                    "%s Time till end: %s\r\n\r\n" +
+                                    "%s" +
                                     "```\r\n" +
                                     "Type `%s%s all` to see all scheduled events.",
-                            ":video_game:", nextEvent.getDescription(),
+                            ":video_game:", nextEvent.getName(),
                             ":calendar:", begin.toString(LONG_DATE_FORMAT),
                             ":calendar:", end.toString(LONG_DATE_FORMAT),
                             ":timer_clock:", period.toString(REMAINING_FMT),
+                            nextEvent.getDescription(),
                             slapBot.getPrefix(), this.name)));
                 }
             }
         } else if (params.length >= 1 && params[0].toLowerCase().equals("all")) {
-            List<OldSlapEvent> events = storage.getValidFutureEventsOrderedByStart();
-            StringBuilder sb = new StringBuilder();
-            sb.append("__**All events:**__\r\n");
-            sb.append("```\r\n");
-            events.forEach(e -> sb.append(String.format(":calendar: %s - %s: %s\r\n",
-                    SlapEventUtil.toDateTimeOrNull(e.getStart()).withZone(SlapBot.TIME_ZONE).toString(SHORT_DATE_FORMAT),
-                    SlapEventUtil.toDateTimeOrNull(e.getEnd()).withZone(SlapBot.TIME_ZONE).toString(SHORT_DATE_FORMAT),
-                    e.getDescription())));
-            sb.append("```\r\n");
-            event.reply(EmojiParser.parseToUnicode(sb.toString()));
+            List<SlapEvent> events = repository.getFutureEvents();
+            if (events.size() > 0) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("__**All events:**__\r\n");
+                sb.append("```\r\n");
+                events.forEach(e -> sb.append(String.format(":calendar: %s - %s: %s\r\n",
+                        e.getStart().withZone(SlapBot.TIME_ZONE).toString(SHORT_DATE_FORMAT),
+                        e.getEnd().withZone(SlapBot.TIME_ZONE).toString(SHORT_DATE_FORMAT),
+                        e.getDescription())));
+                sb.append("```\r\n");
+                event.reply(EmojiParser.parseToUnicode(sb.toString()));
+            } else {
+                event.reply(NO_EVENT);
+            }
         } else {
             event.replyError(EmojiParser.parseToUnicode("That's not a valid subcommand, you melon. :watermelon:"));
         }
-
     }
-
 }
 

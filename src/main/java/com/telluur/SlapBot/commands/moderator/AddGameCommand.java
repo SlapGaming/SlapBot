@@ -3,6 +3,7 @@ package com.telluur.SlapBot.commands.moderator;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.ModeratorCommand;
+import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,10 +50,12 @@ public class AddGameCommand extends ModeratorCommand {
 
         slapBot.getLtgHandler().createGameRole(parts[0], parts[1],
                 role -> {
-                    String reply = String.format("Created LTG role %s.", role.getAsMention());
-                    event.replySuccess(reply);
+                    String reply = String.format("Created LTG role %s.\r\nClick %s to subscribe to this game.",
+                            role.getAsMention(), QuickSubscribeListener.SUBSCRIBE);
+                    event.replySuccess(reply, m -> slapBot.getQuickSubscribeListener().addButton(m, role));
                     String logNSA = String.format("LTG | **%s** created LTG role __%s__", event.getAuthor().getName(), role.getName());
                     slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
+
                 },
                 failure -> event.replyError(failure.getMessage()));
     }

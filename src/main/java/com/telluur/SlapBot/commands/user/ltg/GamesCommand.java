@@ -90,6 +90,7 @@ public class GamesCommand extends UserCommand {
             case TEXT:
                 textChatBuilder
                         .setItems(games)
+                        .setUsers(event.getAuthor())
                         .build()
                         .display(event.getChannel());
                 break;
