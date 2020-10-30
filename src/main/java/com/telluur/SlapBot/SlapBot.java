@@ -29,7 +29,6 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.awt.*;
@@ -60,7 +59,7 @@ public class SlapBot {
     Hibernate entity manager
      */
     @Getter
-    private final EntityManager entityManager;
+    private final EntityManagerFactory entityManagerFactory;
 
     /*
     JDA
@@ -139,8 +138,7 @@ public class SlapBot {
         Connecting to storage backend
          */
         logger.info("Setting up hibernate session");
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("slapbot");
-        this.entityManager = entityManagerFactory.createEntityManager();
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("slapbot");
 
         /*
         Eventwaiter for JDA utilities

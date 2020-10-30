@@ -38,7 +38,7 @@ public class LTGHandler {
     public LTGHandler(SlapBot slapBot) {
         try {
             this.slapBot = slapBot;
-            this.ltgRepository = new LTGRepository(slapBot.getEntityManager());
+            this.ltgRepository = new LTGRepository(slapBot.getEntityManagerFactory());
         } catch (Exception e) {
             logger.error("Failed to read storage", e.getCause());
             Main.shutdown("Caught Exception");
