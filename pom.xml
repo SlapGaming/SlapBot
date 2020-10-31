@@ -6,7 +6,7 @@
 
     <groupId>com.telluur</groupId>
     <artifactId>SlapBot</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
 
     <build>
         <plugins>
@@ -97,12 +97,17 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.21.Final</version>
+            <version>5.4.22.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.4.21.Final</version>
+            <version>5.4.22.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.4.22.Final</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
         <dependency>
