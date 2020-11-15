@@ -3,7 +3,7 @@ package com.telluur.SlapBot.features.ltg;
 import com.telluur.SlapBot.Main;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.features.ltg.jpa.LTGGame;
-import com.telluur.SlapBot.features.ltg.jpa.LTGRepository;
+import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
 import lombok.Getter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -31,14 +31,14 @@ public class LTGHandler {
     private static final String communityRoleId = "663755925248802826";
 
     @Getter
-    private LTGRepository ltgRepository;
+    private LTGGameRepository ltgRepository;
     private SlapBot slapBot;
 
 
     public LTGHandler(SlapBot slapBot) {
         try {
             this.slapBot = slapBot;
-            this.ltgRepository = new LTGRepository(slapBot.getEntityManagerFactory());
+            this.ltgRepository = new LTGGameRepository(slapBot.getEntityManagerFactory());
         } catch (Exception e) {
             logger.error("Failed to read storage", e.getCause());
             Main.shutdown("Caught Exception");
