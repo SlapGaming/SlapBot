@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public class LTGRepository {
+public class LTGGameRepository {
     private final EntityManagerFactory entityManagerFactory;
 
-    public LTGRepository(EntityManagerFactory entityManagerFactory) {
+    public LTGGameRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 

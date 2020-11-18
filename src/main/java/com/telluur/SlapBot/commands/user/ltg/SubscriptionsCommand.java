@@ -7,7 +7,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
-import com.telluur.SlapBot.features.ltg.jpa.LTGRepository;
+import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -83,7 +83,7 @@ public class SubscriptionsCommand extends UserCommand {
         String[] parts = event.getArgs().split("\\s+");
 
         List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], slapBot.getGuild());
-        LTGRepository repository = slapBot.getLtgHandler().getLtgRepository();
+        LTGGameRepository repository = slapBot.getLtgHandler().getLtgRepository();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
             if (repository.hasId(role.getId())) {
@@ -108,7 +108,7 @@ public class SubscriptionsCommand extends UserCommand {
 
     private void memberDisplay(CommandEvent event, Member member) {
         List<String> discordRoles = member.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-        LTGRepository repository = slapBot.getLtgHandler().getLtgRepository();
+        LTGGameRepository repository = slapBot.getLtgHandler().getLtgRepository();
 
         String[] games = repository.findAllIds()
                 .stream()

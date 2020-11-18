@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
-import com.telluur.SlapBot.features.ltg.jpa.LTGRepository;
+import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -57,7 +57,7 @@ public class GamesCommand extends UserCommand {
     @Override
     public void handle(CommandEvent event) {
         Guild g = slapBot.getGuild();
-        LTGRepository repository = slapBot.getLtgHandler().getLtgRepository();
+        LTGGameRepository repository = slapBot.getLtgHandler().getLtgRepository();
 
         /*
         Get gameSnowflakes from storage
