@@ -5,28 +5,13 @@ services:
     image: mariadb
     container_name: slapbot_db
     restart: always
-    expose:
-      - 3306
+    ports:
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: slapbot
     volumes:
       - ./db:/var/lib/mysql
-    networks:
-      - discord
-
-  bot:
-    build:
-      context: ./
-      dockerfile: slapbot.dockerfile
-    container_name: slapbot_bot
-    restart: always
-    volumes:
-      - ./yaml:/yaml
-    depends_on:
-      - db
-    networks:
-      - discord
 
   phpmyadmin:
     depends_on:
@@ -38,10 +23,3 @@ services:
       - '8080:80'
     environment:
       PMA_HOST: db
-    networks:
-      - discord
-
-
-# Custom network so all services can communicate using a FQDN
-networks:
-  discord:

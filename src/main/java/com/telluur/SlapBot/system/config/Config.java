@@ -96,6 +96,14 @@ public class Config {
     private String status;
 
     /**
+     * The URL, user and password for JDBC connection
+     */
+    @Getter
+    private String dbUrl, dbUser, dbPassword;
+
+
+
+    /**
      * Fully prepares a JDA Game object.
      *
      * @return Game object containing the statustype and status

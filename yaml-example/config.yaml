@@ -3,6 +3,7 @@ guild:        "123456789012345678"                                          # Di
 owner:        "123456789012345678"                                          # Discord user snowflake ID
 admin:        "123456789012345678"                                          # Discord guild role snowflake ID
 moderator:    "123456789012345678"                                          # Discord guild role snowflake ID
+genTxChannel: "123456789012345678"                                          # General Discord text channel snowflake ID
 ltgTxChannel: "123456789012345678"                                          # LTG Discord text channel snowflake ID
 nsaTxChannel: "123456789012345678"                                          # NSA Discord text channel snowflake ID
 punRole:      "123456789012345678"                                          # Pun Discord guild role snowflake ID
@@ -11,3 +12,6 @@ statustype:   "listening"                                                   # St
 status:       "for commands: .help"                                         # Status of the bot.
 prefix:       "."                                                           # Prefix for the commands
 altprefix:    ",,"                                                          # Alternative prefix for the commands
+dbUrl:        "jdbc:mariadb://localhost:3306/slapbot"                       # JCDB url to database
+dbUser:       ""
+dbPassword:   ""

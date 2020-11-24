@@ -33,6 +33,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Singleton JDA bot class
@@ -138,7 +139,11 @@ public class SlapBot {
         Connecting to storage backend
          */
         logger.info("Setting up hibernate session");
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("slapbot");
+        HashMap<String, String> overrides = new HashMap<>();
+        overrides.put("javax.persistence.jdbc.url", config.getDbUrl());
+        overrides.put("javax.persistence.jdbc.user", config.getDbUser());
+        overrides.put("javax.persistence.jdbc.password", config.getDbPassword());
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("slapbot", overrides);
 
         /*
         Eventwaiter for JDA utilities

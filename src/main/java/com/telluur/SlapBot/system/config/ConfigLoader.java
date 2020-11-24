@@ -33,6 +33,9 @@ public class ConfigLoader {
                     throw new IllegalArgumentException("Invalid status type");
             }
             logger.info("================= CONFIG =================");
+            logger.info("DB url:            " + config.getDbUrl());
+            logger.info("DB user:           " + config.getDbUser());
+            logger.debug("DB password:       " + config.getDbPassword());
             logger.debug("Discord token:     " + config.getToken());
             logger.info("Guild:             " + config.getGuild());
             logger.info("Owner User:        " + config.getOwner());
@@ -47,10 +50,12 @@ public class ConfigLoader {
             logger.info("NSA tx channel:    " + config.getNsaTxChannel());
             logger.info("Pun channel:       " + config.getPunVcChannel());
             logger.info("Pun Role:          " + config.getPunRole());
+
             logger.info("==========================================");
             return config;
         } catch (Exception e) {
             logger.error("Failed to load config.yaml", e.getCause());
+            logger.error(e.getMessage());
             Main.shutdown("caught exception");
         }
         //This statement should never be reached, as the bot should exit if the config couldn't be loaded.
