@@ -34,6 +34,7 @@ import javax.persistence.Persistence;
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Singleton JDA bot class
@@ -44,11 +45,9 @@ import java.util.HashMap;
 public class SlapBot {
     /*
     In bot constants & Config
-    TODO: Clean this up, move stuff in here away from yaml storage.
      */
 
-    public static final String VERSION = Main.class.getPackage().getImplementationVersion() != null ?
-            Main.class.getPackage().getImplementationVersion() : "DEV";
+    public static final String VERSION = Optional.ofNullable(Main.class.getPackage().getImplementationVersion()).orElse("DEV");
     public static final DateTimeZone TIME_ZONE = DateTimeZone.forID("Europe/London");
     public static final Color COLOR = Color.ORANGE;
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
@@ -210,7 +209,6 @@ public class SlapBot {
                     Admin
                     */
                         new EvalCommand(this),
-                        new FakeHalloweenCommand(this),
                         new KillCommand(this),
                         new EventManageCommand(this),
                         new PruneChatCommand(this),
