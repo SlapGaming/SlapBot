@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Discord](https://discordapp.com/api/guilds/276858200853184522/widget.png)](https://discord.gg/wZes6v4)
 
-SlapGaming Discord bot, please have a look at the wiki for features.
+Tailored bot for the slapgaming discord.
 
 ## Built using
 See pom.xml for complete list
