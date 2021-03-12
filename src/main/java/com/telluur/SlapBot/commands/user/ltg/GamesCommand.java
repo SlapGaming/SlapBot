@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
+import com.telluur.SlapBot.features.ltg.jpa.LTGGame;
 import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -71,13 +72,16 @@ public class GamesCommand extends UserCommand {
                 .stream()
                 .map(s -> new HashMap.SimpleEntry<>(g.getRoleById(s), repository.findById(s))
                 )
-                .filter(entry -> entry.getKey() != null)
-                .map(entry -> String.format(
-                        "`%-6s | %-40s | %2d subs`",
-                        entry.getValue().getAbbreviation(),
-                        entry.getValue().getFullName(),
-                        g.getMembersWithRoles(entry.getKey()).size())
-                        .replace(' ', SPACE))
+                .filter(entry -> entry.getKey() != null && entry.getValue().isPresent())
+                .map(entry -> {
+                    LTGGame game = entry.getValue().get();
+                    return String.format(
+                            "`%-6s | %-40s | %2d subs`",
+                            game.getAbbreviation(),
+                            game.getFullName(),
+                            g.getMembersWithRoles(entry.getKey()).size())
+                            .replace(' ', SPACE);
+                })
                 .sorted()
                 .toArray(String[]::new);
 

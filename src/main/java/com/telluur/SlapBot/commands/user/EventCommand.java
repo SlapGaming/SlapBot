@@ -54,7 +54,7 @@ public class EventCommand extends UserCommand {
         SlapEventRepository repository = slapBot.getSlapEventRepository();
         String[] params = event.getArgs().split("\\s+");
 
-        if (params.length >= 1 && params[0].toLowerCase().equals("")) {
+        if (params.length >= 1 && params[0].equalsIgnoreCase("")) {
             Optional<SlapEvent> optional = repository.getNextEvent();
             if (!optional.isPresent()) {
                 event.reply(NO_EVENT);
@@ -101,7 +101,7 @@ public class EventCommand extends UserCommand {
                             slapBot.getPrefix(), this.name)));
                 }
             }
-        } else if (params.length >= 1 && params[0].toLowerCase().equals("all")) {
+        } else if (params.length >= 1 && params[0].equalsIgnoreCase("all")) {
             List<SlapEvent> events = repository.getFutureEvents();
             if (events.size() > 0) {
                 StringBuilder sb = new StringBuilder();

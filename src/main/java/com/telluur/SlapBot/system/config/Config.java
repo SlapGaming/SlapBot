@@ -102,7 +102,6 @@ public class Config {
     private String dbUrl, dbUser, dbPassword;
 
 
-
     /**
      * Fully prepares a JDA Game object.
      *

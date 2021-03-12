@@ -6,10 +6,7 @@ import com.telluur.SlapBot.features.ltg.jpa.LTGGame;
 import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
 import lombok.Getter;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +63,7 @@ public class LTGHandler {
                 .queue(
                         role -> {
                             try {
-                                LTGGame ltgGame = new LTGGame(role.getId(), abbreviation, fullname);
+                                LTGGame ltgGame = new LTGGame(role.getId(), abbreviation, fullname, null);
                                 ltgRepository.save(ltgGame);
                                 success.accept(role);
                                 logger.info(String.format("Role `%s` with id `%s` created", role.getName(), role.getId()));
@@ -107,6 +104,50 @@ public class LTGHandler {
                         logger.error(String.format("Failed to delete Discord role `%s`", role.getName()));
                         failure.accept(fail);
                     });
+        } else {
+            failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
+        }
+    }
+
+    /**
+     * Attempts to add a game description to an existing role.
+     *
+     * @param role    the role to be edited
+     * @param message the description to be added
+     * @param success success callback
+     * @param failure failure callback
+     */
+    public void addGameDescription(Role role, Message message, Runnable success, Consumer<Throwable> failure) {
+        String snowflake = role.getId();
+        if (ltgRepository.hasId(snowflake)) {
+            try {
+                ltgRepository.mergeById(snowflake, ltgGame -> ltgGame.setDescription(message.getContentRaw()));
+                success.run();
+            } catch (IOException e) {
+                failure.accept(e);
+            }
+        } else {
+            failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
+        }
+    }
+
+    /**
+     * Attempts to remove a game description to an existing role.
+     *
+     * @param role    the role to be edited
+     * @param message the description to be removed
+     * @param success success callback
+     * @param failure failure callback
+     */
+    public void deleteGameDescription(Role role, Runnable success, Consumer<Throwable> failure) {
+        String snowflake = role.getId();
+        if (ltgRepository.hasId(snowflake)) {
+            try {
+                ltgRepository.mergeById(snowflake, ltgGame -> ltgGame.setDescription(null));
+                success.run();
+            } catch (IOException e) {
+                failure.accept(e);
+            }
         } else {
             failure.accept(new IllegalArgumentException(String.format("Role `%s` is not a LTG role", role.getName())));
         }

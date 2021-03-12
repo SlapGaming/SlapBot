@@ -6,7 +6,7 @@
 
     <groupId>com.telluur</groupId>
     <artifactId>SlapBot</artifactId>
-    <version>4.1.2</version>
+    <version>4.2.0</version>
 
     <build>
         <plugins>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.1.1_165</version>
+            <version>4.2.0_241</version>
         </dependency>
         <dependency>
             <groupId>com.jagrosh</groupId>

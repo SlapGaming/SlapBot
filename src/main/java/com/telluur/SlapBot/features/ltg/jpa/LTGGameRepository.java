@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class LTGGameRepository {
     private final EntityManagerFactory entityManagerFactory;
@@ -20,17 +21,12 @@ public class LTGGameRepository {
         return ltgGame != null;
     }
 
-    public LTGGame findById(String id) {
+    public Optional<LTGGame> findById(String id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         LTGGame ltgGame = entityManager.find(LTGGame.class, id);
         entityManager.close();
-        if (ltgGame != null) {
-            return ltgGame;
-        } else {
-            throw new IllegalArgumentException("Game Snowflake does not exist.");
-        }
+        return Optional.ofNullable(ltgGame);
     }
-
 
     public List<String> findAllIds() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -45,6 +41,23 @@ public class LTGGameRepository {
         entityManager.persist(ltgGame);
         entityManager.getTransaction().commit();
         entityManager.close();
+        return Optional.of(ltgGame);
+    }
+
+    public Optional<LTGGame> mergeById(String id, Consumer<LTGGame> ltgGameChanges) throws IOException {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        LTGGame ltgGame = entityManager.find(LTGGame.class, id);
+        if (ltgGame != null) {
+            entityManager.getTransaction().begin();
+            entityManager.detach(ltgGame);
+            ltgGameChanges.accept(ltgGame);
+            entityManager.merge(ltgGame);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+        } else {
+            entityManager.close();
+            throw new IllegalArgumentException("Game Snowflake does not exist.");
+        }
         return Optional.of(ltgGame);
     }
 

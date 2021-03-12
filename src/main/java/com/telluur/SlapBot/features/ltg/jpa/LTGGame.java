@@ -20,4 +20,6 @@ public class LTGGame {
     @Id
     private String id;
     private String abbreviation, fullName;
+    @Column(length = 2000)
+    private String description;
 }
