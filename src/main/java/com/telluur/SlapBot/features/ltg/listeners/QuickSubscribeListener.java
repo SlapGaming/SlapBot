@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 

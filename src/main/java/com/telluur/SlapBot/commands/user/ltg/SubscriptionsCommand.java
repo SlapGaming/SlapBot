@@ -7,6 +7,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
+import com.telluur.SlapBot.features.ltg.jpa.LTGGame;
 import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.util.EmbedUtil;
@@ -18,7 +19,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -83,10 +84,9 @@ public class SubscriptionsCommand extends UserCommand {
         String[] parts = event.getArgs().split("\\s+");
 
         List<Role> mentionedRoles = FinderUtil.findRoles(parts[0], slapBot.getGuild());
-        LTGGameRepository repository = slapBot.getLtgHandler().getLtgRepository();
         if (mentionedRoles.size() == 1) {
             Role role = mentionedRoles.get(0);
-            if (repository.hasId(role.getId())) {
+            if (slapBot.getLtgHandler().isGameRole(role)) {
                 roleDisplay(event, role);
             } else {
                 event.replyError(String.format("`%s` is not a looking-to-game role.", role.getName()));
@@ -114,7 +114,8 @@ public class SubscriptionsCommand extends UserCommand {
                 .stream()
                 .filter(discordRoles::contains)
                 .map(repository::findById)
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(game -> String.format("`%-6s | %-40s `", game.getAbbreviation(), game.getFullName())
                         .replace(' ', SPACE))
                 .sorted()
@@ -130,6 +131,14 @@ public class SubscriptionsCommand extends UserCommand {
     }
 
     private void roleDisplay(CommandEvent event, Role role) {
+        Optional<LTGGame> optionalLTGGame = slapBot.getLtgHandler().getLtgRepository().findById(role.getId());
+        if (optionalLTGGame.isPresent()) {
+            String desc = optionalLTGGame.get().getDescription();
+            if (desc != null) {
+                event.reply(desc);
+            }
+        }
+
         String[] subscribers = slapBot.getGuild().getMembersWithRoles(role)
                 .stream()
                 .map(member -> String.format("`%-50s`", member.getEffectiveName()))
