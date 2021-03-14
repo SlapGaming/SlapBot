@@ -19,7 +19,7 @@ public class EvalCommand extends AdminCommand {
         super(slapBot);
         this.name = "eval";
         this.help = "evaluates nashorn code, available bindings: bot, event, jda, guild, channel.";
-        this.guildOnly = false;
+        this.guildOnly = true;
     }
 
 

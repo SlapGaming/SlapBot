@@ -26,11 +26,7 @@ public class RollCommand extends UserCommand {
             try {
                 bound = Integer.parseInt(event.getArgs().split("\\s+")[0]);
             } catch (NumberFormatException e) {
-                if (event.getAuthor().getIdLong() == 162890083735830529L) {
-                    event.replyError("Fuck off Sam.");
-                } else {
-                    event.reply("Something went wrong. ¯\\_(ツ)_/¯");
-                }
+                event.reply("Something went wrong. ¯\\_(ツ)_/¯");
                 return;
             }
         }

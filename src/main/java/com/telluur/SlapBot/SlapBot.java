@@ -14,7 +14,10 @@ import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameDescriptionCommand;
 import com.telluur.SlapBot.commands.moderator.SetGameDescriptionCommand;
-import com.telluur.SlapBot.commands.user.*;
+import com.telluur.SlapBot.commands.user.AvatarCommand;
+import com.telluur.SlapBot.commands.user.EventCommand;
+import com.telluur.SlapBot.commands.user.RollCommand;
+import com.telluur.SlapBot.commands.user.TeamsCommand;
 import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscribeCommand;
 import com.telluur.SlapBot.commands.user.ltg.SubscriptionsCommand;
@@ -200,7 +203,6 @@ public class SlapBot {
                 .setOwnerId(config.getOwner())
                 .setPrefix(config.getPrefix())
                 .setAlternativePrefix(config.getAltprefix())
-                .setActivity(config.getGameStatus())
                 .addCommands(
                     /*
                     Listen in alphabetical order
@@ -231,7 +233,6 @@ public class SlapBot {
                      */
                         new AvatarCommand(this),
                         new EventCommand(this),
-                        new PunCommand(this),
                         new RollCommand(this),
                         new TeamsCommand(this),
                         new GamesCommand(this, eventWaiter),
@@ -240,6 +241,7 @@ public class SlapBot {
                         new UnsubscribeCommand(this) //leave
                 ).build();
         jda.addEventListener(this.commandClient);
+        jda.getPresence().setActivity(config.getGameStatus());
 
         logger.info("SlapBot Build Complete. Ready.");
     }
