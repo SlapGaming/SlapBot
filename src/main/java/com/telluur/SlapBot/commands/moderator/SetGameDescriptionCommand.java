@@ -24,7 +24,7 @@ public class SetGameDescriptionCommand extends ModeratorCommand {
     public void handle(CommandEvent event) {
         Message msg = event.getMessage().getReferencedMessage();
         if (msg == null) {
-            event.replyError("Select the new description message by using the discord reply function.");
+            event.replyError(String.format("Create the new description message first by typing it in discord. Then _reply_ to that message with `%s%s <@role>`.", slapBot.getPrefix(), this.name));
             return;
         }
 
