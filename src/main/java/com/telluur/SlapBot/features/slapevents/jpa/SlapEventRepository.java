@@ -66,7 +66,6 @@ public class SlapEventRepository {
     /**
      * (Over)writes an event object to the internal state
      *
-     * @param id    the discord group snowflake id
      * @param event the game object
      * @throws IOException
      */
@@ -94,7 +93,7 @@ public class SlapEventRepository {
         try {
             EntityManager em = entityManagerFactory.createEntityManager();
             em.getTransaction().begin();
-            em.remove(event);
+            em.remove(em.contains(event) ? event : em.merge(event)); //Check if event is attached
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
