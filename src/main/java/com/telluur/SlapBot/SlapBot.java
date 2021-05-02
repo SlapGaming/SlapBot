@@ -6,10 +6,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.commands.AboutCommand;
 import com.telluur.SlapBot.commands.PingCommand;
 import com.telluur.SlapBot.commands.VersionCommand;
-import com.telluur.SlapBot.commands.admin.EvalCommand;
-import com.telluur.SlapBot.commands.admin.EventManageCommand;
-import com.telluur.SlapBot.commands.admin.KillCommand;
-import com.telluur.SlapBot.commands.admin.PruneChatCommand;
+import com.telluur.SlapBot.commands.admin.*;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameDescriptionCommand;
@@ -219,6 +216,7 @@ public class SlapBot {
                         new KillCommand(this),
                         new EventManageCommand(this),
                         new PruneChatCommand(this),
+                        new SayCommand(this),
 
                     /*
                     Moderator
