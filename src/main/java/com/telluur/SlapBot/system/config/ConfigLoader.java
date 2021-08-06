@@ -48,8 +48,6 @@ public class ConfigLoader {
             logger.info("Gen tx channel:    " + config.getGenTxChannel());
             logger.info("LTG tx channel:    " + config.getLtgTxChannel());
             logger.info("NSA tx channel:    " + config.getNsaTxChannel());
-            logger.info("Pun channel:       " + config.getPunVcChannel());
-            logger.info("Pun Role:          " + config.getPunRole());
 
             logger.info("==========================================");
             return config;

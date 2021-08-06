@@ -9,7 +9,6 @@
         <!-- Entity classes -->
         <class>com.telluur.SlapBot.features.ltg.jpa.LTGGame</class>
         <class>com.telluur.SlapBot.features.ltg.jpa.LTGQuickSubscribe</class>
-        <class>com.telluur.SlapBot.features.slapevents.jpa.SlapEvent</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>

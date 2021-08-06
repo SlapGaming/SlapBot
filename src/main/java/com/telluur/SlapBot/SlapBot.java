@@ -6,13 +6,15 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.telluur.SlapBot.commands.AboutCommand;
 import com.telluur.SlapBot.commands.PingCommand;
 import com.telluur.SlapBot.commands.VersionCommand;
-import com.telluur.SlapBot.commands.admin.*;
+import com.telluur.SlapBot.commands.admin.EvalCommand;
+import com.telluur.SlapBot.commands.admin.KillCommand;
+import com.telluur.SlapBot.commands.admin.PruneChatCommand;
+import com.telluur.SlapBot.commands.admin.SayCommand;
 import com.telluur.SlapBot.commands.moderator.AddGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameCommand;
 import com.telluur.SlapBot.commands.moderator.RemoveGameDescriptionCommand;
 import com.telluur.SlapBot.commands.moderator.SetGameDescriptionCommand;
 import com.telluur.SlapBot.commands.user.AvatarCommand;
-import com.telluur.SlapBot.commands.user.EventCommand;
 import com.telluur.SlapBot.commands.user.RollCommand;
 import com.telluur.SlapBot.commands.user.TeamsCommand;
 import com.telluur.SlapBot.commands.user.ltg.GamesCommand;
@@ -25,12 +27,13 @@ import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.listeners.LTGChatListener;
 import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.features.nsa.NSAChatListener;
-import com.telluur.SlapBot.features.slapevents.jpa.SlapEventRepository;
 import com.telluur.SlapBot.system.config.Config;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.*;
-import org.joda.time.DateTimeZone;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +56,6 @@ public class SlapBot {
      */
 
     public static final String VERSION = Optional.ofNullable(Main.class.getPackage().getImplementationVersion()).orElse("DEV");
-    public static final DateTimeZone TIME_ZONE = DateTimeZone.forID("Europe/London");
     public static final Color COLOR = Color.ORANGE;
     private static final Logger logger = LoggerFactory.getLogger("SYSTEM");
     private final Config config;
@@ -105,12 +107,6 @@ public class SlapBot {
      */
     @Getter
     private final JoinNotifierListener joinNotifierListener;
-
-    /*
-    Slap Events
-     */
-    @Getter
-    private final SlapEventRepository slapEventRepository;
 
     /*
     NSA
@@ -180,12 +176,6 @@ public class SlapBot {
         jda.addEventListener(this.joinNotifierListener);
 
         /*
-        Slap Events
-         */
-        logger.info("Building Slap Events");
-        this.slapEventRepository = new SlapEventRepository(this);
-
-        /*
         NSA
          */
         logger.info("Building NSA");
@@ -214,7 +204,6 @@ public class SlapBot {
                     */
                         new EvalCommand(this),
                         new KillCommand(this),
-                        new EventManageCommand(this),
                         new PruneChatCommand(this),
                         new SayCommand(this),
 
@@ -230,7 +219,6 @@ public class SlapBot {
                     User
                      */
                         new AvatarCommand(this),
-                        new EventCommand(this),
                         new RollCommand(this),
                         new TeamsCommand(this),
                         new GamesCommand(this, eventWaiter),
@@ -260,23 +248,13 @@ public class SlapBot {
         return jda.getRoleById(config.getModerator());
     }
 
-    public Role getPunRole() {
-        return jda.getRoleById(config.getPunRole());
-    }
 
     public TextChannel getGenTxChannel() {
         return jda.getTextChannelById(config.getGenTxChannel());
-    }
-
-    public TextChannel getLtgTxChannel() {
-        return jda.getTextChannelById(config.getLtgTxChannel());
     }
 
     public TextChannel getNsaTxChannel() {
         return jda.getTextChannelById(config.getNsaTxChannel());
     }
 
-    public VoiceChannel getPunVcChannel() {
-        return jda.getVoiceChannelById(config.getPunVcChannel());
-    }
 }

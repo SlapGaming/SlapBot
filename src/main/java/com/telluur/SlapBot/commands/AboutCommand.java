@@ -77,13 +77,6 @@ public class AboutCommand extends UserCommand {
         eb.addField("Bot Admins", slapBot.getAdminRole().getName(), true);
         eb.addField("Bot Moderators", slapBot.getModeratorRole().getName(), true);
 
-        /*
-        // THis does not allign nicely, so uncommented for now...
-        eb.addField("LTG Channel", slapBot.getLtgTxChannel().getAsMention(), true);
-        eb.addField("Pun Role", slapBot.getPunRole().getName(), true);
-        eb.addField("Pun Channel", slapBot.getPunVcChannel().getName(), true);
-        */
-
 
         /*
         Add some stats at the bottom
