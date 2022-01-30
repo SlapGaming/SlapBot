@@ -9,7 +9,6 @@ import com.telluur.SlapBot.commands.abstractions.UserCommand;
 import com.telluur.SlapBot.features.ltg.LTGHandler;
 import com.telluur.SlapBot.features.ltg.jpa.LTGGame;
 import com.telluur.SlapBot.features.ltg.jpa.LTGGameRepository;
-import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import com.telluur.SlapBot.util.EmbedUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -182,8 +181,7 @@ public class SubscriptionsCommand extends UserCommand {
     private void createSubscribeButtonIfPossible(CommandEvent event, Role role) {
         //Button is only possible in guild chat channels.
         if (event.getChannel().getType() == ChannelType.TEXT) {
-            String msg = String.format("Click %s to subscribe to `%s`.", QuickSubscribeListener.SUBSCRIBE, role.getName());
-            event.replySuccess(msg, m -> slapBot.getQuickSubscribeListener().addButton(m, role));
+            slapBot.getQuickSubscribeListener().sendQuicksubMessage(event.getTextChannel(), role);
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.telluur.SlapBot.features.ltg.listeners;
 
 import com.telluur.SlapBot.SlapBot;
-import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
@@ -12,7 +11,6 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Transforms LTG game role mentions into fancy messages.
@@ -21,6 +19,7 @@ import java.util.Objects;
  */
 
 public class LTGChatListener implements EventListener {
+    private static final String LTGTXChannel = "596030791214170112"; //TODO Move to bot config
     private final SlapBot bot;
 
 
@@ -49,28 +48,18 @@ public class LTGChatListener implements EventListener {
                 return;
             }
 
-            //Message is not in the guild we're interested in.
+            //Limit it to the LTG Channel
             TextChannel textChannel = message.getTextChannel();
-            List<TextChannel> guildChannels = bot.getGuild().getTextChannels();
-            if (!guildChannels.contains(textChannel)) {
+            if (!textChannel.getId().equals(LTGTXChannel)) {
                 return;
             }
 
             //Check whether the message contains a role mention and if that role is a LTG role
             List<Role> foundRoles = message.getMentionedRoles();
             if (foundRoles.size() == 1 && bot.getLtgHandler().isGameRole(foundRoles.get(0))) {
-                //Delete the original message and create text embed
+                //Reply with a quick subscribe message
                 Role role = foundRoles.get(0);
-
-                String msg = String.format("**Looking-to-game notifier**\r\n" +
-                                "> %s: %s\r\n" +
-                                "Click on %s to quick subscribe to this game.",
-                        Objects.requireNonNull(message.getMember()).getAsMention(), message.getContentRaw(), QuickSubscribeListener.SUBSCRIBE);
-                textChannel.sendMessage(EmojiParser.parseToUnicode(msg)).queue(m -> {
-                    bot.getQuickSubscribeListener().addButton(m, role);
-                });
-
-                message.delete().queue();
+                bot.getQuickSubscribeListener().sendQuicksubMessage(textChannel, role);
             }
         }
     }

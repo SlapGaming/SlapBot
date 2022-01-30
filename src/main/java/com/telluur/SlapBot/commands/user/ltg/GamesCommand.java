@@ -76,10 +76,10 @@ public class GamesCommand extends UserCommand {
                 .map(entry -> {
                     LTGGame game = entry.getValue().get();
                     return String.format(
-                            "`%-6s | %-40s | %2d subs`",
-                            game.getAbbreviation(),
-                            game.getFullName(),
-                            g.getMembersWithRoles(entry.getKey()).size())
+                                    "`%-6s | %-40s | %2d subs`",
+                                    game.getAbbreviation(),
+                                    game.getFullName(),
+                                    g.getMembersWithRoles(entry.getKey()).size())
                             .replace(' ', SPACE);
                 })
                 .sorted()

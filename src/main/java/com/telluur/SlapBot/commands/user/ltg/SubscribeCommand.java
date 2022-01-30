@@ -3,7 +3,6 @@ package com.telluur.SlapBot.commands.user.ltg;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.telluur.SlapBot.SlapBot;
 import com.telluur.SlapBot.commands.abstractions.UserCommand;
-import com.telluur.SlapBot.features.ltg.listeners.QuickSubscribeListener;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -49,9 +48,10 @@ public class SubscribeCommand extends UserCommand {
         User subscriber = member.getUser();
         slapBot.getLtgHandler().joinGameRole(LTGRole, subscriber,
                 success -> {
-                    String reply = String.format("`%s` is now subscribed to `%s`\r\nClick %s to also subscribe to this game.",
-                            member.getEffectiveName(), LTGRole.getName(), QuickSubscribeListener.SUBSCRIBE);
-                    event.replySuccess(reply, m -> slapBot.getQuickSubscribeListener().addButton(m, LTGRole));
+                    String reply = String.format("`%s` is now subscribed to `%s`.", member.getEffectiveName(), LTGRole.getName());
+                    event.replySuccess(reply);
+                    slapBot.getQuickSubscribeListener().sendQuicksubMessage(event.getTextChannel(), LTGRole);
+
                     String logNSA = String.format("LTG | **%s** subscribed to __%s__", member.getEffectiveName(), LTGRole.getName());
                     slapBot.getNsaTxChannel().sendMessage(logNSA).queue();
                 },
