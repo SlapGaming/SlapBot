@@ -1,3 +1,7 @@
+# Deprecation Notice
+Second iteration here: https://github.com/SlapGaming/SlapSpring
+
+
 # SlapGaming Discord Bot
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Discord](https://discordapp.com/api/guilds/276858200853184522/widget.png)](https://discord.gg/wZes6v4)
